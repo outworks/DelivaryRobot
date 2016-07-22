@@ -16,7 +16,7 @@ public class RobotNotification{
     static let LOCATION_CHANGE = "LOCATION_CHANGE"
     static let ONLINE_CHANGE = "ONLINE_CHANGE"
     static let POSLABLE_CHANGE = "POSLABLE_CHANGE"
-    static let DEVICE_ERROR = "DEVICE_ERROR"
+    static let DEVICE_STATUS = "DEVICE_STATUS"
 }
 
 /**
@@ -201,6 +201,18 @@ public class RotbotInfo{
             return "正在充电"
         case ROBOT_STATUS.MOVE_MEAL:
             return "正在送餐"
+        case ROBOT_STATUS.MOVE_LEVETRACK:
+            return "脱离磁道"
+        case ROBOT_STATUS.MOVE_WAITREADY:
+            return "等待就位"
+        case ROBOT_STATUS.MOVE_WAITBEGINMEAL:
+            return "等待送餐"
+        case ROBOT_STATUS.MOVE_MEALARRIVE:
+            return "送餐到达"
+        case ROBOT_STATUS.MOVE_GOBACK:
+            return "正在返回"
+        case ROBOT_STATUS.MOVE_MEALSTOP:
+            return "送餐终止"
         case ROBOT_STATUS.MOVE_TIMEOUT:
             return "超时停止"
         default:

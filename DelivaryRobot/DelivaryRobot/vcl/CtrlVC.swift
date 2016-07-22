@@ -34,7 +34,7 @@ class CtrlVC: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateElectricity), name: RobotNotification.POWER_CHANGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.ONLINE_CHANGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updatePosLable), name: RobotNotification.POSLABLE_CHANGE, object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.DEVICE_STATUS, object: nil)
         self.clearTagStatus()
         self.updateUI()
     }
@@ -54,7 +54,11 @@ extension CtrlVC{
         if endpoint_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
             let online = robotInfo.online ? "在线":"断线"
-            self.lb_status.text = "状态:" + robotInfo.statusName() + "(" + online + ")"
+            if(robotInfo.errorDetail.isEmpty){
+                self.lb_status.text = "状态:" + robotInfo.statusName() + "(" + online + ")"
+            }else{
+                self.lb_status.text = "状态:" + robotInfo.errorDetail
+            }
         }
     }
     

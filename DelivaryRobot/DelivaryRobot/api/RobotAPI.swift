@@ -13,9 +13,9 @@ import SwiftyJSON
 
 
 class RobotAPI :BaseHttpAPI{
-   
+    
     static let DEFIND_HOST = "http://172.24.132.20"
-//    static let DEFIND_HOST = "http://172.24.132.20"
+    //    static let DEFIND_HOST = "http://172.24.132.20"
     static var user_key = "4bf5772289cd701bc29486f0e87aee27"
     static var user_login = false
     static var notificationHandler = TopicNotificationHandler()
@@ -23,7 +23,7 @@ class RobotAPI :BaseHttpAPI{
     class LoginParams: EVObject {
         var account_name = ""
         var password = ""
-         init(username:String,password:String) {
+        init(username:String,password:String) {
             super.init()
             self.account_name = username
             self.password = password
@@ -75,8 +75,8 @@ class RobotAPI :BaseHttpAPI{
                 user_key = result!.user_key
             }
             successHandle(result: result!)
-            }) { (error) in
-               errorHandler(error: error)
+        }) { (error) in
+            errorHandler(error: error)
         }
     }
     
@@ -89,8 +89,8 @@ class RobotAPI :BaseHttpAPI{
     static func getEndpoints(func successHandle:(result:[EndPoint]?)->Void,func errorHandler:(error:BaseError?) ->Void)->Void{
         request(.GET, path: "/v0.1/endpoints", func: { (result:[EndPoint]?) in
             successHandle(result: result)
-            }) { (error) in
-                errorHandler(error: error)
+        }) { (error) in
+            errorHandler(error: error)
         }
     }
     
@@ -126,9 +126,9 @@ class RobotAPI :BaseHttpAPI{
                         }
                     }
                 }
-                 successHandle()
+                successHandle()
                 }, func: { (error) in
-                   errorHandler(error: error)
+                    errorHandler(error: error)
             })
             
         }) { (error) in
@@ -175,8 +175,8 @@ class RobotAPI :BaseHttpAPI{
         let dict = ["pathAction":7,"nPathID":0,"nPathType":3,"nSpeedLevel":2,"bEndMsg":1,"node":[["x":(seat.x*1000),"y":(seat.y*1000),"nNodeIndex":1,"eAction":3,"nActionVal":(seat.angle/45),"nAnimateId":0,"nVoiceId":0,"nLightId":0,"nVideoId":0]],"nIndex":0]
         request(.POST, path: path, paramsdict: dict, serverPort: nil, func: { (result:NSDictionary?) in
             successHandle()
-            }) { (error) in
-               errorHandler(error: error)
+        }) { (error) in
+            errorHandler(error: error)
         }
         
     }
@@ -209,8 +209,8 @@ class RobotAPI :BaseHttpAPI{
         let path = "/v0.1/mqtt/client_id"
         request(.GET, path: path, func: { (result:MQTTClientIDResult?) in
             successHandle(result: result!)
-            }) { (error) in
-                errorHandler(error: error)
+        }) { (error) in
+            errorHandler(error: error)
         }
     }
     
@@ -315,7 +315,7 @@ class RobotAPI :BaseHttpAPI{
         let topic = String(format: "/Robot/%@/info/devicestatus", endpoint_id)
         TopicTools.pushNotification(topic, endpoint_id: endpoint_id)
         MQTTManager.sharedInstance.listenTopic(topic);
-        NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.onlineHandler(_:)), name: topic, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.deviceStatusHandler(_:)), name: topic, object: nil)
     }
     
     /// 消息分发
@@ -430,15 +430,24 @@ class RobotAPI :BaseHttpAPI{
             let importantDevice:NSArray = info["importantDevice"] as! NSArray
             if importantDevice.count>0 {
                 let dict:NSDictionary = importantDevice[0] as! NSDictionary
-                let errordetail:String = dict["errordetail"] as! String
+                let statusType:NSNumber = dict["statusType"] as! NSNumber
                 let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
-                robotInfo.errorDetail = errordetail
-                NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.DEVICE_ERROR, object: nil,userInfo: ["endpoint_id":endpoint_id])
+                if statusType.integerValue == 2 {
+                    robotInfo.errorDetail = "未启动"
+                }
+                if statusType.integerValue == 3 {
+                    let errordetail:String = dict["errordetail"] as! String
+                    robotInfo.errorDetail = errordetail
+                }
+                if statusType.integerValue < 2 {
+                    robotInfo.errorDetail = ""
+                }
+                NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.DEVICE_STATUS, object: nil,userInfo: ["endpoint_id":endpoint_id])
             }
         }
         
     }
-
+    
     
 }
 
