@@ -1,0 +1,427 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		92E703E9F232BD1427D8B536 /* Pods_DelivaryRobot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6568953023B8E52219F9DF7 /* Pods_DelivaryRobot.framework */; };
+		AC26B1E91D339D5000DBC637 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC26B1E81D339D5000DBC637 /* AppDelegate.swift */; };
+		AC26B1EB1D339D5000DBC637 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC26B1EA1D339D5000DBC637 /* ViewController.swift */; };
+		AC26B1EE1D339D5000DBC637 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC26B1EC1D339D5000DBC637 /* Main.storyboard */; };
+		AC26B1F01D339D5000DBC637 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC26B1EF1D339D5000DBC637 /* Assets.xcassets */; };
+		AC26B1F31D339D5000DBC637 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC26B1F11D339D5000DBC637 /* LaunchScreen.storyboard */; };
+		AC26B1FC1D339F6200DBC637 /* RobotAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC26B1FB1D339F6200DBC637 /* RobotAPI.swift */; };
+		AC4012C51D35E41500382558 /* BaseHttpAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4012C41D35E41500382558 /* BaseHttpAPI.swift */; };
+		AC4012C71D36219B00382558 /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4012C61D36219B00382558 /* Tools.swift */; };
+		AC44E4871D34E07F002DB51A /* Predefined.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC44E4861D34E07F002DB51A /* Predefined.swift */; };
+		AC44E4891D34E4C8002DB51A /* MQTTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC44E4881D34E4C8002DB51A /* MQTTManager.swift */; };
+		ACD660051D373363004D615C /* CtrlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD660041D373363004D615C /* CtrlVC.swift */; };
+		ACD660071D3798A5004D615C /* DelivaryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD660061D3798A5004D615C /* DelivaryVC.swift */; };
+		ACE2F9241D3885B600EC3914 /* SeatChooseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE2F9231D3885B600EC3914 /* SeatChooseVC.swift */; };
+		ACE2F9261D3886BB00EC3914 /* RobotChooseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE2F9251D3886BB00EC3914 /* RobotChooseVC.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7FEF1544CBBBCBDB596DBBF3 /* Pods-DelivaryRobot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DelivaryRobot.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DelivaryRobot/Pods-DelivaryRobot.debug.xcconfig"; sourceTree = "<group>"; };
+		AC26B1E51D339D5000DBC637 /* DelivaryRobot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DelivaryRobot.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC26B1E81D339D5000DBC637 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AC26B1EA1D339D5000DBC637 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		AC26B1ED1D339D5000DBC637 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		AC26B1EF1D339D5000DBC637 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AC26B1F21D339D5000DBC637 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		AC26B1F41D339D5000DBC637 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AC26B1FB1D339F6200DBC637 /* RobotAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RobotAPI.swift; sourceTree = "<group>"; };
+		AC4012C41D35E41500382558 /* BaseHttpAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseHttpAPI.swift; sourceTree = "<group>"; };
+		AC4012C61D36219B00382558 /* Tools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tools.swift; sourceTree = "<group>"; };
+		AC44E4861D34E07F002DB51A /* Predefined.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Predefined.swift; sourceTree = "<group>"; };
+		AC44E4881D34E4C8002DB51A /* MQTTManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MQTTManager.swift; sourceTree = "<group>"; };
+		ACD660041D373363004D615C /* CtrlVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CtrlVC.swift; sourceTree = "<group>"; };
+		ACD660061D3798A5004D615C /* DelivaryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelivaryVC.swift; sourceTree = "<group>"; };
+		ACE2F9231D3885B600EC3914 /* SeatChooseVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeatChooseVC.swift; sourceTree = "<group>"; };
+		ACE2F9251D3886BB00EC3914 /* RobotChooseVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RobotChooseVC.swift; sourceTree = "<group>"; };
+		B94830DF9C5C6245DD9B2553 /* Pods-DelivaryRobot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DelivaryRobot.release.xcconfig"; path = "Pods/Target Support Files/Pods-DelivaryRobot/Pods-DelivaryRobot.release.xcconfig"; sourceTree = "<group>"; };
+		D6568953023B8E52219F9DF7 /* Pods_DelivaryRobot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DelivaryRobot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AC26B1E21D339D5000DBC637 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92E703E9F232BD1427D8B536 /* Pods_DelivaryRobot.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3B2797243F4242D011674CA8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7FEF1544CBBBCBDB596DBBF3 /* Pods-DelivaryRobot.debug.xcconfig */,
+				B94830DF9C5C6245DD9B2553 /* Pods-DelivaryRobot.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		AC26B1DC1D339D5000DBC637 = {
+			isa = PBXGroup;
+			children = (
+				AC26B1E71D339D5000DBC637 /* DelivaryRobot */,
+				AC26B1E61D339D5000DBC637 /* Products */,
+				3B2797243F4242D011674CA8 /* Pods */,
+				F5016761723FEF4D661AA3FD /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		AC26B1E61D339D5000DBC637 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AC26B1E51D339D5000DBC637 /* DelivaryRobot.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AC26B1E71D339D5000DBC637 /* DelivaryRobot */ = {
+			isa = PBXGroup;
+			children = (
+				ACD660031D37326B004D615C /* vcl */,
+				AC26B1FA1D339F0A00DBC637 /* api */,
+				AC26B1E81D339D5000DBC637 /* AppDelegate.swift */,
+				AC26B1EA1D339D5000DBC637 /* ViewController.swift */,
+				AC26B1EC1D339D5000DBC637 /* Main.storyboard */,
+				AC26B1EF1D339D5000DBC637 /* Assets.xcassets */,
+				AC26B1F11D339D5000DBC637 /* LaunchScreen.storyboard */,
+				AC26B1F41D339D5000DBC637 /* Info.plist */,
+			);
+			path = DelivaryRobot;
+			sourceTree = "<group>";
+		};
+		AC26B1FA1D339F0A00DBC637 /* api */ = {
+			isa = PBXGroup;
+			children = (
+				AC26B1FB1D339F6200DBC637 /* RobotAPI.swift */,
+				AC44E4861D34E07F002DB51A /* Predefined.swift */,
+				AC44E4881D34E4C8002DB51A /* MQTTManager.swift */,
+				AC4012C41D35E41500382558 /* BaseHttpAPI.swift */,
+				AC4012C61D36219B00382558 /* Tools.swift */,
+			);
+			path = api;
+			sourceTree = "<group>";
+		};
+		ACD660031D37326B004D615C /* vcl */ = {
+			isa = PBXGroup;
+			children = (
+				ACD660041D373363004D615C /* CtrlVC.swift */,
+				ACD660061D3798A5004D615C /* DelivaryVC.swift */,
+				ACE2F9231D3885B600EC3914 /* SeatChooseVC.swift */,
+				ACE2F9251D3886BB00EC3914 /* RobotChooseVC.swift */,
+			);
+			path = vcl;
+			sourceTree = "<group>";
+		};
+		F5016761723FEF4D661AA3FD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D6568953023B8E52219F9DF7 /* Pods_DelivaryRobot.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AC26B1E41D339D5000DBC637 /* DelivaryRobot */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC26B1F71D339D5000DBC637 /* Build configuration list for PBXNativeTarget "DelivaryRobot" */;
+			buildPhases = (
+				C550BFCD1AB9D82153DDABB1 /* [CP] Check Pods Manifest.lock */,
+				AC26B1E11D339D5000DBC637 /* Sources */,
+				AC26B1E21D339D5000DBC637 /* Frameworks */,
+				AC26B1E31D339D5000DBC637 /* Resources */,
+				E6D67A6E90B04938FB1C1F45 /* [CP] Embed Pods Frameworks */,
+				D11458EF30C828A862424ECA /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DelivaryRobot;
+			productName = DelivaryRobot;
+			productReference = AC26B1E51D339D5000DBC637 /* DelivaryRobot.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AC26B1DD1D339D5000DBC637 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = ilikeido;
+				TargetAttributes = {
+					AC26B1E41D339D5000DBC637 = {
+						CreatedOnToolsVersion = 7.3;
+					};
+				};
+			};
+			buildConfigurationList = AC26B1E01D339D5000DBC637 /* Build configuration list for PBXProject "DelivaryRobot" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AC26B1DC1D339D5000DBC637;
+			productRefGroup = AC26B1E61D339D5000DBC637 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AC26B1E41D339D5000DBC637 /* DelivaryRobot */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AC26B1E31D339D5000DBC637 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC26B1F31D339D5000DBC637 /* LaunchScreen.storyboard in Resources */,
+				AC26B1F01D339D5000DBC637 /* Assets.xcassets in Resources */,
+				AC26B1EE1D339D5000DBC637 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C550BFCD1AB9D82153DDABB1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D11458EF30C828A862424ECA /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DelivaryRobot/Pods-DelivaryRobot-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E6D67A6E90B04938FB1C1F45 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DelivaryRobot/Pods-DelivaryRobot-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AC26B1E11D339D5000DBC637 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC26B1EB1D339D5000DBC637 /* ViewController.swift in Sources */,
+				AC44E4871D34E07F002DB51A /* Predefined.swift in Sources */,
+				ACE2F9241D3885B600EC3914 /* SeatChooseVC.swift in Sources */,
+				AC26B1FC1D339F6200DBC637 /* RobotAPI.swift in Sources */,
+				AC26B1E91D339D5000DBC637 /* AppDelegate.swift in Sources */,
+				AC4012C71D36219B00382558 /* Tools.swift in Sources */,
+				ACD660051D373363004D615C /* CtrlVC.swift in Sources */,
+				AC44E4891D34E4C8002DB51A /* MQTTManager.swift in Sources */,
+				ACD660071D3798A5004D615C /* DelivaryVC.swift in Sources */,
+				ACE2F9261D3886BB00EC3914 /* RobotChooseVC.swift in Sources */,
+				AC4012C51D35E41500382558 /* BaseHttpAPI.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		AC26B1EC1D339D5000DBC637 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AC26B1ED1D339D5000DBC637 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		AC26B1F11D339D5000DBC637 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AC26B1F21D339D5000DBC637 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		AC26B1F51D339D5000DBC637 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AC26B1F61D339D5000DBC637 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AC26B1F81D339D5000DBC637 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7FEF1544CBBBCBDB596DBBF3 /* Pods-DelivaryRobot.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = DelivaryRobot/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ejs.hello;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		AC26B1F91D339D5000DBC637 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B94830DF9C5C6245DD9B2553 /* Pods-DelivaryRobot.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = DelivaryRobot/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ejs.hello;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AC26B1E01D339D5000DBC637 /* Build configuration list for PBXProject "DelivaryRobot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC26B1F51D339D5000DBC637 /* Debug */,
+				AC26B1F61D339D5000DBC637 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC26B1F71D339D5000DBC637 /* Build configuration list for PBXNativeTarget "DelivaryRobot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC26B1F81D339D5000DBC637 /* Debug */,
+				AC26B1F91D339D5000DBC637 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AC26B1DD1D339D5000DBC637 /* Project object */;
+}

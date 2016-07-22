@@ -1,0 +1,14 @@
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
+use_frameworks!
+
+target 'DelivaryRobot' do
+    pod 'SwiftyJSON'
+    pod 'Alamofire', '~> 3.4'
+    pod 'DZNEmptyDataSet'
+    pod 'RAMAnimatedTabBarController'
+    pod 'SCLAlertView'
+    pod 'CryptoSwift'
+    pod 'EVReflection'
+    pod 'CocoaMQTT'
+end

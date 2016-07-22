@@ -1,0 +1,444 @@
+//
+//  RobotAPI.swift
+//  DelivaryRobot
+//
+//  Created by ilikeido on 16/7/11.
+//  Copyright © 2016年 ilikeido. All rights reserved.
+//
+
+import Foundation
+import Alamofire
+import EVReflection
+import SwiftyJSON
+
+
+class RobotAPI :BaseHttpAPI{
+   
+    static let DEFIND_HOST = "http://172.24.132.20"
+//    static let DEFIND_HOST = "http://172.24.132.20"
+    static var user_key = "4bf5772289cd701bc29486f0e87aee27"
+    static var user_login = false
+    static var notificationHandler = TopicNotificationHandler()
+    
+    class LoginParams: EVObject {
+        var account_name = ""
+        var password = ""
+         init(username:String,password:String) {
+            super.init()
+            self.account_name = username
+            self.password = password
+        }
+        
+        required init() {
+            super.init()
+        }
+        
+    }
+    
+    class LoginResult: EVObject {
+        var user_name = ""
+        var user_id = ""
+        var user_key = ""
+        var create_time = ""
+        var encrypt_key = ""
+        var account_name = ""
+    }
+    
+    
+    class MQTTClientIDResult:EVObject {
+        var client_id = ""
+    }
+    
+    class RockerCtrlCMD: EVObject {
+        var moveMode = 1
+        var lineSpd = 0
+        var angSpd = 1
+        var timeStam = NSDate().timeIntervalSince1970 * 1000
+    }
+    
+    class RobotStatusResult{
+        
+    }
+    
+    /**
+     登录
+     
+     - parameter params:        登录参数
+     - parameter successHandle: 成功回调
+     - parameter errorHandler:  错误回调
+     */
+    static func login(params:LoginParams,func successHandle:(result:LoginResult)->Void,func errorHandler:(error:BaseError?) ->Void)->Void{
+        let params = LoginParams(username:params.account_name,password:params.password )
+        request(.POST, path: "/v0.1/tokens", params: params, serverPort: "8081", func: { (result:LoginResult?) in
+            if nil != result{
+                user_login = true
+                user_key = result!.user_key
+            }
+            successHandle(result: result!)
+            }) { (error) in
+               errorHandler(error: error)
+        }
+    }
+    
+    /**
+     获取机器节点
+     
+     - parameter successHandle: 成功回调
+     - parameter errorHandler:  错误回调
+     */
+    static func getEndpoints(func successHandle:(result:[EndPoint]?)->Void,func errorHandler:(error:BaseError?) ->Void)->Void{
+        request(.GET, path: "/v0.1/endpoints", func: { (result:[EndPoint]?) in
+            successHandle(result: result)
+            }) { (error) in
+                errorHandler(error: error)
+        }
+    }
+    
+    /**
+     登录机器
+     - parameter endpoint_id:   编号
+     - parameter successHandle: 成功回调
+     - parameter errorHandler:  错误回调
+     */
+    static func loginRobot(endpoint_id:String,func successHandle:()->Void,func errorHandler:(error:BaseError?) ->Void)->Void{
+        let path = String(format: "/v0.1/endpoints/%@/robot/login/", endpoint_id)
+        let dict = ["prior":"true"]
+        request(.POST, path: path, paramsdict: dict, serverPort: nil, func: { (result:OKResult?) in
+            let path1 = String(format: "/v0.1/endpoints/%@/robot/ctrlapp_login", endpoint_id)
+            let dict1 = [:]
+            request(.POST, path: path1, paramsdict: dict1,serverPort: nil,func: { (result1:NSDictionary?) in
+                let robotinfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
+                let message = (result1?["message"]) as? NSString
+                if nil != message{
+                    let messageJson = JSON.parse(message! as String)
+                    let array:Array<JSON> = messageJson.arrayValue
+                    for dic:JSON in array {
+                        let idstr = dic["id"].intValue
+                        if 10004 == idstr{
+                            let infodict = dic["info"].dictionary!
+                            let status = infodict["status"]!.intValue
+                            robotinfo.status = ROBOT_STATUS.IntToStatus(status)
+                        }
+                        if 10005 == idstr{
+                            let infodict = dic["info"].dictionary
+                            let value = infodict!["percent"]!.intValue
+                            robotinfo.power = value
+                        }
+                    }
+                }
+                 successHandle()
+                }, func: { (error) in
+                   errorHandler(error: error)
+            })
+            
+        }) { (error) in
+            errorHandler(error: error)
+        }
+    }
+    
+    static func getSeatList() -> [SeatData]{
+        let array = [
+            ["seat":"A-002","x":3.6,"y":0.0,"angle":180,"x0":3.6,"y0":-1],
+            ["seat":"A-003","x":7.1,"y":0.0,"angle":180,"x0":7.1,"y0":-1],
+            ["seat":"A-004","x":10.1,"y":0.0,"angle":180,"x0":10.1,"y0":-1],
+            ["seat":"B-005","x":12.3,"y":1.0,"angle":180,"x0":13,"y0":0.5],
+            ["seat":"C-006","x":20.0,"y":2.0,"angle":90,"x0":21.3,"y0":1.6],
+            ["seat":"C-007","x":21.3,"y":0.6,"angle":180,"x0":21.3,"y0":-0.4],
+            ["seat":"C-008","x":23.5,"y":0.6,"angle":0,"x0":24.0,"y0":1.6],
+            ["seat":"C-009","x":24.0,"y":0.6,"angle":180,"x0":24.0,"y0":-0.4],
+            ["seat":"C-010","x":26.1,"y":0.6,"angle":0,"x0":26.7,"y0":1.6],
+            ["seat":"C-011","x":26.7,"y":0.6,"angle":180,"x0":26.7,"y0":-0.4],
+            ["seat":"D-012","x":29.7,"y":0.8,"angle":180,"x0":29.7,"y0":0],
+            ["seat":"D-013","x":31.1,"y":0.8,"angle":0,"x0":31.5,"y0":1.8],
+            ["seat":"D-014","x":32.1,"y":0.8,"angle":180,"x0":32.1,"y0":0],
+            ["seat":"E-015","x":34.0,"y":0.8,"angle":90,"x0":35.0,"y0":0.8]
+        ]
+        var list = [SeatData]()
+        for seatDict in array{
+            let seat = SeatData()
+            EVReflection.setPropertiesfromDictionary(seatDict, anyObject: seat)
+            list.append(seat)
+        }
+        return list
+    }
+    
+    /**
+     到某个位置去
+     
+     - parameter registration_id: 机器节点的编号
+     - parameter seat:            位置信息
+     - parameter successHandle:   成功回调
+     - parameter errorHandler:    错误回调
+     */
+    static func goSeat(registration_id:String,seat:SeatData,func successHandle:()->Void,func errorHandler:(error:BaseError?) ->Void)->Void{
+        let path = String(format: "/v0.1/endpoints/%@/robot/patrolpath/", registration_id)
+        let dict = ["pathAction":7,"nPathID":0,"nPathType":3,"nSpeedLevel":2,"bEndMsg":1,"node":[["x":(seat.x*1000),"y":(seat.y*1000),"nNodeIndex":1,"eAction":3,"nActionVal":(seat.angle/45),"nAnimateId":0,"nVoiceId":0,"nLightId":0,"nVideoId":0]],"nIndex":0]
+        request(.POST, path: path, paramsdict: dict, serverPort: nil, func: { (result:NSDictionary?) in
+            successHandle()
+            }) { (error) in
+               errorHandler(error: error)
+        }
+        
+    }
+    
+    /**
+     发送指令
+     
+     - parameter registration_id: 机器节点的编号
+     - parameter cmd:             位置信息
+     - parameter successHandle:   成功回调
+     - parameter errorHandler:    错误回调
+     */
+    static func sendCMD(registration_id:String,cmd:MOVE_CTRL_ACTION,func successHandle:()->Void,func errorHandler:(error:BaseError?) ->Void)->Void{
+        let path = String(format: "/v0.1/endpoints/%@/robot/movecontrol/", registration_id)
+        let dict = ["ctrlAction":cmd.rawValue]
+        request(.POST, path: path, paramsdict: dict, serverPort: nil, func: { (result:NSDictionary?) in
+            successHandle()
+        }) { (error) in
+            errorHandler(error: error)
+        }
+    }
+    
+    /**
+     获取MQTT的客户端ID
+     
+     - parameter successHandle: 成功回调
+     - parameter errorHandler:  错误回调
+     */
+    static func getMQTTClient(func successHandle:(result:MQTTClientIDResult)->Void,func errorHandler:(error:BaseError?) ->Void)->Void{
+        let path = "/v0.1/mqtt/client_id"
+        request(.GET, path: path, func: { (result:MQTTClientIDResult?) in
+            successHandle(result: result!)
+            }) { (error) in
+                errorHandler(error: error)
+        }
+    }
+    
+    /**
+     控制机器人的方向
+     
+     - parameter registration_id: 机器人的id
+     - parameter dirction:        方向
+     */
+    static func ctrolDirection(endpoint_id:String,dirction:MOVE_DIRCTION){
+        let topic = String(format: "/Robot/%@/move/RockerCtrl", endpoint_id)
+        let sendData =  RockerCtrlCMD()
+        switch dirction {
+        case .MOVE_DIRCTION_FONT:
+            sendData.lineSpd = 1
+            sendData.angSpd = 0
+            break
+        case .MOVE_DIRCTION_BOTTOM:
+            sendData.lineSpd = -1
+            sendData.angSpd = 0
+            break
+        case .MOVE_DIRCTION_LEFT:
+            sendData.lineSpd = 0
+            sendData.angSpd = -1
+            break
+        case .MOVE_DIRCTION_RIGHT:
+            sendData.lineSpd = 0
+            sendData.angSpd = 1
+            break
+        case .MOVE_DIRCTION_STOP:
+            sendData.lineSpd = 0
+            sendData.angSpd = 0
+            break
+        }
+        MQTTManager.sharedInstance.sendTopic(topic, data: sendData)
+    }
+    
+    /**
+     添加机器人状态监听
+     - parameter registration_id: 编号
+     */
+    static func addStatusListener(endpoint_id:String){
+        let topic = String(format: "/Robot/%@/info/Status", endpoint_id)
+        TopicTools.pushNotification(topic, endpoint_id: endpoint_id)
+        MQTTManager.sharedInstance.listenTopic(topic);
+        NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.statusHandler(_:)), name: topic, object: nil)
+    }
+    
+    /**
+     添加机器人电量监听
+     - parameter registration_id: 编号
+     */
+    static func addPowerListener(endpoint_id:String){
+        let topic = String(format: "/Robot/%@/info/BatteryInfo", endpoint_id)
+        TopicTools.pushNotification(topic, endpoint_id: endpoint_id)
+        MQTTManager.sharedInstance.listenTopic(topic);
+        NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.powerHandler(_:)), name: topic, object: nil)
+    }
+    
+    /**
+     添加机器人位置监听
+     - parameter registration_id: 编号
+     */
+    static func addPositionListener(endpoint_id:String){
+        let topic = String(format: "/Robot/%@/info/RobotPos", endpoint_id)
+        TopicTools.pushNotification(topic, endpoint_id: endpoint_id)
+        MQTTManager.sharedInstance.listenTopic(topic);
+        NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.positionHandler(_:)), name: topic, object: nil)
+    }
+    
+    
+    /**
+     添加机器人送餐经过点监听
+     - parameter registration_id: 编号
+     */
+    static func addLeaveSeatPointListener(endpoint_id:String){
+        let topic = String(format: "/Robot/%@/info/RobotPosLabel", endpoint_id)
+        TopicTools.pushNotification(topic, endpoint_id: endpoint_id)
+        MQTTManager.sharedInstance.listenTopic(topic);
+        NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.positionLableHandler(_:)), name: topic, object: nil)
+    }
+    
+    
+    /**
+     添加机器人的在线和断线监听
+     
+     - parameter registration_id: 编号
+     */
+    static func addOnlineListener(endpoint_id:String){
+        let topic = String(format: "/endpoints/%@/alive", endpoint_id)
+        TopicTools.pushNotification(topic, endpoint_id: endpoint_id)
+        MQTTManager.sharedInstance.listenTopic(topic);
+        NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.onlineHandler(_:)), name: topic, object: nil)
+    }
+    
+    /**
+     添加机器人的在线和断线监听
+     
+     - parameter registration_id: 编号
+     */
+    static func addDeviceStatusListener(endpoint_id:String){
+        let topic = String(format: "/Robot/%@/info/devicestatus", endpoint_id)
+        TopicTools.pushNotification(topic, endpoint_id: endpoint_id)
+        MQTTManager.sharedInstance.listenTopic(topic);
+        NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.onlineHandler(_:)), name: topic, object: nil)
+    }
+    
+    /// 消息分发
+    class TopicNotificationHandler: NSObject {
+        @objc func statusHandler(notification: NSNotification){
+            let info = notification.userInfo!
+            let status:NSNumber = (info["status"] as? NSNumber)!
+            let endpoint_id = TopicTools.getEndpoint_id(notification.name)
+            if nil == endpoint_id {
+                return
+            }
+            let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id!)
+            switch status.integerValue {
+            case 1:
+                robotInfo.status = ROBOT_STATUS.MOVE_AUTO
+                break
+            case 2:
+                robotInfo.status = ROBOT_STATUS.MOVE_ROCKER
+                break
+            case 3:
+                robotInfo.status = ROBOT_STATUS.MOVE_TASK
+                break
+            case 4:
+                robotInfo.status = ROBOT_STATUS.MOVE_WANDER
+                break
+            case 5:
+                robotInfo.status = ROBOT_STATUS.MOVE_FREE
+                break
+            case 6:
+                robotInfo.status = ROBOT_STATUS.MOVE_TOCHARGE
+                break
+            case 7:
+                robotInfo.status = ROBOT_STATUS.MOVE_CHARGING
+                break
+            case 8:
+                robotInfo.status = ROBOT_STATUS.MOVE_MEAL
+                break
+            case 9:
+                robotInfo.status = ROBOT_STATUS.MOVE_TIMEOUT
+                break
+            default:
+                break
+            }
+            NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.STATUS_CHANGE, object: nil,userInfo: ["endpoint_id":endpoint_id!])
+        }
+        
+        @objc func powerHandler(notification: NSNotification){
+            let info = notification.userInfo!
+            let percent:NSNumber = (info["percent"] as? NSNumber)!
+            let endpoint_id = TopicTools.getEndpoint_id(notification.name)
+            if nil == endpoint_id {
+                return
+            }
+            let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id!)
+            robotInfo.power = percent.integerValue
+            NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.POWER_CHANGE, object: nil,userInfo: ["endpoint_id":endpoint_id!])
+        }
+        
+        @objc func positionHandler(notification: NSNotification){
+            let info = notification.userInfo!
+            let cellX:NSNumber = (info["cellX"] as? NSNumber)!
+            let cellY:NSNumber = (info["cellY"] as? NSNumber)!
+            let angle:NSNumber = (info["angle"] as? NSNumber)!
+            let endpoint_id = TopicTools.getEndpoint_id(notification.name)
+            if nil == endpoint_id {
+                return
+            }
+            let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id!)
+            robotInfo.local_x = cellX.integerValue
+            robotInfo.local_y = cellY.integerValue
+            robotInfo.angle = angle.integerValue
+            NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.LOCATION_CHANGE, object: nil,userInfo: ["endpoint_id":endpoint_id!])
+        }
+        
+        @objc func positionLableHandler(notification: NSNotification){
+            print(notification.name)
+            let endpoint_id = TopicTools.getEndpoint_id(notification.name)
+            if nil != endpoint_id {
+                let userinfo = notification.userInfo
+                if nil != userinfo {
+                    let posLable:NSNumber? = (userinfo!["posLabel"] as? NSNumber)
+                    if nil != posLable {
+                        let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id!)
+                        robotInfo.posLable = posLable!.integerValue
+                        NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.POSLABLE_CHANGE, object: nil,userInfo: ["endpoint_id":endpoint_id!,"posLabel":posLable!])
+                    }
+                }
+            }
+        }
+        
+        @objc func onlineHandler(notification: NSNotification){
+            let info = notification.userInfo!
+            let online:String = info["alive"] as! String
+            let endpoint_id:String = info["endpoint_id"] as! String
+            let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
+            switch online {
+            case "T":
+                robotInfo.online = true
+                break
+            case "F":
+                robotInfo.online = false
+                break
+            default:
+                break
+            }
+            NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.ONLINE_CHANGE, object: nil,userInfo: ["endpoint_id":endpoint_id])
+        }
+        
+        @objc func deviceStatusHandler(notification: NSNotification){
+            let info = notification.userInfo!
+            let endpoint_id = TopicTools.getEndpoint_id(notification.name)!
+            let importantDevice:NSArray = info["importantDevice"] as! NSArray
+            if importantDevice.count>0 {
+                let dict:NSDictionary = importantDevice[0] as! NSDictionary
+                let errordetail:String = dict["errordetail"] as! String
+                let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
+                robotInfo.errorDetail = errordetail
+                NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.DEVICE_ERROR, object: nil,userInfo: ["endpoint_id":endpoint_id])
+            }
+        }
+        
+    }
+
+    
+}
+

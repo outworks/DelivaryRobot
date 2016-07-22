@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pods/Alamofire/Source/Manager.swift"
+            timestampString = "489986495.816188"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
+            landmarkName = "request(_:_:parameters:encoding:headers:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DelivaryRobot/api/BaseHttpAPI.swift"
+            timestampString = "490169030.758141"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "request(_:path:params:serverPort:func:func:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static DelivaryRobot.BaseHttpAPI.request &lt;A where A: __ObjC.NSObject&gt; (Alamofire.Method, path : Swift.String, params : Swift.Optional&lt;EVReflection.EVObject&gt;, serverPort : Swift.Optional&lt;Swift.String&gt;, func : (result : Swift.Optional&lt;Swift.Array&lt;A&gt;&gt;) -&gt; (), func : (error : Swift.Optional&lt;DelivaryRobot.BaseHttpAPI.BaseError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "DelivaryRobot"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ilikeido/work/ios/DelivaryRobot/DelivaryRobot/api/BaseHttpAPI.swift"
+                  timestampString = "490169030.761003"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "63"
+                  endingLineNumber = "63"
+                  offsetFromSymbolStart = "406">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static DelivaryRobot.BaseHttpAPI.(request &lt;A where A: __ObjC.NSObject&gt; (Alamofire.Method, path : Swift.String, params : Swift.Optional&lt;EVReflection.EVObject&gt;, serverPort : Swift.Optional&lt;Swift.String&gt;, func : (result : Swift.Optional&lt;Swift.Array&lt;A&gt;&gt;) -&gt; (), func : (error : Swift.Optional&lt;DelivaryRobot.BaseHttpAPI.BaseError&gt;) -&gt; ()) -&gt; ()).(closure #1)"
+                  moduleName = "DelivaryRobot"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ilikeido/work/ios/DelivaryRobot/DelivaryRobot/api/BaseHttpAPI.swift"
+                  timestampString = "490169030.761155"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "64"
+                  endingLineNumber = "64"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DelivaryRobot/vcl/DelivaryVC.swift"
+            timestampString = "490186005.122557"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "tableView(_:numberOfRowsInSection:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DelivaryRobot/api/BaseHttpAPI.swift"
+            timestampString = "490186338.787445"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
+            landmarkName = "request(_:path:paramsdict:serverPort:func:func:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DelivaryRobot/api/RobotAPI.swift"
+            timestampString = "490608491.672389"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
+            landmarkName = "sendCMD(_:cmd:func:func:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DelivaryRobot/vcl/RobotChooseVC.swift"
+            timestampString = "490603506.780159"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "tableView(_:didSelectRowAtIndexPath:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
