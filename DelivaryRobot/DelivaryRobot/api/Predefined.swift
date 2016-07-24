@@ -61,7 +61,7 @@ public enum MOVE_DIRCTION: Int {
  - MOVE_ROCKER:   手柄柄制
  - MOVE_TASK:     巡逻作务
  - MOVE_WANDER:   自动漫游
- - MOVE_FREE:     闲置作务
+ - MOVE_FREE:     闲置任务
  - MOVE_TOCHARGE: 前去充电
  - MOVE_CHARGING: 正在充电
  - MOVE_MEAL:     正在送餐

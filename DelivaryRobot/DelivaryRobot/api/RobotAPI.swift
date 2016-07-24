@@ -178,7 +178,57 @@ class RobotAPI :BaseHttpAPI{
         }) { (error) in
             errorHandler(error: error)
         }
-        
+    }
+    
+    /**
+     判断是否可以执行送餐指令
+     
+     - parameter registration_id: 机器节点的编号
+     
+     - returns: (是否可以执行送餐指令，相关提示信息)
+     */
+    static func commandGoSeat(registration_id:String)->(canGo:Bool,msg:String){
+        let robotInfo:RotbotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(registration_id)
+        if !robotInfo.errorDetail.isEmpty {
+            return (false,robotInfo.errorDetail)
+        }
+        if robotInfo.status == ROBOT_STATUS.MOVE_LEVETRACK {
+            return (false,"脱离磁道,请启用手动控制")
+        }
+        if robotInfo.status == ROBOT_STATUS.MOVE_MEAL {
+            return (false,"正在送餐，请稍候")
+        }
+        if robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE {
+            return (false,"正在送餐，请稍候")
+        }
+        if robotInfo.status == ROBOT_STATUS.MOVE_GOBACK {
+            return (false,"正在返回送餐点，请稍候")
+        }
+        if robotInfo.status == ROBOT_STATUS.MOVE_TOCHARGE {
+            return (false,"正在前往充电，请稍候")
+        }
+        if robotInfo.status == ROBOT_STATUS.MOVE_CHARGING {
+            if(robotInfo.power <= 20){
+                return (false,"正在充电，请稍候")
+            }
+            //ToDo: 发送就位指令
+            return (false,"正在返回送餐点，请稍候")
+        }
+        if robotInfo.status == ROBOT_STATUS.MOVE_CHARGING {
+            if(robotInfo.power <= 20){
+                return (false,"正在充电，请稍候")
+            }
+            //ToDo: 发送就位指令
+            return (false,"机器人前往取餐，请稍候")
+        }
+        if robotInfo.status == ROBOT_STATUS.MOVE_WAITREADY {
+            //ToDo: 发送就位指令
+            return (false,"请放入咖啡")
+        }
+        if robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
+            return (true,"")
+        }
+        return(true,"")
     }
     
     /**
