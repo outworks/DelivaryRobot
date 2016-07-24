@@ -23,6 +23,12 @@ class ViewController: UIViewController {
         self.btn_username.text = NSUserDefaults.standardUserDefaults().stringForKey("ACCOUNT_NAME")
         self.btn_password.text = NSUserDefaults.standardUserDefaults().stringForKey("ACCOUNT_PASSWORD")
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

@@ -20,6 +20,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let params = RobotAPI.LoginParams(username: "886066",password: "123456")
 //        RobotAPI.login(params, func: { (result) in
 //            print(result.create_time)
+        
+            UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
+            let navBar = UINavigationBar.appearance()
+            navBar.barTintColor = UIColor.init(red: 62/255, green: 111/255, blue: 77/255, alpha: 1.0)
+            var attrs = [String:AnyObject]()
+            attrs[NSFontAttributeName] = UIFont.systemFontOfSize(21)
+            attrs[NSForegroundColorAttributeName] = UIColor.whiteColor()
+            navBar.titleTextAttributes = attrs
+            navBar.translucent = false
+        
+        
             RobotAPI.getEndpoints(func: { (result) in
                 for endPoint:EndPoint in result!{
                     print(endPoint.endpoin_name + endPoint.registration_id)
