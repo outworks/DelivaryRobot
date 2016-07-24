@@ -408,6 +408,24 @@ class RobotAPI :BaseHttpAPI{
             case 9:
                 robotInfo.status = ROBOT_STATUS.MOVE_TIMEOUT
                 break
+            case 10:
+                robotInfo.status = ROBOT_STATUS.MOVE_LEVETRACK
+                break
+            case 8001:
+                robotInfo.status = ROBOT_STATUS.MOVE_WAITREADY
+                break
+            case 8002:
+                robotInfo.status = ROBOT_STATUS.MOVE_WAITBEGINMEAL
+                break
+            case 8004:
+                robotInfo.status = ROBOT_STATUS.MOVE_MEALARRIVE
+                break
+            case 8005:
+                robotInfo.status = ROBOT_STATUS.MOVE_GOBACK
+                break
+            case 8006:
+                robotInfo.status = ROBOT_STATUS.MOVE_MEALSTOP
+                break
             default:
                 break
             }
