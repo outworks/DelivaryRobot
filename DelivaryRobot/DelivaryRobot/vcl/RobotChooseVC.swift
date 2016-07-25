@@ -62,10 +62,11 @@ extension RobotChooseVC{
             RobotAPI.addOnlineListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addPowerListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addLeaveSeatPointListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            RobotAPI.addDeviceStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let seatChooseVC = storyboard.instantiateViewControllerWithIdentifier("SeatChooseVC")
-            weakself!.navigationController?.pushViewController(seatChooseVC, animated: true)
+            let ctrlVC = storyboard.instantiateViewControllerWithIdentifier("CtrlVC")
+            weakself!.navigationController?.pushViewController(ctrlVC, animated: true)
         }) { (error) in
             SCLAlertView().showError("提示", subTitle: (error?.message)!)
         }

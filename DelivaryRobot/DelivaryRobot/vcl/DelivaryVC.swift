@@ -63,8 +63,11 @@ extension DelivaryVC{
     }
     
     func sendCmd(){
+        weak var weakself = self;
         RobotAPI.goSeat(RotbotInfoManager.sharedInstance.current_endpoint_id!, seat: self.waitSeat!, func: {
-            
+            weakself!.dismissViewControllerAnimated(true, completion: {
+                
+            })
             }) { (error) in
                 
         }

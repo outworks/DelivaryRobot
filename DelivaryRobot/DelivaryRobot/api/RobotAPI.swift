@@ -215,6 +215,11 @@ class RobotAPI :BaseHttpAPI{
                 return (false,"正在充电，请稍候")
             }
             //ToDo: 发送就位指令
+            RobotAPI.sendCMD(registration_id, cmd: MOVE_CTRL_ACTION.ACT_CTRL_GET_MEALS, func: { 
+                
+                }, func: { (error) in
+                    
+            })
             return (false,"正在返回送餐点，请稍候")
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_CHARGING {

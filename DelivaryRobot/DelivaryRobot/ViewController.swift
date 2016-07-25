@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController,UITextFieldDelegate {
 
     var storyBoard:UIStoryboard?
     
@@ -63,6 +63,11 @@ class ViewController: UIViewController {
         
         
     }
-
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool{
+        textField.resignFirstResponder();
+        return true
+    }
+    
 }
 

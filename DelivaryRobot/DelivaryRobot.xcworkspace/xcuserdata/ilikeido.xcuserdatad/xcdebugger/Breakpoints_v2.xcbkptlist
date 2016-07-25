@@ -111,7 +111,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "193"
             endingLineNumber = "193"
-            landmarkName = "sendCMD(_:cmd:func:func:)"
+            landmarkName = "canGoSeat(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

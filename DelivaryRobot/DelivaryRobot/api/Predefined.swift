@@ -28,6 +28,7 @@ public class RobotNotification{
  - ACT_MOVE_CTRL_WANDER: 漫游
  - ACT_MOVE_CTRL_STOP_SLOW: 停止
  - ACT_FINDPATH_STOP: 中断寻路
+ - ACT_CTRL_GET_MEALS: 送餐机器人取餐
  */
 public enum MOVE_CTRL_ACTION: Int {
     case ACT_AUTOMOVE_SUSPEND = 1
@@ -36,6 +37,7 @@ public enum MOVE_CTRL_ACTION: Int {
     case ACT_MOVE_CTRL_WANDER = 4
     case ACT_MOVE_CTRL_STOP_SLOW  = 5
     case ACT_FINDPATH_STOP  = 6
+    case ACT_CTRL_GET_MEALS  = 7
 }
 
 /**

@@ -18,6 +18,8 @@ class CtrlVC: UIViewController {
     
     var endpoints = Array<EndPoint>()
     
+    var alertView:UIAlertView? = nil;
+    
     @IBOutlet weak var lb_electricity: UILabel!
     
     @IBOutlet weak var lb_status: UILabel!
@@ -30,7 +32,7 @@ class CtrlVC: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.STATUS_CHANGE, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.statusChanged), name: RobotNotification.STATUS_CHANGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateElectricity), name: RobotNotification.POWER_CHANGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.ONLINE_CHANGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updatePosLable), name: RobotNotification.POSLABLE_CHANGE, object: nil)
@@ -58,6 +60,26 @@ extension CtrlVC{
                 self.lb_status.text = "状态:" + robotInfo.statusName() + "(" + online + ")"
             }else{
                 self.lb_status.text = "状态:" + robotInfo.errorDetail
+            }
+        }
+    }
+    
+    @objc func statusChanged(notification: NSNotification){
+        self.updateStatus(notification);
+        let info = notification.userInfo!
+        let endpoint_id:String = info["endpoint_id"] as! String
+        weak var weakself = self
+        if endpoint_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
+            let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
+            if robotInfo.status == ROBOT_STATUS.MOVE_WAITREADY { //等待就位 弹出提示
+                alertView = UIAlertView.init(title: "提示", message: "请放让咖啡", delegate: nil, cancelButtonTitle: "确定")
+                alertView!.show()
+            }else if robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL{ //等待送餐 ，弹出选择框
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let seatChooseVC = storyboard.instantiateViewControllerWithIdentifier("SeatChooseVC")
+                weakself!.navigationController?.presentViewController(seatChooseVC, animated: true, completion: { 
+                    
+                })
             }
         }
     }
