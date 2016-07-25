@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ad5-Pc-ch2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ad5-Pc-ch2">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -161,9 +161,68 @@
                                     <constraint firstAttribute="height" constant="36" id="vtH-gT-tLk"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="KiO-2R-Q8R">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="59" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="KiO-2R-Q8R">
                                 <rect key="frame" x="0.0" y="100" width="375" height="567"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RobotChooseCell" rowHeight="59" id="Mz2-fi-aIZ" customClass="RobotChooseCell" customModule="DelivaryRobot" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="59"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Mz2-fi-aIZ" id="QKd-ZR-xVO">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="59"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="ic_机器人头像" translatesAutoresizingMaskIntoConstraints="NO" id="mTF-tT-aib">
+                                                    <rect key="frame" x="15" y="14" width="30" height="30"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hya-HR-2em">
+                                                    <rect key="frame" x="60" y="18" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.11372549019607843" green="0.11372549019607843" blue="0.14901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="icon_commonPower_bg" translatesAutoresizingMaskIntoConstraints="NO" id="N87-rD-T8P">
+                                                    <rect key="frame" x="342" y="20" width="11" height="19"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="19" id="6RT-13-SRu"/>
+                                                        <constraint firstAttribute="width" constant="11" id="hEU-Jf-ICA"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="icon_common_color" translatesAutoresizingMaskIntoConstraints="NO" id="oPF-O5-PoP">
+                                                    <rect key="frame" x="343" y="22" width="9" height="16"/>
+                                                </imageView>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="icon_line_login" translatesAutoresizingMaskIntoConstraints="NO" id="zds-8k-48M">
+                                                    <rect key="frame" x="15" y="58" width="345" height="1"/>
+                                                    <color key="backgroundColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="1" id="3fe-n4-AV1"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="N87-rD-T8P" secondAttribute="trailing" constant="22" id="1zS-ya-JQ8"/>
+                                                <constraint firstItem="mTF-tT-aib" firstAttribute="centerY" secondItem="QKd-ZR-xVO" secondAttribute="centerY" id="3Db-E8-wfU"/>
+                                                <constraint firstItem="oPF-O5-PoP" firstAttribute="leading" secondItem="N87-rD-T8P" secondAttribute="leading" constant="1" id="45z-D7-76g"/>
+                                                <constraint firstItem="oPF-O5-PoP" firstAttribute="trailing" secondItem="N87-rD-T8P" secondAttribute="trailing" constant="-1" id="83b-T1-tIN"/>
+                                                <constraint firstItem="oPF-O5-PoP" firstAttribute="bottom" secondItem="N87-rD-T8P" secondAttribute="bottom" constant="-1" id="E0G-Gn-tfb"/>
+                                                <constraint firstItem="mTF-tT-aib" firstAttribute="leading" secondItem="QKd-ZR-xVO" secondAttribute="leading" constant="15" id="EC2-S9-DpX"/>
+                                                <constraint firstItem="oPF-O5-PoP" firstAttribute="top" secondItem="N87-rD-T8P" secondAttribute="top" constant="2" id="Fwy-eg-NOV"/>
+                                                <constraint firstItem="zds-8k-48M" firstAttribute="leading" secondItem="QKd-ZR-xVO" secondAttribute="leadingMargin" constant="7" id="V02-qK-KiX"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="zds-8k-48M" secondAttribute="trailing" constant="7" id="Xfw-LS-iUh"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="zds-8k-48M" secondAttribute="bottom" constant="-8" id="bAh-a6-Tnt"/>
+                                                <constraint firstItem="N87-rD-T8P" firstAttribute="centerY" secondItem="QKd-ZR-xVO" secondAttribute="centerY" id="cQ0-Oa-fKv"/>
+                                                <constraint firstItem="hya-HR-2em" firstAttribute="centerY" secondItem="mTF-tT-aib" secondAttribute="centerY" id="oXw-4u-3t6"/>
+                                                <constraint firstItem="hya-HR-2em" firstAttribute="leading" secondItem="mTF-tT-aib" secondAttribute="trailing" constant="15" id="y4w-nW-QHm"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="img_powerColoer" destination="oPF-O5-PoP" id="xcv-WZ-1FO"/>
+                                            <outlet property="img_powerbg" destination="N87-rD-T8P" id="ZFF-Zx-rmZ"/>
+                                            <outlet property="layout_top_power" destination="Fwy-eg-NOV" id="PG9-eE-knT"/>
+                                            <outlet property="lb_title" destination="hya-HR-2em" id="sKy-wC-oPg"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="6fI-qQ-trc" id="IfR-ct-afH"/>
                                     <outlet property="delegate" destination="6fI-qQ-trc" id="vgC-Tn-1We"/>
@@ -624,7 +683,10 @@
         <image name="btn_login_unSelect" width="127" height="34"/>
         <image name="btn_rememberpassword_selected" width="10" height="10"/>
         <image name="btn_rememberpassword_unselected" width="10" height="10"/>
+        <image name="ic_机器人头像" width="30" height="30"/>
         <image name="icon_coffee" width="154" height="151"/>
+        <image name="icon_commonPower_bg" width="11" height="19"/>
+        <image name="icon_common_color" width="8" height="2"/>
         <image name="icon_line_login" width="1" height="1"/>
         <image name="map" width="390" height="453"/>
     </resources>

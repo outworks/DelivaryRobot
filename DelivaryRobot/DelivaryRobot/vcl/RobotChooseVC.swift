@@ -16,16 +16,19 @@ class RobotChooseVC: UIViewController,UITableViewDelegate,UITableViewDataSource 
     
     @IBOutlet weak var tableView: UITableView!
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         weak var weakself = self
+    
         RobotAPI.getEndpoints(func: { (result) in
             weakself!.endpoints =  self.endpoints + result!
             weakself!.tableView.reloadData()
         }) { (error) in
             
         }
+    
     }
     
     override func didReceiveMemoryWarning() {
@@ -42,13 +45,18 @@ extension RobotChooseVC{
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("CELL")
-        if nil == cell {
-            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "CELL")
-        }
-        let endpoint = self.endpoints[indexPath.row]
-        cell?.textLabel?.text = endpoint.endpoin_name
-        return cell!
+        
+        let CellIndentifier:String = "RobotChooseCell"
+        
+        let cell:RobotChooseCell = tableView.dequeueReusableCellWithIdentifier(CellIndentifier, forIndexPath: indexPath) as! RobotChooseCell
+       
+        let endpoint:EndPoint = self.endpoints[indexPath.row]
+        cell.lb_title.text = endpoint.endpoin_name
+        let i = NSNumber(int:(Int32(endpoint.battery_percent))!)
+       
+        cell.power = i
+        
+        return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
