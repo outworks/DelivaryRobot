@@ -34,6 +34,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>IQKeyboardManagerSwift.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MSWeakTimer.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -62,6 +67,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>1520003FEBEC114D6C84F832AFEDB994</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>16FB872D0D2D4BA0F378AB34D47CF95F</key>
 		<dict>
 			<key>primary</key>
@@ -72,12 +82,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>3BEFABF3D5A15A58D276053A21EDD178</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>4DD8D7B8D6C13EC39913BEA7CCCCA5B0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>52B7BA760F5DBEA626A280AA6C18FB36</key>
+		<key>754FB6E09AFF3C5193EA773747290846</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -87,17 +102,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AABDACDDC2C177B485EEA3AB50FEC20B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>B1D17BA74BEACBD28F897F231B5907A4</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>B2C39D8042C189CC22254AB5274D90BC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -107,12 +112,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BA8B625F509E9E0F642336C652B5D4C6</key>
+		<key>C3C2090211A29BD5E3D9489627F6F807</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C3C2090211A29BD5E3D9489627F6F807</key>
+		<key>D635B6EBDED8514BFFD9E59AA70FB9C9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FE64DB3BA6B8D83E4C46FCFFFC42CC10</key>
 		<dict>
 			<key>primary</key>
 			<true/>

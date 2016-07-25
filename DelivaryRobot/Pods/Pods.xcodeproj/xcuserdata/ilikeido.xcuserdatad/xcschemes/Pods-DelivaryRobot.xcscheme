@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B2C39D8042C189CC22254AB5274D90BC"
+               BlueprintIdentifier = "FE64DB3BA6B8D83E4C46FCFFFC42CC10"
                BuildableName = "Pods_DelivaryRobot.framework"
                BlueprintName = "Pods-DelivaryRobot"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B2C39D8042C189CC22254AB5274D90BC"
+            BlueprintIdentifier = "FE64DB3BA6B8D83E4C46FCFFFC42CC10"
             BuildableName = "Pods_DelivaryRobot.framework"
             BlueprintName = "Pods-DelivaryRobot"
             ReferencedContainer = "container:Pods.xcodeproj">

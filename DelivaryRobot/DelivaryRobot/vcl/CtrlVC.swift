@@ -120,7 +120,132 @@ extension CtrlVC{
 
 
 extension CtrlVC{
+    //TODO:
+    /**
+     显示方向控制视图
+     */
+    func  showDirctionView() -> Void {
+        
+    }
+    /**
+     隐藏方向控制视图
+     */
+    func hideDirctionView()->Void{
+        
+    }
     
+    /**
+     显示座位选择视图
+     */
+    func showSeatChooseVC()->Void{
+        weak var weakself = self
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let seatChooseVC = storyboard.instantiateViewControllerWithIdentifier("SeatChooseVC")
+        weakself!.navigationController?.presentViewController(seatChooseVC, animated: true, completion: {
+            
+        })
+    }
+    
+    /**
+     在界面上显示信息
+     
+     - parameter msg:
+     */
+    func showMessage(msg:String)->Void{
+        
+    }
+    
+    /**
+     关闭显示的信息
+     */
+    func hideMessage()->Void{
+        
+    }
+    
+    /**
+     设置控制按钮的标题
+     
+     - parameter title: 标题
+     */
+    func setCtrlBtnTitle(title:String) -> Void{
+        
+    }
+    
+}
+
+let TAG_TARGET_PAUSE = 101 //任务挂起
+var HAS_TARGET_PAUSE = false  //用来判断是否送餐任务挂起
+
+
+extension CtrlVC:UIAlertViewDelegate{
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int){
+        weak var weakself = self;
+        if buttonIndex==1 && alertView.tag == TAG_TARGET_PAUSE{
+            RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_AUTOMOVE_SUSPEND, func: {
+                weakself?.setCtrlBtnTitle("自动")
+                weakself?.showDirctionView()
+                }, func: { (error) in
+                    
+            })
+        }
+    }
+}
+
+extension CtrlVC{
+    
+    /**
+     送餐
+     
+     - parameter sender:
+     */
+    @IBAction func chooseAction(sender: AnyObject) {
+        let flag = RobotAPI.canGoSeat(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+        if !flag.canGo {
+            self.showMessage(flag.msg)
+        }else{
+            self.hideMessage()
+            self.showSeatChooseVC()
+        }
+    }
+    
+    /**
+     控制
+     
+     - parameter sender:
+     */
+    @IBAction func beginCtrlAction(sender: AnyObject) {
+        weak var weakself = self
+        if HAS_TARGET_PAUSE {
+            RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_FINDPATH_RESUME, func: { 
+                    weakself?.setCtrlBtnTitle("手控")
+                    HAS_TARGET_PAUSE = false
+                    weakself?.hideDirctionView()
+                }, func: { (error) in
+                    
+            })
+        }else{
+            let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_GOBACK {
+                let alert = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否挂起该任务状态？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定");
+                alert.tag = TAG_TARGET_PAUSE
+            }else{
+                RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_AUTOMOVE_SUSPEND, func: {
+                    HAS_TARGET_PAUSE = false
+                    weakself?.setCtrlBtnTitle("自动")
+                    weakself?.showDirctionView()
+                    }, func: { (error) in
+                        
+                })
+            }
+        }
+        
+    }
+    
+    /**
+     方向按下
+     
+     - parameter sender:
+     */
     @IBAction func downAction(sender: AnyObject) {
         let btn:UIButton = sender as! UIButton
         switch btn.tag {
@@ -138,7 +263,11 @@ extension CtrlVC{
         self.beginAction()
     }
     
-    
+    /**
+     方向放开
+     
+     - parameter sender:
+     */
     @IBAction func upAction(sender: AnyObject) {
         dirction = MOVE_DIRCTION.MOVE_DIRCTION_STOP
         self.endDirctionCMD()

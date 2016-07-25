@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import IQKeyboardManagerSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let params = RobotAPI.LoginParams(username: "886066",password: "123456")
 //        RobotAPI.login(params, func: { (result) in
 //            print(result.create_time)
-        
+            IQKeyboardManager.sharedManager().enable = true
             UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
             let navBar = UINavigationBar.appearance()
             navBar.barTintColor = UIColor.init(red: 62/255, green: 111/255, blue: 77/255, alpha: 1.0)

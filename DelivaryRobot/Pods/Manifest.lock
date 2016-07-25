@@ -13,6 +13,7 @@ PODS:
   - CryptoSwift (0.5.1)
   - DZNEmptyDataSet (1.8.1)
   - EVReflection (2.38.1)
+  - IQKeyboardManagerSwift (4.0.4)
   - MSWeakTimer (1.1.0)
   - RAMAnimatedTabBarController (1.5.3)
   - SCLAlertView (0.5.9)
@@ -24,6 +25,7 @@ DEPENDENCIES:
   - CryptoSwift
   - DZNEmptyDataSet
   - EVReflection
+  - IQKeyboardManagerSwift
   - RAMAnimatedTabBarController
   - SCLAlertView
   - SwiftyJSON
@@ -35,11 +37,12 @@ SPEC CHECKSUMS:
   CryptoSwift: df42dda18baf6c76347a94e227dbcc0a341304bd
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   EVReflection: 8982495e0a5a9b7b1d4e766e4e08b0ffc6ca5469
+  IQKeyboardManagerSwift: e0964d04d6a29b71016fd346dca13ecb80a2823a
   MSWeakTimer: 9426150f933b80ed3acf3f6d228e4b61f0e303c8
   RAMAnimatedTabBarController: 04b624cf8958a0032bf7fa9c0f2c515f59d30b9c
   SCLAlertView: d7c6a48c7d340e60206d4ed0e8ebcbff3b9d2a44
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
-PODFILE CHECKSUM: 16c5fb07575279ff19b535a6f8eb168962c62c87
+PODFILE CHECKSUM: 0cc7408b88b01f765d9d307843363320ab1d8520
 
 COCOAPODS: 1.0.1

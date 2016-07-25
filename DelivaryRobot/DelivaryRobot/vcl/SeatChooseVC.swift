@@ -65,13 +65,14 @@ extension SeatChooseVC{
             weakself!.sendCmd()
         }
         alertView.showInfo("提示", subTitle: "点击确定开始送餐")
-
     }
     
     func sendCmd(){
-        
+        weak var weakself = self;
         RobotAPI.goSeat(RotbotInfoManager.sharedInstance.current_endpoint_id!, seat: self.waitSeat!, func: {
-            
+            weakself?.dismissViewControllerAnimated(true, completion: { 
+                
+            })
         }) { (error) in
             
         }
