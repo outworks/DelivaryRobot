@@ -75,11 +75,7 @@ extension CtrlVC{
                 alertView = UIAlertView.init(title: "提示", message: "请放让咖啡", delegate: nil, cancelButtonTitle: "确定")
                 alertView!.show()
             }else if robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL{ //等待送餐 ，弹出选择框
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let seatChooseVC = storyboard.instantiateViewControllerWithIdentifier("SeatChooseVC")
-                weakself!.navigationController?.presentViewController(seatChooseVC, animated: true, completion: { 
-                    
-                })
+                weakself?.showSeatChooseVC()
             }
         }
     }
