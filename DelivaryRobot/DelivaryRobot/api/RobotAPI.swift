@@ -211,7 +211,7 @@ class RobotAPI :BaseHttpAPI{
             return (false,"正在送餐，请稍候")
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_GOBACK {
-            return (false,"正在返回送餐点，请稍候")
+            return (false,"正在返回取餐点，请稍候")
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_TOCHARGE {
             return (false,"正在前往充电，请稍候")
@@ -236,6 +236,7 @@ class RobotAPI :BaseHttpAPI{
         if robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
             return (true,"")
         }
+        RobotAPI.toGetMeals(registration_id)
         //ToDo: 发送就位指令
         return (false,"机器人前往取餐，请稍候")
     }

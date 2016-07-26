@@ -78,8 +78,10 @@ extension CtrlVC{
         if endpoint_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
             if robotInfo.status == ROBOT_STATUS.MOVE_WAITREADY { //等待就位 弹出提示
-                alertView = UIAlertView.init(title: "提示", message: "请放让咖啡", delegate: nil, cancelButtonTitle: "确定")
-                alertView!.show()
+                if nil == alertView {
+                    alertView = UIAlertView.init(title: "提示", message: "请放让咖啡", delegate: nil, cancelButtonTitle: "确定")
+                    alertView!.show()
+                }
             }else if robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL{ //等待送餐 ，弹出选择框
                 weakself?.showSeatChooseVC()
             }
@@ -144,6 +146,10 @@ extension CtrlVC{
      显示座位选择视图
      */
     func showSeatChooseVC()->Void{
+        if nil != alertView {
+            alertView!.dismissWithClickedButtonIndex(0, animated: false)
+            alertView = nil
+        }
         weak var weakself = self
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let seatChooseVC = storyboard.instantiateViewControllerWithIdentifier("SeatChooseVC")
@@ -158,6 +164,7 @@ extension CtrlVC{
      - parameter msg:
      */
     func showMessage(msg:String)->Void{
+        self.hideMessage()
         alertView = UIAlertView(title: "提示", message: msg, delegate: nil, cancelButtonTitle: "确定")
         alertView?.show()
     }
@@ -166,7 +173,8 @@ extension CtrlVC{
      关闭显示的信息
      */
     func hideMessage()->Void{
-        alertView?.dismissWithClickedButtonIndex(0, animated: true)
+        alertView?.dismissWithClickedButtonIndex(0, animated: false)
+        alertView = nil
     }
     
     /**

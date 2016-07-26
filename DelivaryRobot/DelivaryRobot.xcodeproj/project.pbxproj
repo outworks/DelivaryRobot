@@ -18,6 +18,7 @@
 		AC4012C71D36219B00382558 /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4012C61D36219B00382558 /* Tools.swift */; };
 		AC44E4871D34E07F002DB51A /* Predefined.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC44E4861D34E07F002DB51A /* Predefined.swift */; };
 		AC44E4891D34E4C8002DB51A /* MQTTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC44E4881D34E4C8002DB51A /* MQTTManager.swift */; };
+		AC6D9F3D1D4723210083418A /* RobotChooseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6D9F3C1D4723210083418A /* RobotChooseCell.swift */; };
 		ACD660051D373363004D615C /* CtrlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD660041D373363004D615C /* CtrlVC.swift */; };
 		ACD660071D3798A5004D615C /* DelivaryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD660061D3798A5004D615C /* DelivaryVC.swift */; };
 		ACE2F9241D3885B600EC3914 /* SeatChooseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE2F9231D3885B600EC3914 /* SeatChooseVC.swift */; };
@@ -38,6 +39,7 @@
 		AC4012C61D36219B00382558 /* Tools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tools.swift; sourceTree = "<group>"; };
 		AC44E4861D34E07F002DB51A /* Predefined.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Predefined.swift; sourceTree = "<group>"; };
 		AC44E4881D34E4C8002DB51A /* MQTTManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MQTTManager.swift; sourceTree = "<group>"; };
+		AC6D9F3C1D4723210083418A /* RobotChooseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RobotChooseCell.swift; sourceTree = "<group>"; };
 		ACD660041D373363004D615C /* CtrlVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CtrlVC.swift; sourceTree = "<group>"; };
 		ACD660061D3798A5004D615C /* DelivaryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelivaryVC.swift; sourceTree = "<group>"; };
 		ACE2F9231D3885B600EC3914 /* SeatChooseVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeatChooseVC.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 		AC26B1E71D339D5000DBC637 /* DelivaryRobot */ = {
 			isa = PBXGroup;
 			children = (
+				AC6D9F3B1D4723210083418A /* cell */,
 				ACD660031D37326B004D615C /* vcl */,
 				AC26B1FA1D339F0A00DBC637 /* api */,
 				AC26B1E81D339D5000DBC637 /* AppDelegate.swift */,
@@ -110,6 +113,15 @@
 				AC4012C61D36219B00382558 /* Tools.swift */,
 			);
 			path = api;
+			sourceTree = "<group>";
+		};
+		AC6D9F3B1D4723210083418A /* cell */ = {
+			isa = PBXGroup;
+			children = (
+				AC6D9F3C1D4723210083418A /* RobotChooseCell.swift */,
+			);
+			name = cell;
+			path = vcl/cell;
 			sourceTree = "<group>";
 		};
 		ACD660031D37326B004D615C /* vcl */ = {
@@ -260,6 +272,7 @@
 				AC26B1E91D339D5000DBC637 /* AppDelegate.swift in Sources */,
 				AC4012C71D36219B00382558 /* Tools.swift in Sources */,
 				ACD660051D373363004D615C /* CtrlVC.swift in Sources */,
+				AC6D9F3D1D4723210083418A /* RobotChooseCell.swift in Sources */,
 				AC44E4891D34E4C8002DB51A /* MQTTManager.swift in Sources */,
 				ACD660071D3798A5004D615C /* DelivaryVC.swift in Sources */,
 				ACE2F9261D3886BB00EC3914 /* RobotChooseVC.swift in Sources */,

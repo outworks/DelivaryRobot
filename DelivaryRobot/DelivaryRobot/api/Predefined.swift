@@ -96,6 +96,8 @@ public enum ROBOT_STATUS: Int {
     
     static func IntToStatus(value:Int) -> ROBOT_STATUS {
         switch value {
+        case 0:
+            return MOVE_FREE
         case 1:
             return MOVE_AUTO
         case 2:
