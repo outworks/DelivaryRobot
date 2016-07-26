@@ -28,6 +28,11 @@ class CtrlVC: UIViewController {
     
     @IBOutlet weak var btn_pause: UIButton!
     
+    @IBOutlet weak var btn_ctrl: UIButton!
+    
+    @IBOutlet weak var view_ctrl: UIView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -37,6 +42,7 @@ class CtrlVC: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.ONLINE_CHANGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updatePosLable), name: RobotNotification.POSLABLE_CHANGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.DEVICE_STATUS, object: nil)
+        self.hideDirctionView()
         self.clearTagStatus()
         self.updateUI()
     }
@@ -121,13 +127,17 @@ extension CtrlVC{
      显示方向控制视图
      */
     func  showDirctionView() -> Void {
-        
+        btn_ctrl.tag = 1
+        self.setCtrlBtnTitle("自动")
+        view_ctrl.hidden = false
     }
     /**
      隐藏方向控制视图
      */
     func hideDirctionView()->Void{
-        
+        btn_ctrl.tag = 0
+        self.setCtrlBtnTitle("手控")
+        view_ctrl.hidden = true
     }
     
     /**
@@ -148,14 +158,15 @@ extension CtrlVC{
      - parameter msg:
      */
     func showMessage(msg:String)->Void{
-        
+        alertView = UIAlertView(title: "提示", message: msg, delegate: nil, cancelButtonTitle: "确定")
+        alertView?.show()
     }
     
     /**
      关闭显示的信息
      */
     func hideMessage()->Void{
-        
+        alertView?.dismissWithClickedButtonIndex(0, animated: true)
     }
     
     /**
@@ -178,7 +189,6 @@ extension CtrlVC:UIAlertViewDelegate{
         weak var weakself = self;
         if buttonIndex==1 && alertView.tag == TAG_TARGET_PAUSE{
             RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_AUTOMOVE_SUSPEND, func: {
-                weakself?.setCtrlBtnTitle("自动")
                 weakself?.showDirctionView()
                 }, func: { (error) in
                     
@@ -211,15 +221,7 @@ extension CtrlVC{
      */
     @IBAction func beginCtrlAction(sender: AnyObject) {
         weak var weakself = self
-        if HAS_TARGET_PAUSE {
-            RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_FINDPATH_RESUME, func: { 
-                    weakself?.setCtrlBtnTitle("手控")
-                    HAS_TARGET_PAUSE = false
-                    weakself?.hideDirctionView()
-                }, func: { (error) in
-                    
-            })
-        }else{
+        if btn_ctrl.tag == 0{
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_GOBACK {
                 let alert = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否挂起该任务状态？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定");
@@ -227,11 +229,22 @@ extension CtrlVC{
             }else{
                 RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_AUTOMOVE_SUSPEND, func: {
                     HAS_TARGET_PAUSE = false
-                    weakself?.setCtrlBtnTitle("自动")
                     weakself?.showDirctionView()
+                    
                     }, func: { (error) in
                         
                 })
+            }
+        }else{
+            if HAS_TARGET_PAUSE {
+                RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_FINDPATH_RESUME, func: {
+                    HAS_TARGET_PAUSE = false
+                    weakself?.hideDirctionView()
+                    }, func: { (error) in
+                        
+                })
+            }else{
+                weakself?.hideDirctionView()
             }
         }
         

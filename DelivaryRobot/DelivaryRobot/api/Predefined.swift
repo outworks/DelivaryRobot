@@ -37,7 +37,7 @@ public enum MOVE_CTRL_ACTION: Int {
     case ACT_MOVE_CTRL_WANDER = 4
     case ACT_MOVE_CTRL_STOP_SLOW  = 5
     case ACT_FINDPATH_STOP  = 6
-    case ACT_CTRL_GET_MEALS  = 7
+    case ACT_MOVE_CTRL_GET_MEALS  = 7
 }
 
 /**
@@ -170,7 +170,6 @@ public class RotbotInfo{
     var endpoint_id = ""
     var posLable = -1
     var errorDetail = ""
-    
     
     init(endpoint_id:String){
         self.endpoint_id = endpoint_id

@@ -126,7 +126,13 @@ class RobotAPI :BaseHttpAPI{
                         }
                     }
                 }
-                successHandle()
+                 successHandle()
+                return
+                getRobotposLable(endpoint_id, func: { (posLable) in
+                    successHandle()
+                    }, func: { (error) in
+                        
+                })
                 }, func: { (error) in
                     errorHandler(error: error)
             })
@@ -215,12 +221,8 @@ class RobotAPI :BaseHttpAPI{
                 return (false,"正在充电，请稍候")
             }
             //ToDo: 发送就位指令
-            RobotAPI.sendCMD(registration_id, cmd: MOVE_CTRL_ACTION.ACT_CTRL_GET_MEALS, func: { 
-                
-                }, func: { (error) in
-                    
-            })
-            return (false,"正在返回送餐点，请稍候")
+            RobotAPI.toGetMeals(registration_id)
+            return (false,"正在返回取餐点，请稍候")
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_CHARGING {
             if(robotInfo.power <= 20){
@@ -236,6 +238,61 @@ class RobotAPI :BaseHttpAPI{
         }
         //ToDo: 发送就位指令
         return (false,"机器人前往取餐，请稍候")
+    }
+    
+    /**
+     获取机器人当前的rfid标答
+     
+     - parameter registration_id: 编号
+     - parameter successHand:     成功回调
+     - parameter errorHandler:    错误回调
+     */
+    static func getRobotposLable(registration_id:String,func successHand:(posLable:Int)->Void,func errorHandler:(error:BaseError?) -> Void) -> Void{
+        let path = String(format: "/v0.1/endpoints/%@/robot/robotposlable/", registration_id)
+        request(.POST, path: path, paramsdict: nil, serverPort: nil, func: { (result:NSDictionary?) in
+            if nil != result{
+                let infodict:NSDictionary? = result!["info"] as? NSDictionary
+                if nil != infodict{
+                    let posLable:NSNumber? = infodict!["posLable"] as? NSNumber
+                    if nil != posLable{
+                        let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(registration_id)
+                        robotInfo.posLable = posLable!.integerValue
+                        successHand(posLable:posLable!.integerValue)
+                        return
+                    }
+                }
+            }
+            successHand(posLable:-1)
+        }) { (error) in
+            errorHandler(error: error)
+        }
+    }
+    
+    /**
+     获取机器人正在送菜的桌号
+     
+     - parameter registration_id: 编号
+     - parameter successHand:     成功回调
+     - parameter errorHandler:    错误回调
+     */
+    static func getSeatTaskID(registration_id:String,func successHand:(tableId:Int)->Void,func errorHandler:(error:BaseError?) -> Void) -> Void{
+        let path = String(format: "/v0.1/endpoints/%@/robot/tableid/", registration_id)
+        request(.POST, path: path, paramsdict: nil, serverPort: nil, func: { (result:NSDictionary?) in
+            if nil != result{
+                let infodict:NSDictionary? = result!["info"] as? NSDictionary
+                if nil != infodict{
+                    let tableId:NSNumber? = infodict!["nTableId"] as? NSNumber
+                    if nil != tableId{
+                        successHand(tableId: tableId!.integerValue)
+                        return
+                    }
+                }
+            }
+            successHand(tableId: -1)
+        }) { (error) in
+            errorHandler(error: error)
+        }
+
     }
     
     /**
@@ -373,6 +430,24 @@ class RobotAPI :BaseHttpAPI{
         TopicTools.pushNotification(topic, endpoint_id: endpoint_id)
         MQTTManager.sharedInstance.listenTopic(topic);
         NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.deviceStatusHandler(_:)), name: topic, object: nil)
+    }
+    
+    
+    /**
+     机器人取餐
+     
+     - parameter endpoint_id: 编
+     */
+    static func toGetMeals(endpoint_id:String){
+        RobotAPI.sendCMD(endpoint_id, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_STOP_SLOW, func: {
+            RobotAPI.sendCMD(endpoint_id, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_GET_MEALS, func: {
+                
+                }, func: { (error) in
+                    
+            })
+            }) { (error) in
+                
+        }
     }
     
     /// 消息分发
