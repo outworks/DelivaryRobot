@@ -18,6 +18,9 @@ class RobotChooseCell: UITableViewCell {
     @IBOutlet weak var img_powerbg: UIImageView!
     /**************** 显示电量多少图片 *****************/
     @IBOutlet weak var img_powerColoer: UIImageView!
+    /**************** 显示电量多少 *****************/
+    @IBOutlet weak var lb_power: UILabel!
+    
     /**************** 显示电量距离上面的layout *****************/
     @IBOutlet weak var layout_top_power: NSLayoutConstraint!
     
@@ -33,14 +36,18 @@ class RobotChooseCell: UITableViewCell {
             if self.power?.intValue < 30 {
                 img_powerbg.image = UIImage(named:"icon_lowPower_bg")
                 img_powerColoer.image = UIImage(named: "icon_lowPower_color")
-                
+                lb_power.textColor = UIColor(red: 199.0/255.0, green: 2.0/255.0, blue: 1.0/255.0, alpha: 1.0)
                 
             } else{
                 img_powerbg.image = UIImage(named:"icon_commonPower_bg")
                 img_powerColoer.image = UIImage(named: "icon_common_color")
+                lb_power.textColor = UIColor.blackColor()
+                
             }
             
             layout_top_power.constant = CGFloat(17.0 - 0.17 * (self.power?.floatValue)! + 2)
+            
+            lb_power.text = (self.power?.stringValue)! + "%"
             
         }
     

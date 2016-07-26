@@ -1,10 +1,12 @@
-//
-//  ViewController.swift
-//  DelivaryRobot
-//
-//  Created by ilikeido on 16/7/11.
-//  Copyright © 2016年 ilikeido. All rights reserved.
-//
+/*********************************************************************
+ * Copyright © 2016年 NetDragon. All rights reserved.
+ * Date: 16/7/05
+ * Name: ilikeido
+ **********************************************************************
+ * @文件名称: ViewController.swift
+ * @文件描述: 登录场景
+ * @补充说明: 无
+ *********************************************************************/
 
 import UIKit
 
@@ -13,13 +15,14 @@ class ViewController: UIViewController,UITextFieldDelegate {
     var storyBoard:UIStoryboard?
     
     @IBOutlet weak var btn_username: UITextField!
-    
-    
     @IBOutlet weak var btn_password: UITextField!
+    @IBOutlet weak var btn_rememberPwd: UIButton!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
         self.btn_username.text = NSUserDefaults.standardUserDefaults().stringForKey("ACCOUNT_NAME")
         self.btn_password.text = NSUserDefaults.standardUserDefaults().stringForKey("ACCOUNT_PASSWORD")
     }
@@ -50,9 +53,29 @@ class ViewController: UIViewController,UITextFieldDelegate {
         let loginParams = RobotAPI.LoginParams(username: btn_username.text!, password: btn_password.text!)
         weak var weakself = self
         RobotAPI.login(loginParams, func: { (result) in
-            NSUserDefaults.standardUserDefaults().setObject(loginParams.account_name, forKey: "ACCOUNT_NAME")
-            NSUserDefaults.standardUserDefaults().setObject(loginParams.password, forKey:"ACCOUNT_PASSWORD")
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            if weakself!.btn_rememberPwd.selected {
+                
+                NSUserDefaults.standardUserDefaults().setObject(loginParams.account_name, forKey: "ACCOUNT_NAME")
+                NSUserDefaults.standardUserDefaults().setObject(loginParams.password, forKey:"ACCOUNT_PASSWORD")
+                NSUserDefaults.standardUserDefaults().synchronize()
+            }else{
+            
+                NSUserDefaults.standardUserDefaults().setObject("", forKey: "ACCOUNT_NAME")
+                NSUserDefaults.standardUserDefaults().setObject("", forKey:"ACCOUNT_PASSWORD")
+                NSUserDefaults.standardUserDefaults().synchronize()
+            }
+            
+            var storyboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            if (UIDevice.currentDevice().userInterfaceIdiom == .Phone) {
+               storyboard = UIStoryboard(name: "Main", bundle: nil)
+            }else{
+               storyboard = UIStoryboard(name: "Main_ipad", bundle: nil)
+            }
+            
+            
+            //let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let ctrlVC = storyboard.instantiateViewControllerWithIdentifier("RobotChooseVC")
             weakself!.navigationController?.pushViewController(ctrlVC, animated: true)
             }) { (error) in
@@ -64,6 +87,14 @@ class ViewController: UIViewController,UITextFieldDelegate {
         
     }
     
+    
+    @IBAction func rememberButtonAction(sender: AnyObject) {
+        
+        btn_rememberPwd.selected = !btn_rememberPwd.selected
+        
+    }
+    
+
     func textFieldShouldReturn(textField: UITextField) -> Bool{
         textField.resignFirstResponder();
         return true

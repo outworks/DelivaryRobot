@@ -1,10 +1,12 @@
-//
-//  RobotChooseVC.swift
-//  DelivaryRobot
-//
-//  Created by ilikeido on 16/7/15.
-//  Copyright © 2016年 ilikeido. All rights reserved.
-//
+/*********************************************************************
+ * Copyright © 2016年 NetDragon. All rights reserved.
+ * Date: 16/7/05
+ * Name: ilikeido
+ **********************************************************************
+ * @文件名称: RobotChooseVC.swift
+ * @文件描述: 选择机器场景
+ * @补充说明: 无
+ *********************************************************************/
 
 import UIKit
 import Foundation
@@ -72,12 +74,25 @@ extension RobotChooseVC{
             RobotAPI.addLeaveSeatPointListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addDeviceStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            var storyboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            if (UIDevice.currentDevice().userInterfaceIdiom == .Phone) {
+                storyboard = UIStoryboard(name: "Main", bundle: nil)
+            }else{
+                storyboard = UIStoryboard(name: "Main_ipad", bundle: nil)
+            }
+            
             let ctrlVC = storyboard.instantiateViewControllerWithIdentifier("CtrlVC")
             weakself!.navigationController?.pushViewController(ctrlVC, animated: true)
         }) { (error) in
             SCLAlertView().showError("提示", subTitle: (error?.message)!)
         }
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat{
+    
+        return 70.0
     }
     
 }

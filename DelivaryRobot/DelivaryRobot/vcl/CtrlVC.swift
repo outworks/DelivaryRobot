@@ -234,6 +234,7 @@ extension CtrlVC{
             if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_GOBACK {
                 let alert = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否挂起该任务状态？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定");
                 alert.tag = TAG_TARGET_PAUSE
+                alert.show()
             }else{
                 RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_AUTOMOVE_SUSPEND, func: {
                     HAS_TARGET_PAUSE = false
@@ -301,6 +302,12 @@ extension CtrlVC{
     @IBAction func stopAction(sender: AnyObject) {
         self.sendStopAction()
     }
+    
+    /**
+     充电
+     
+     - parameter sender:
+     */
     
     @IBAction func chargeAction(sender: AnyObject) {
         self.sendChargeAction()

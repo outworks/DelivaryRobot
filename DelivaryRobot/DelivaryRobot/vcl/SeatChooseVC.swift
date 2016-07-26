@@ -1,10 +1,12 @@
-//
-//  RobotChooseVC.swift
-//  DelivaryRobot
-//
-//  Created by ilikeido on 16/7/15.
-//  Copyright © 2016年 ilikeido. All rights reserved.
-//
+/*********************************************************************
+ * Copyright © 2016年 NetDragon. All rights reserved.
+ * Date: 16/7/05
+ * Name: ilikeido
+ **********************************************************************
+ * @文件名称: SeatChooseVC.swift
+ * @文件描述: 座位选择场景
+ * @补充说明: 无
+ *********************************************************************/
 
 import Foundation
 import SCLAlertView
