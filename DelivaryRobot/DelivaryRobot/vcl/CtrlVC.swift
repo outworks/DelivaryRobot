@@ -78,10 +78,7 @@ extension CtrlVC{
         if endpoint_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
             if robotInfo.status == ROBOT_STATUS.MOVE_WAITREADY { //等待就位 弹出提示
-                if nil == alertView {
-                    alertView = UIAlertView.init(title: "提示", message: "请放让咖啡", delegate: nil, cancelButtonTitle: "确定")
-                    alertView!.show()
-                }
+                showMessage("请放让咖啡")
             }else if robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL{ //等待送餐 ，弹出选择框
                 weakself?.showSeatChooseVC()
             }
@@ -115,6 +112,7 @@ extension CtrlVC{
             let online = robotInfo.online ? "在线":"断线"
             self.lb_electricity.text = "电量：" + String(robotInfo.power)
             self.lb_status.text = "状态:" + robotInfo.statusName() + "(" + online + ")"
+            self.setTagHighter(robotInfo.posLable)
         }
         
     }
@@ -232,9 +230,9 @@ extension CtrlVC{
         if btn_ctrl.tag == 0{
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_GOBACK {
-                let alert = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否挂起该任务状态？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定");
-                alert.tag = TAG_TARGET_PAUSE
-                alert.show()
+                alertView = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否挂起该任务状态？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定");
+                alertView!.tag = TAG_TARGET_PAUSE
+                alertView!.show()
             }else{
                 RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_AUTOMOVE_SUSPEND, func: {
                     HAS_TARGET_PAUSE = false
@@ -351,6 +349,10 @@ extension CtrlVC{
         RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_STOP_SLOW, func: {
             weakself!.btn_pause.enabled = false
             weakself!.btn_pause.setTitle("已无任务", forState:UIControlState.Normal)
+            RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_GET_MEALS, func: {
+            }) { (error) in
+                
+            }
         }) { (error) in
             
         }
@@ -402,6 +404,7 @@ extension CtrlVC{
         print(endpoint.endpoin_name + "_" + endpoint.registration_id)
         let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint.registration_id)
         robotInfo.clearStatus()
+        weak var weakself = self;
         RobotAPI.loginRobot(endpoint.registration_id, func: {
             print("登录机器成功")
             RobotAPI.addStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
@@ -409,7 +412,7 @@ extension CtrlVC{
             RobotAPI.addPowerListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
             }) { (error) in
-                SCLAlertView().showError("提示", subTitle: (error?.message)!)
+                weakself!.showMessage((error?.message)!)
         }
     }
     

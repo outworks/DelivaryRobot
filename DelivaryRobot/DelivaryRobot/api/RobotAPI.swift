@@ -126,12 +126,10 @@ class RobotAPI :BaseHttpAPI{
                         }
                     }
                 }
-                 successHandle()
-                return
                 getRobotposLable(endpoint_id, func: { (posLable) in
                     successHandle()
-                    }, func: { (error) in
-                        
+                    }, func: { (error1) in
+                        errorHandler(error: error1)
                 })
                 }, func: { (error) in
                     errorHandler(error: error)
@@ -168,6 +166,7 @@ class RobotAPI :BaseHttpAPI{
         return list
     }
     
+        
     /**
      送餐到某个位置去
      
@@ -211,10 +210,20 @@ class RobotAPI :BaseHttpAPI{
             return (false,"正在送餐，请稍候")
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_GOBACK {
-            return (false,"正在返回取餐点，请稍候")
+            if(robotInfo.power <= 20){
+                return (false,"电量不足，正在前往充电，请稍候")
+            }else{
+                RobotAPI.toGetMeals(registration_id)
+                return (false,"正在返回取餐点，请稍候")
+            }
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_TOCHARGE {
-            return (false,"正在前往充电，请稍候")
+            if(robotInfo.power <= 20){
+                return (false,"正在充电，请稍候")
+            }
+            //ToDo: 发送就位指令
+            RobotAPI.toGetMeals(registration_id)
+            return (false,"正在返回取餐点，请稍候")
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_CHARGING {
             if(robotInfo.power <= 20){
@@ -249,17 +258,26 @@ class RobotAPI :BaseHttpAPI{
      - parameter errorHandler:    错误回调
      */
     static func getRobotposLable(registration_id:String,func successHand:(posLable:Int)->Void,func errorHandler:(error:BaseError?) -> Void) -> Void{
-        let path = String(format: "/v0.1/endpoints/%@/robot/robotposlable/", registration_id)
-        request(.POST, path: path, paramsdict: nil, serverPort: nil, func: { (result:NSDictionary?) in
+        let path = String(format: "/v0.1/endpoints/%@/robot/robotposlabel/", registration_id)
+        let params = ["posAction":0,"posType":0]
+        request(.POST, path: path, paramsdict: params, serverPort: nil, func: { (result:NSDictionary?) in
             if nil != result{
-                let infodict:NSDictionary? = result!["info"] as? NSDictionary
-                if nil != infodict{
-                    let posLable:NSNumber? = infodict!["posLable"] as? NSNumber
-                    if nil != posLable{
-                        let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(registration_id)
-                        robotInfo.posLable = posLable!.integerValue
-                        successHand(posLable:posLable!.integerValue)
-                        return
+                let message:NSString? = result!["message"] as? NSString
+                if nil != message{
+                    let messageJson = JSON.parse(message! as String)
+                    let array:Array<JSON> = messageJson.arrayValue
+                    if array.count > 0{
+                        let messageDict = array[0]
+                        let infodict:NSDictionary? = messageDict["info"].dictionaryObject
+                        if nil != infodict{
+                            let posLable:NSNumber? = infodict!["posLabel"] as? NSNumber
+                            if nil != posLable{
+                                let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(registration_id)
+                                robotInfo.posLable = posLable!.integerValue
+                                successHand(posLable:posLable!.integerValue)
+                                return
+                            }
+                        }
                     }
                 }
             }
