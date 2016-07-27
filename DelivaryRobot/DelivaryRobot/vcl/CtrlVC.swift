@@ -338,7 +338,9 @@ extension CtrlVC{
         weak var weakself = self
         RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_AUTOMOVE_SUSPEND, func: {
             weakself!.btn_pause.tag = 1
-            weakself!.btn_pause.setTitle("继续任务", forState:UIControlState.Normal)
+            //weakself!.btn_pause.setTitle("继续任务", forState:UIControlState.Normal)
+            weakself!.btn_pause.setImage(UIImage(named: "icon_star_unsd_ipad"), forState: UIControlState.Normal)
+            weakself!.btn_pause.setImage(UIImage(named: "icon_star_sd_ipad"), forState: UIControlState.Highlighted)
         }) { (error) in
             
         }
@@ -358,7 +360,11 @@ extension CtrlVC{
         weak var weakself = self
         RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_FINDPATH_RESUME, func: {
             weakself!.btn_pause.tag = 0
-            weakself!.btn_pause.setTitle("暂停任务", forState:UIControlState.Normal)
+            //weakself!.btn_pause.setTitle("暂停任务", forState:UIControlState.Normal)
+            
+            weakself!.btn_pause.setImage(UIImage(named: "icon_pause_unsd_ipad"), forState: UIControlState.Normal)
+            weakself!.btn_pause.setImage(UIImage(named: "icon_pause_sd_ipad"), forState: UIControlState.Highlighted)
+            
             }) { (error) in
         }
     }
