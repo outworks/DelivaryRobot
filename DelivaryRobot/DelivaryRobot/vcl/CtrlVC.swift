@@ -22,7 +22,7 @@ class CtrlVC: UIViewController {
     
     @IBOutlet weak var lb_electricity: UILabel!
     
-    @IBOutlet weak var lb_status: UILabel!
+    //@IBOutlet weak var lb_status: UILabel!
     
     @IBOutlet weak var lb_route: UILabel!
     
@@ -32,10 +32,61 @@ class CtrlVC: UIViewController {
     
     @IBOutlet weak var view_ctrl: UIView!
     
+    var view_status: UIView?
+    var imgv_status: UIImageView?
+    var lb_status: UILabel?
     
+    
+    
+    /****************  停止视图 *****************/
+    @IBOutlet weak var view_stop: UIView!
+    /**************** 显示电量的背景图片 *****************/
+    @IBOutlet weak var img_powerbg: UIImageView!
+    /**************** 显示电量多少图片 *****************/
+    @IBOutlet weak var img_powerColoer: UIImageView!
+    /**************** 显示电量距离上面的layout *****************/
+    @IBOutlet weak var layout_height_power: NSLayoutConstraint!
+    /**************** 显示电量多少 *****************/
+    @IBOutlet weak var lb_power: UILabel!
+    /**************** 显示机器名字 *****************/
+    @IBOutlet weak var lb_nameRobit: UILabel!
+    
+    var power:NSNumber?{
+        
+        /* 属性监视器方法
+         * 1.willSet 在设置新的值之前调用
+         * 2.didSet  在新的值被设置之后立即调用
+         */
+        
+        didSet{
+            
+            if self.power?.intValue < 30 {
+                img_powerbg.image = UIImage(named:"icon_lowPower_bg_ipad")
+                img_powerColoer.image = UIImage(named: "icon_lowPower_color_ipad")
+                lb_power.textColor = UIColor(red: 199.0/255.0, green: 2.0/255.0, blue: 1.0/255.0, alpha: 1.0)
+                
+            } else{
+                
+                img_powerbg.image = UIImage(named:"icon_commonPower_bg_ipad")
+                img_powerColoer.image = UIImage(named: "icon_common_color_ipad")
+                lb_power.textColor = UIColor.blackColor()
+
+            }
+            
+            layout_height_power.constant = CGFloat(0.1 * (self.power?.floatValue)!)
+            
+            lb_power.text = (self.power?.stringValue)! + "%"
+            
+        }
+        
+    }
+    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        self.addBackButton(self, action: #selector(self.backAction))
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.statusChanged), name: RobotNotification.STATUS_CHANGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateElectricity), name: RobotNotification.POWER_CHANGE, object: nil)
@@ -44,6 +95,7 @@ class CtrlVC: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.DEVICE_STATUS, object: nil)
         self.hideDirctionView()
         self.clearTagStatus()
+        self.setUpTitleView()
         self.updateUI()
     }
     
@@ -56,6 +108,7 @@ class CtrlVC: UIViewController {
 
 
 extension CtrlVC{
+    
     @objc func updateStatus(notification: NSNotification){
         let info = notification.userInfo!
         let endpoint_id:String = info["endpoint_id"] as! String
@@ -63,9 +116,19 @@ extension CtrlVC{
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
             let online = robotInfo.online ? "在线":"断线"
             if(robotInfo.errorDetail.isEmpty){
-                self.lb_status.text = "状态:" + robotInfo.statusName() + "(" + online + ")"
+                self.lb_status!.text = robotInfo.statusName() + "(" + online + ")"
+                
+                if robotInfo.statusName() == "闲置任务" || robotInfo.statusName() == "等待就位"{
+                    imgv_status?.image = UIImage(named: "icon_status_idle_ipad")
+                }else if robotInfo.statusName() == "脱离磁道" {
+                    imgv_status?.image = UIImage(named: "icon_status_abnormal_ipad")
+                } else {
+                    imgv_status?.image = UIImage(named: "icon_status_busy_ipad")
+                }
+                
             }else{
-                self.lb_status.text = "状态:" + robotInfo.errorDetail
+                self.lb_status!.text = robotInfo.errorDetail
+                imgv_status?.image = UIImage(named: "icon_status_abnormal_ipad")
             }
         }
     }
@@ -90,7 +153,10 @@ extension CtrlVC{
         let endpoint_id:String = info["endpoint_id"] as! String
         if endpoint_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
-            self.lb_electricity.text = "电量：" + String(robotInfo.power) + "/100"
+            
+            self.power = NSNumber(int:(Int32(robotInfo.power)))
+            
+            //self.lb_electricity.text = "电量：" + String(robotInfo.power) + "/100"
         }
     }
     
@@ -110,11 +176,38 @@ extension CtrlVC{
         if nil != RotbotInfoManager.sharedInstance.current_endpoint_id {
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             let online = robotInfo.online ? "在线":"断线"
-            self.lb_electricity.text = "电量：" + String(robotInfo.power)
-            self.lb_status.text = "状态:" + robotInfo.statusName() + "(" + online + ")"
+            //self.lb_electricity.text = "电量：" + String(robotInfo.power)
+            self.power = NSNumber(int:(Int32(robotInfo.power)))
+            self.lb_status!.text = robotInfo.statusName() + "(" + online + ")"
+            if robotInfo.statusName() == "闲置任务" || robotInfo.statusName() == "等待就位"{
+                imgv_status?.image = UIImage(named: "icon_status_idle_ipad")
+            }else if robotInfo.statusName() == "脱离磁道"{
+                imgv_status?.image = UIImage(named: "icon_status_abnormal_ipad")
+            } else {
+                imgv_status?.image = UIImage(named: "icon_status_busy_ipad")
+            }
+            
             self.setTagHighter(robotInfo.posLable)
+            self.lb_nameRobit.text = RotbotInfoManager.sharedInstance.current_endpoin_name!
+            self.view_stop.hidden = true;
         }
         
+    }
+    
+    func setUpTitleView(){
+        
+        view_status = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 150, height: 44))
+        view_status?.backgroundColor = UIColor.clearColor()
+        imgv_status = UIImageView(frame: CGRect(x: 5.0, y: 22-4.5, width: 9, height: 9))
+        view_status?.addSubview(imgv_status!)
+        
+        lb_status = UILabel(frame: CGRect(x: 19.0, y: 0.0, width: 150, height: 44))
+        lb_status?.font = UIFont.systemFontOfSize(18.0)
+        lb_status?.textColor = UIColor.whiteColor()
+        view_status?.addSubview(lb_status!)
+        
+        self.navigationItem.titleView = view_status
+    
     }
 
     
@@ -148,12 +241,17 @@ extension CtrlVC{
             alertView!.dismissWithClickedButtonIndex(0, animated: false)
             alertView = nil
         }
-        weak var weakself = self
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let seatChooseVC = storyboard.instantiateViewControllerWithIdentifier("SeatChooseVC")
-        weakself!.navigationController?.presentViewController(seatChooseVC, animated: true, completion: {
-            
-        })
+        //weak var weakself = self
+        
+        let myView = NSBundle.mainBundle().loadNibNamed("SeatChooseView", owner: nil, options: nil).first as? SeatChooseView
+        myView?.seatList = RobotAPI.getSeatList()
+        myView?.showView()
+        
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let seatChooseVC = storyboard.instantiateViewControllerWithIdentifier("SeatChooseVC")
+//        weakself!.navigationController?.presentViewController(seatChooseVC, animated: true, completion: {
+//            
+//        })
     }
     
     /**
@@ -191,6 +289,7 @@ var HAS_TARGET_PAUSE = false  //用来判断是否送餐任务挂起
 
 
 extension CtrlVC:UIAlertViewDelegate{
+    
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int){
         weak var weakself = self;
         if buttonIndex==1 && alertView.tag == TAG_TARGET_PAUSE{
@@ -207,10 +306,11 @@ extension CtrlVC{
     
     /**
      送餐
-     
      - parameter sender:
      */
+    
     @IBAction func chooseAction(sender: AnyObject) {
+        
         let flag = RobotAPI.canGoSeat(RotbotInfoManager.sharedInstance.current_endpoint_id!)
         if !flag.canGo {
             self.showMessage(flag.msg)
@@ -222,9 +322,9 @@ extension CtrlVC{
     
     /**
      控制
-     
      - parameter sender:
      */
+    
     @IBAction func beginCtrlAction(sender: AnyObject) {
         weak var weakself = self
         if btn_ctrl.tag == 0{
@@ -259,9 +359,9 @@ extension CtrlVC{
     
     /**
      方向按下
-     
      - parameter sender:
      */
+    
     @IBAction func downAction(sender: AnyObject) {
         let btn:UIButton = sender as! UIButton
         switch btn.tag {
@@ -281,9 +381,9 @@ extension CtrlVC{
     
     /**
      方向放开
-     
      - parameter sender:
      */
+    
     @IBAction func upAction(sender: AnyObject) {
         dirction = MOVE_DIRCTION.MOVE_DIRCTION_STOP
         self.endDirctionCMD()
@@ -303,7 +403,6 @@ extension CtrlVC{
     
     /**
      充电
-     
      - parameter sender:
      */
     
@@ -317,6 +416,50 @@ extension CtrlVC{
                                                             userInfo:nil,repeats:true)
         self.timer?.fire()
     }
+    
+    /**
+      显示或者隐藏暂停视图
+    */
+    
+    @IBAction func ShowOrHideStopView(sender: AnyObject) {
+        
+        if !self.view_stop.hidden {
+          
+            UIView.animateWithDuration(0.3, animations: {
+                    () -> Void in
+                
+                self.view_stop.alpha = 0.0
+                
+                }, completion: {
+                    
+                    (finished:Bool) -> Void in
+            
+                    self.view_stop.hidden = true;
+            })
+            
+
+        }else{
+        
+            UIView.animateWithDuration(0.3, animations: {
+                () -> Void in
+                
+                self.view_stop.alpha = 1.0
+                
+                }, completion: {
+                    
+                    (finished:Bool) -> Void in
+                    
+                    self.view_stop.hidden = false;
+                    
+            })
+            
+        
+        
+        }
+        
+        
+    }
+    
     
     func endDirctionCMD(){
         timer?.invalidate()
@@ -348,7 +491,10 @@ extension CtrlVC{
         weak var weakself = self
         RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_STOP_SLOW, func: {
             weakself!.btn_pause.enabled = false
-            weakself!.btn_pause.setTitle("已无任务", forState:UIControlState.Normal)
+            //weakself!.btn_pause.setTitle("已无任务", forState:UIControlState.Normal)
+            weakself!.btn_pause.setImage(UIImage(named: "icon_pause_unsd_ipad"), forState: UIControlState.Normal)
+            weakself!.btn_pause.setImage(UIImage(named: "icon_pause_sd_ipad"), forState: UIControlState.Highlighted)
+            
             RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_GET_MEALS, func: {
             }) { (error) in
                 
@@ -479,11 +625,34 @@ extension CtrlVC{
         
         for lable in lables {
             if lable.tag == tag {
-                lable.backgroundColor = UIColor.blueColor()
+                lable.backgroundColor = UIColor(red: 62/255.0, green: 111/255.0, blue: 77/255.0, alpha: 1.0)
             }
         }
     }
     
     
 }
+
+extension CtrlVC{
+    
+    
+    func addBackButton(target:AnyObject, action:Selector){
+        
+        let image :UIImage = UIImage(named: "icon_back_unsd_ipad")!
+        let buttonFrame :CGRect  = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: image.size.width + 10.0, height: self.navigationController!.navigationBar.frame.size.height))
+        let button:UIButton = UIButton(type: UIButtonType.Custom)
+        button.contentMode = UIViewContentMode.ScaleAspectFit;
+        button.backgroundColor = UIColor.clearColor();
+        button.frame = buttonFrame;
+        button.setImage(image, forState: UIControlState.Normal)
+        button.addTarget(target, action: action, forControlEvents: UIControlEvents.TouchUpInside)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView:button)
+    }
+    
+    func backAction(){
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+}
+
 

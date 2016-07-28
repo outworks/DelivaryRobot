@@ -23,7 +23,9 @@ class RobotChooseVC: UIViewController,UITableViewDelegate,UITableViewDataSource 
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         weak var weakself = self
-    
+      
+        self.addBackButton(self, action: #selector(self.backAction))
+        
         RobotAPI.getEndpoints(func: { (result) in
             weakself!.endpoints =  self.endpoints + result!
             weakself!.tableView.reloadData()
@@ -74,6 +76,7 @@ extension RobotChooseVC{
             RobotAPI.addLeaveSeatPointListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addDeviceStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
+            RotbotInfoManager.sharedInstance.current_endpoin_name = endpoint.endpoin_name
             
             var storyboard = UIStoryboard(name: "Main", bundle: nil)
             
@@ -86,7 +89,7 @@ extension RobotChooseVC{
             let ctrlVC = storyboard.instantiateViewControllerWithIdentifier("CtrlVC")
             weakself!.navigationController?.pushViewController(ctrlVC, animated: true)
         }) { (error) in
-            SCLAlertView().showError("提示", subTitle: (error?.message)!)
+            SCLAlertView().showError("提示", subTitle: ("机器离线"))
         }
     }
     
@@ -97,5 +100,25 @@ extension RobotChooseVC{
     
 }
 
+extension RobotChooseVC{
 
+    
+    func addBackButton(target:AnyObject, action:Selector){
+        
+        let image :UIImage = UIImage(named: "icon_back_unsd_ipad")!
+        let buttonFrame :CGRect  = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: image.size.width + 10.0, height: self.navigationController!.navigationBar.frame.size.height))
+        let button:UIButton = UIButton(type: UIButtonType.Custom)
+        button.contentMode = UIViewContentMode.ScaleAspectFit;
+        button.backgroundColor = UIColor.clearColor();
+        button.frame = buttonFrame;
+        button.setImage(image, forState: UIControlState.Normal)
+        button.addTarget(target, action: action, forControlEvents: UIControlEvents.TouchUpInside)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView:button)
+    }
+    
+    func backAction(){
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+
+}
 

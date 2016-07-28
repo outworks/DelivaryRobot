@@ -124,6 +124,12 @@ class RobotAPI :BaseHttpAPI{
                             let value = infodict!["percent"]!.intValue
                             robotinfo.power = value
                         }
+                        if 10003 == idstr{
+                            let infodict = dic["info"].dictionary
+                            let value = infodict!["percent"]!.intValue
+                            robotinfo.power = value
+                        }
+                        
                     }
                 }
                 getRobotposLable(endpoint_id, func: { (posLable) in
@@ -142,20 +148,20 @@ class RobotAPI :BaseHttpAPI{
     
     static func getSeatList() -> [SeatData]{
         let array = [
-            ["seat":"A-002","x":3.6,"y":0.0,"angle":180,"x0":3.6,"y0":-1],
-            ["seat":"A-003","x":7.1,"y":0.0,"angle":180,"x0":7.1,"y0":-1],
-            ["seat":"A-004","x":10.1,"y":0.0,"angle":180,"x0":10.1,"y0":-1],
-            ["seat":"B-005","x":12.3,"y":1.0,"angle":180,"x0":13,"y0":0.5],
-            ["seat":"C-006","x":20.0,"y":2.0,"angle":90,"x0":21.3,"y0":1.6],
-            ["seat":"C-007","x":21.3,"y":0.6,"angle":180,"x0":21.3,"y0":-0.4],
-            ["seat":"C-008","x":23.5,"y":0.6,"angle":0,"x0":24.0,"y0":1.6],
-            ["seat":"C-009","x":24.0,"y":0.6,"angle":180,"x0":24.0,"y0":-0.4],
-            ["seat":"C-010","x":26.1,"y":0.6,"angle":0,"x0":26.7,"y0":1.6],
-            ["seat":"C-011","x":26.7,"y":0.6,"angle":180,"x0":26.7,"y0":-0.4],
-            ["seat":"D-012","x":29.7,"y":0.8,"angle":180,"x0":29.7,"y0":0],
-            ["seat":"D-013","x":31.1,"y":0.8,"angle":0,"x0":31.5,"y0":1.8],
-            ["seat":"D-014","x":32.1,"y":0.8,"angle":180,"x0":32.1,"y0":0],
-            ["seat":"E-015","x":34.0,"y":0.8,"angle":90,"x0":35.0,"y0":0.8]
+            ["seat":"A-002","x":3.6,"y":0.0,"angle":180,"x0":3.6,"y0":-1,"tag":2],
+            ["seat":"A-003","x":7.1,"y":0.0,"angle":180,"x0":7.1,"y0":-1,"tag":3],
+            ["seat":"A-004","x":10.1,"y":0.0,"angle":180,"x0":10.1,"y0":-1,"tag":4],
+            ["seat":"B-005","x":12.3,"y":1.0,"angle":180,"x0":13,"y0":0.5,"tag":5],
+            ["seat":"C-006","x":20.0,"y":2.0,"angle":90,"x0":21.3,"y0":1.6,"tag":6],
+            ["seat":"C-007","x":21.3,"y":0.6,"angle":180,"x0":21.3,"y0":-0.4,"tag":7],
+            ["seat":"C-008","x":23.5,"y":0.6,"angle":0,"x0":24.0,"y0":1.6,"tag":8],
+            ["seat":"C-009","x":24.0,"y":0.6,"angle":180,"x0":24.0,"y0":-0.4,"tag":9],
+            ["seat":"C-010","x":26.1,"y":0.6,"angle":0,"x0":26.7,"y0":1.6,"tag":10],
+            ["seat":"C-011","x":26.7,"y":0.6,"angle":180,"x0":26.7,"y0":-0.4,"tag":11],
+            ["seat":"D-012","x":29.7,"y":0.8,"angle":180,"x0":29.7,"y0":0,"tag":12],
+            ["seat":"D-013","x":31.1,"y":0.8,"angle":0,"x0":31.5,"y0":1.8,"tag":13],
+            ["seat":"D-014","x":32.1,"y":0.8,"angle":180,"x0":32.1,"y0":0,"tag":14],
+            ["seat":"E-015","x":34.0,"y":0.8,"angle":90,"x0":35.0,"y0":0.8,"tag":15]
         ]
         var list = [SeatData]()
         for seatDict in array{

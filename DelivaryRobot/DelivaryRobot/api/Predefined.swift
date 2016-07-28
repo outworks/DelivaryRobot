@@ -140,6 +140,7 @@ public class RotbotInfoManager{
     private var rotBotInfoMap:[String:RotbotInfo] = [:]
     
     var current_endpoint_id:String?
+    var current_endpoin_name:String?
     
     class var sharedInstance : RotbotInfoManager {
         struct Static {
@@ -240,6 +241,7 @@ class SeatData:EVObject{
     var angle = 0
     var x0 = 0.0
     var y0 = 0.0
+    var tag = 0
 }
 
 

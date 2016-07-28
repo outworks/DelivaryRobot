@@ -30,6 +30,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+       
         
     }
 
@@ -99,6 +100,8 @@ class ViewController: UIViewController,UITextFieldDelegate {
         textField.resignFirstResponder();
         return true
     }
+    
+
     
 }
 
