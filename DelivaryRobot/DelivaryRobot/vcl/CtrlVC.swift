@@ -20,6 +20,26 @@ class CtrlVC: UIViewController {
     
     var alertView:UIAlertView? = nil;
     
+    var isChangle:Bool?{
+    
+        didSet{
+            
+            if self.isChangle == true {
+                
+                self.v_jinye.hidden = true
+                self.v_changle.hidden = false
+                
+            }else{
+                self.v_jinye.hidden = false
+                self.v_changle.hidden = true
+            }
+            
+            self.clearTagStatus()
+            
+        }
+    
+    }
+    
     @IBOutlet weak var lb_electricity: UILabel!
     
     //@IBOutlet weak var lb_status: UILabel!
@@ -31,6 +51,18 @@ class CtrlVC: UIViewController {
     @IBOutlet weak var btn_ctrl: UIButton!
     
     @IBOutlet weak var view_ctrl: UIView!
+    
+    /************ 长乐地图 ************/
+    @IBOutlet weak var v_changle: UIView!
+    
+    /************ 金业地图 ************/
+    @IBOutlet weak var v_jinye: UIView!
+    
+    /************ 长乐地图开关**********/
+    
+    @IBOutlet weak var switch_map: UISwitch!
+    
+    
     
     var view_status: UIView?
     var imgv_status: UIImageView?
@@ -167,8 +199,16 @@ extension CtrlVC{
         let endpoint_id:String = info["endpoint_id"] as! String
         if endpoint_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
             let posLable:NSNumber = info["posLabel"] as! NSNumber
-            let tag = self.getTagFormLable(posLable.integerValue)
-            self.setTagHighter(tag)
+            
+            if self.isChangle == true {
+               let tag = self.getChangleTagFormLable(posLable.integerValue)
+               self.setTagHighter(tag)
+            }else{
+                
+               let tag = self.getTagFormLable(posLable.integerValue)
+               self.setTagHighter(tag)
+            }
+            
         }
     }
     
@@ -190,6 +230,11 @@ extension CtrlVC{
             self.setTagHighter(robotInfo.posLable)
             self.lb_nameRobit.text = RotbotInfoManager.sharedInstance.current_endpoin_name!
             self.view_stop.hidden = true;
+            
+            self.switch_map.addTarget(self, action:#selector(CtrlVC.mapChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+            self.isChangle = false
+            self.switch_map.setOn(self.isChangle!, animated: false)
+        
         }
         
     }
@@ -567,22 +612,35 @@ extension CtrlVC{
 extension CtrlVC{
     
     func getTagLables() -> [UILabel]{
-        let mapview = self.view.viewWithTag(110)
-        let tagView = mapview?.viewWithTag(111)
-        let tempviews = tagView?.subviews
-        var results = [UILabel]()
-        for view in tempviews! {
-            let lable = view as! UILabel
-            results.append(lable)
+        
+        if self.isChangle == true {
+            
+            let tagView = v_changle?.viewWithTag(119)
+            let tempviews = tagView?.subviews
+            var results = [UILabel]()
+            for view in tempviews! {
+                let lable = view as! UILabel
+                results.append(lable)
+            }
+            return results
+        }else{
+            
+            let tagView = v_jinye?.viewWithTag(111)
+            let tempviews = tagView?.subviews
+            var results = [UILabel]()
+            for view in tempviews! {
+                let lable = view as! UILabel
+                results.append(lable)
+            }
+            return results
         }
-        return results
     }
     
     func clearTagStatus() -> Void{
         let lables = getTagLables()
         
         for lable in lables {
-            lable.backgroundColor = UIColor.whiteColor()
+            lable.backgroundColor = UIColor.lightGrayColor()
             lable.textColor = UIColor.darkTextColor()
         }
     }
@@ -620,6 +678,69 @@ extension CtrlVC{
         }
     }
     
+    
+    func getChangleTagFormLable(lable:Int) -> Int{
+        switch lable {
+        case 0:
+            return 0
+        case 1,2:
+            return 1
+        case 3,4,5:
+            return 2
+        case 6,7,8:
+            return 3
+        case 9:
+            return 4
+        case 10,11,12:
+            return 5
+        case 13:
+            return 6
+        case 14,15,16:
+            return 7
+        case 17:
+            return 8
+        case 18,19:
+            return 9
+        case 20,21:
+            return 10
+        case 22,23,24:
+            return 11
+        case 25:
+            return 12
+        case 26,27:
+            return 13
+        case 28,29:
+            return 14
+        case 30,31:
+            return 15
+        case 32,33,34:
+            return 16
+        case 35:
+            return 17
+        case 36,37:
+            return 18
+        case 38:
+            return 19
+        case 39:
+            return 20
+        case 40:
+            return 21
+        case 41:
+            return 22
+        case 42:
+            return 23
+        case 43,44:
+            return 24
+        case 45:
+            return 25
+            
+        default:
+            return -1
+        }
+    }
+    
+    
+    
     func setTagHighter(tag:Int) -> Void{
         let lables = getTagLables()
         
@@ -653,6 +774,21 @@ extension CtrlVC{
         self.navigationController?.popViewControllerAnimated(true)
     }
     
+}
+
+extension CtrlVC{
+
+
+    func mapChanged(switchState:UISwitch){
+        
+        if switchState.on {
+            self.isChangle = true
+        }else{
+            self.isChangle = false
+        }
+        
+    }
+
 }
 
 
