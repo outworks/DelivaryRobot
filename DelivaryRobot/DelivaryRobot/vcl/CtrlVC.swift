@@ -378,9 +378,9 @@ extension CtrlVC{
     
     @IBAction func chooseAction(sender: AnyObject) {
         
-        self.hideMessage()
-        self.showSeatChooseVC()
-        return
+//        self.hideMessage()
+//        self.showSeatChooseVC()
+//        return
         let flag = RobotAPI.canGoSeat(RotbotInfoManager.sharedInstance.current_endpoint_id!)
         if !flag.canGo {
             self.showMessage(flag.msg)
@@ -647,6 +647,11 @@ extension CtrlVC{
             RobotAPI.addStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addOnlineListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addPowerListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            RobotAPI.getSeatTaskID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
+                
+                }, func: { (error) in
+                    
+            })
             RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
             }) { (error) in
                 weakself!.showMessage((error?.message)!)

@@ -173,6 +173,7 @@ public class RotbotInfo{
     var endpoint_id = ""
     var posLable = -1
     var errorDetail = ""
+    var tableId = -1
     
     init(endpoint_id:String){
         self.endpoint_id = endpoint_id
@@ -204,7 +205,11 @@ public class RotbotInfo{
         case ROBOT_STATUS.MOVE_CHARGING:
             return "正在充电"
         case ROBOT_STATUS.MOVE_MEAL:
-            return "正在送餐"
+            if self.tableId>0 {
+                return "正在送餐" + "(" + self.tableId.description + "号桌)"
+            }else{
+                return "正在送餐"
+            }
         case ROBOT_STATUS.MOVE_LEVETRACK:
             return "脱离磁道"
         case ROBOT_STATUS.MOVE_WAITREADY:

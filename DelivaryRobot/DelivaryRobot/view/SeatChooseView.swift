@@ -60,7 +60,7 @@ class SeatChooseView: UIView {
         imgv_bg.alpha = 0
         self.alpha = 1
         
-        let rv = UIApplication.sharedApplication().keyWindow! as UIWindow
+        let rv = UIApplication.sharedApplication().windows.first! as UIWindow
         rv.addSubview(self)
         self.frame = rv.bounds
         

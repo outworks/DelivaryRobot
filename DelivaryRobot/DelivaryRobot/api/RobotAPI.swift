@@ -185,6 +185,8 @@ class RobotAPI :BaseHttpAPI{
         let path = String(format: "/v0.1/endpoints/%@/robot/patrolpath/", registration_id)
         let dict = ["pathAction":7,"nPathID":0,"nPathType":3,"nSpeedLevel":2,"bEndMsg":1,"node":[["x":(seat.x*1000),"y":(seat.y*1000),"nNodeIndex":1,"eAction":3,"nActionVal":(seat.angle/45),"nAnimateId":0,"nVoiceId":0,"nLightId":0,"nVideoId":0]],"nIndex":0]
         request(.POST, path: path, paramsdict: dict, serverPort: nil, func: { (result:NSDictionary?) in
+            let robotInfo:RotbotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(registration_id)
+            robotInfo.tableId = seat.tag
             successHandle()
         }) { (error) in
             errorHandler(error: error)
@@ -302,14 +304,24 @@ class RobotAPI :BaseHttpAPI{
      */
     static func getSeatTaskID(registration_id:String,func successHand:(tableId:Int)->Void,func errorHandler:(error:BaseError?) -> Void) -> Void{
         let path = String(format: "/v0.1/endpoints/%@/robot/tableid/", registration_id)
-        request(.POST, path: path, paramsdict: nil, serverPort: nil, func: { (result:NSDictionary?) in
+        request(.POST, path: path, paramsdict: [:], serverPort: nil, func: { (result:NSDictionary?) in
             if nil != result{
-                let infodict:NSDictionary? = result!["info"] as? NSDictionary
-                if nil != infodict{
-                    let tableId:NSNumber? = infodict!["nTableId"] as? NSNumber
-                    if nil != tableId{
-                        successHand(tableId: tableId!.integerValue)
-                        return
+                let message:NSString? = result!["message"] as? NSString
+                if nil != message{
+                    let messageJson = JSON.parse(message! as String)
+                    let array:Array<JSON> = messageJson.arrayValue
+                    if array.count > 0{
+                        let messageDict = array[0]
+                        let infodict:NSDictionary? = messageDict["info"].dictionaryObject
+                        if nil != infodict{
+                            let tableId:NSNumber? = infodict!["nTableId"] as? NSNumber
+                            if nil != tableId{
+                                let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(registration_id)
+                                robotInfo.tableId = tableId!.integerValue
+                                successHand(tableId: tableId!.integerValue)
+                                return
+                            }
+                        }
                     }
                 }
             }

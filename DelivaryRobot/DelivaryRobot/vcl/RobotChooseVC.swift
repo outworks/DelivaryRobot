@@ -77,7 +77,11 @@ extension RobotChooseVC{
             RobotAPI.addDeviceStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
             RotbotInfoManager.sharedInstance.current_endpoin_name = endpoint.endpoin_name
-            
+            RobotAPI.getSeatTaskID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
+                
+                }, func: { (error) in
+                    
+            })
             var storyboard = UIStoryboard(name: "Main", bundle: nil)
             
             if (UIDevice.currentDevice().userInterfaceIdiom == .Phone) {
