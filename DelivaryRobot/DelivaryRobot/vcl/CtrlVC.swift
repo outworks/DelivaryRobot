@@ -730,45 +730,45 @@ extension CtrlVC{
         switch lable {
         case 0:
             return 0
-        case 1,2:
+        case 5:
             return 1
-        case 3,4,5:
+        case 1,2:
             return 2
-        case 6,7,8:
+        case 3,4:
             return 3
-        case 9:
+        case 6,7,8:
             return 4
-        case 10,11,12:
+        case 9:
             return 5
-        case 13:
+        case 10,11,12:
             return 6
-        case 14,15,16:
+        case 13:
             return 7
-        case 17:
+        case 14,15,16:
             return 8
-        case 18,19:
+        case 17:
             return 9
-        case 20,21:
+        case 18,19:
             return 10
-        case 22,23,24:
+        case 20,21:
             return 11
-        case 25:
+        case 22,23,24:
             return 12
-        case 26,27:
+        case 25:
             return 13
-        case 28,29:
+        case 26,27:
             return 14
-        case 30,31:
+        case 28,29:
             return 15
-        case 32,33,34:
+        case 30,31:
             return 16
-        case 35:
+        case 32,33,34:
             return 17
-        case 36,37:
+        case 35:
             return 18
-        case 38:
+        case 36,37:
             return 19
-        case 39:
+        case 38,39:
             return 20
         case 40:
             return 21
@@ -776,11 +776,16 @@ extension CtrlVC{
             return 22
         case 42:
             return 23
-        case 43,44:
+        case 43:
             return 24
-        case 45:
+        case 44:
             return 25
-            
+        case 45,46:
+            return 26
+        case 47,48:
+            return 27
+        case 49:
+            return 28
         default:
             return -1
         }
