@@ -54,7 +54,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
         let loginParams = RobotAPI.LoginParams(username: btn_username.text!, password: btn_password.text!)
         weak var weakself = self
         RobotAPI.login(loginParams, func: { (result) in
-            
+             
             if weakself!.btn_rememberPwd.selected {
                 
                 NSUserDefaults.standardUserDefaults().setObject(loginParams.account_name, forKey: "ACCOUNT_NAME")
