@@ -328,8 +328,11 @@ extension CtrlVC{
     
 }
 
-let TAG_TARGET_PAUSE = 101 //任务挂起
-let TAG_TARGET_CHARGE = 102 //任务中止
+let TAG_TARGET_CTRL = 101 //手动状态
+let TAG_TARGET_CHARGE = 102 //充电
+let TAG_TARGET_PAUSE = 103 //任务挂起
+let TAG_TARGET_STOP = 104 //任务中止
+
 var HAS_TARGET_PAUSE = false  //用来判断是否送餐任务挂起
 
 
@@ -344,14 +347,18 @@ extension CtrlVC:UIAlertViewDelegate{
                 }, func: { (error) in
                     
             })
-        }else if buttonIndex==1 && alertView.tag == TAG_TARGET_PAUSE{
+        }else if(buttonIndex == 1 && alertView.tag == TAG_TARGET_PAUSE){
+           weakself?.sendPauseAction()
+        }else if(buttonIndex == 1 && alertView.tag == TAG_TARGET_STOP){
+            weakself?.sendStopAction()
+        }else if buttonIndex==1 && alertView.tag == TAG_TARGET_CTRL{
             RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_AUTOMOVE_SUSPEND, func: {
                 HAS_TARGET_PAUSE = true
                 weakself?.showDirctionView()
                 }, func: { (error) in
                     
             })
-        }else if buttonIndex==2 && alertView.tag == TAG_TARGET_PAUSE{
+        }else if buttonIndex==2 && alertView.tag == TAG_TARGET_CTRL{
             RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_STOP_SLOW, func: {
                 HAS_TARGET_PAUSE = false
                 weakself?.showDirctionView()
@@ -387,14 +394,13 @@ extension CtrlVC{
      控制
      - parameter sender:
      */
-    
     @IBAction func beginCtrlAction(sender: AnyObject) {
         weak var weakself = self
         if btn_ctrl.tag == 0{
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_GOBACK {
+            if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
                 alertView = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，请选择任务处理", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "暂停","中止");
-                alertView!.tag = TAG_TARGET_PAUSE
+                alertView!.tag = TAG_TARGET_CTRL
                 alertView!.show()
             }else{
                 RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_AUTOMOVE_SUSPEND, func: {
@@ -454,14 +460,29 @@ extension CtrlVC{
     
     @IBAction func pauseAction(sender: AnyObject) {
         if btn_pause.tag == 0 {
-            self.sendPauseAction()
+            let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
+                alertView = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否要暂停？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "暂停");
+                alertView!.tag = TAG_TARGET_PAUSE
+                alertView!.show()
+            }else{
+                self.sendPauseAction()
+            }
         }else{
             self.sendContinueAction()
         }
     }
     
     @IBAction func stopAction(sender: AnyObject) {
-        self.sendStopAction()
+        let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+        if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
+            alertView = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否要暂停？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "暂停");
+            alertView!.tag = TAG_TARGET_STOP
+            alertView!.show()
+        }else{
+            self.sendStopAction()
+        }
+        
     }
     
     /**
@@ -471,7 +492,7 @@ extension CtrlVC{
     
     @IBAction func chargeAction(sender: AnyObject) {
         let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-        if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_GOBACK {
+        if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
             alertView = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否要中止任务？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "中止");
             alertView!.tag = TAG_TARGET_CHARGE
             alertView!.show()
