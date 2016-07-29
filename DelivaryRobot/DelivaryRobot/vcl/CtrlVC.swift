@@ -476,7 +476,7 @@ extension CtrlVC{
     @IBAction func stopAction(sender: AnyObject) {
         let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
         if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
-            alertView = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否要暂停？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "暂停");
+            alertView = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否要中止？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "中止");
             alertView!.tag = TAG_TARGET_STOP
             alertView!.show()
         }else{
