@@ -123,6 +123,11 @@ extension SeatChooseView {
             
             }
         
+        }else{
+            
+            let alertView:UIAlertView = UIAlertView(title: "提示", message: "请选择桌号", delegate: nil, cancelButtonTitle: "确定")
+            alertView.show()
+            
         }
         
         

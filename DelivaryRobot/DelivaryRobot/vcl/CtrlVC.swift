@@ -69,7 +69,6 @@ class CtrlVC: UIViewController {
     var lb_status: UILabel?
     
     
-    
     /****************  停止视图 *****************/
     @IBOutlet weak var view_stop: UIView!
     /**************** 显示电量的背景图片 *****************/
@@ -149,7 +148,7 @@ extension CtrlVC{
             let online = robotInfo.online ? "在线":"断线"
             if(robotInfo.errorDetail.isEmpty){
                 self.lb_status!.text = robotInfo.statusName() + "(" + online + ")"
-                
+                self.updateTitleViewFrame(self.lb_status!.text!)
                 if robotInfo.statusName() == "闲置任务" || robotInfo.statusName() == "等待就位"{
                     imgv_status?.image = UIImage(named: "icon_status_idle_ipad")
                 }else if robotInfo.statusName() == "脱离磁道" {
@@ -160,6 +159,7 @@ extension CtrlVC{
                 
             }else{
                 self.lb_status!.text = robotInfo.errorDetail
+                self.updateTitleViewFrame(self.lb_status!.text!)
                 imgv_status?.image = UIImage(named: "icon_status_abnormal_ipad")
             }
         }
@@ -219,6 +219,7 @@ extension CtrlVC{
             //self.lb_electricity.text = "电量：" + String(robotInfo.power)
             self.power = NSNumber(int:(Int32(robotInfo.power)))
             self.lb_status!.text = robotInfo.statusName() + "(" + online + ")"
+            self.updateTitleViewFrame(self.lb_status!.text!)
             if robotInfo.statusName() == "闲置任务" || robotInfo.statusName() == "等待就位"{
                 imgv_status?.image = UIImage(named: "icon_status_idle_ipad")
             }else if robotInfo.statusName() == "脱离磁道"{
@@ -240,13 +241,15 @@ extension CtrlVC{
     
     func setUpTitleView(){
         
-        view_status = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 150, height: 44))
+        view_status = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 250, height: 44))
         view_status?.backgroundColor = UIColor.clearColor()
         imgv_status = UIImageView(frame: CGRect(x: 5.0, y: 22-4.5, width: 9, height: 9))
         view_status?.addSubview(imgv_status!)
         
-        lb_status = UILabel(frame: CGRect(x: 19.0, y: 0.0, width: 150, height: 44))
+        lb_status = UILabel(frame: CGRect(x: 20.0, y: 0.0, width: 230, height: 44))
         lb_status?.font = UIFont.systemFontOfSize(18.0)
+        lb_status?.backgroundColor = UIColor.clearColor()
+        lb_status?.textAlignment = NSTextAlignment.Center
         lb_status?.textColor = UIColor.whiteColor()
         view_status?.addSubview(lb_status!)
         
@@ -845,6 +848,25 @@ extension CtrlVC{
         }
         
     }
+    
+    func updateTitleViewFrame(text:String){
+        
+        let font:UIFont = (lb_status?.font)!
+        let attributes = [NSFontAttributeName:font];
+        let frame:CGRect = labelSize(text, attributes: attributes)
+        lb_status?.frame.size.width = frame.size.width
+        lb_status?.center = CGPoint(x:(view_status?.frame.size.width)!/2, y:(view_status?.frame.size.height)!/2)
+        imgv_status?.frame.origin.x = (lb_status?.frame.origin.x)! - 20
+    }
+    
+    func labelSize(text:String ,attributes : [String : UIFont]) -> CGRect{
+        var size = CGRect();
+        let size2 = CGSize(width: 210, height: 0);
+        size = text.boundingRectWithSize(size2, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: attributes , context: nil);
+        return size
+    }
+
+    
 
 }
 
