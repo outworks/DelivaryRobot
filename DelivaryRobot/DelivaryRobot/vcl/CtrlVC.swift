@@ -28,6 +28,9 @@ class CtrlVC: UIViewController {
                 
                 self.v_jinye.hidden = true
                 self.v_changle.hidden = false
+                let at:CGAffineTransform = CGAffineTransformMakeRotation(CGFloat(-M_PI/2))
+                self.v_changle.transform = at
+                
                 
             }else{
                 self.v_jinye.hidden = false
@@ -173,7 +176,7 @@ extension CtrlVC{
         if endpoint_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
             if robotInfo.status == ROBOT_STATUS.MOVE_WAITREADY { //等待就位 弹出提示
-                showMessage("请放让咖啡")
+                showMessage("请放入餐点")
             }else if robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL{ //等待送餐 ，弹出选择框
                 weakself?.showSeatChooseVC()
             }
@@ -675,6 +678,9 @@ extension CtrlVC{
             var results = [UILabel]()
             for view in tempviews! {
                 let lable = view as! UILabel
+                let at:CGAffineTransform = CGAffineTransformMakeRotation(CGFloat(M_PI/2))
+                lable.transform = at
+
                 results.append(lable)
             }
             return results
