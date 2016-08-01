@@ -81,6 +81,7 @@ class SeatChooseView: UIView {
             self.alpha = 0
             }, completion: { finished in
                 self.removeFromSuperview()
+                
         })
     }
     

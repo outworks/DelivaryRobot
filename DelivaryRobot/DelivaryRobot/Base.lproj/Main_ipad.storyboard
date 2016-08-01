@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ad5-Pc-ch2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ad5-Pc-ch2">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -1059,8 +1059,11 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
+                        <outlet property="btn_chongdian" destination="Cdt-lD-ZE7" id="7pr-uR-rta"/>
                         <outlet property="btn_ctrl" destination="lFo-8d-aoS" id="3Pi-zA-psZ"/>
+                        <outlet property="btn_kongzhi" destination="lFo-8d-aoS" id="wNf-hu-e5O"/>
                         <outlet property="btn_pause" destination="dAn-oU-l8o" id="fPX-Me-gBZ"/>
+                        <outlet property="btn_songcan" destination="GjJ-Lh-8eZ" id="ypZ-eN-ewD"/>
                         <outlet property="img_powerColoer" destination="x27-l6-j6N" id="WuM-0y-nST"/>
                         <outlet property="img_powerbg" destination="a1F-Ve-s7Z" id="kgg-p7-JF1"/>
                         <outlet property="layout_height_power" destination="zz8-oq-Vf7" id="acR-pr-nf5"/>

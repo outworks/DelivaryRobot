@@ -85,6 +85,16 @@ class CtrlVC: UIViewController {
     /**************** 显示机器名字 *****************/
     @IBOutlet weak var lb_nameRobit: UILabel!
     
+    /**************** 送餐按钮 *****************/
+    @IBOutlet weak var btn_songcan: UIButton!
+    /**************** 控制按钮 *****************/
+    @IBOutlet weak var btn_kongzhi: UIButton!
+    /**************** 充电按钮 *****************/
+    @IBOutlet weak var btn_chongdian: UIButton!
+    
+    
+    var v_showSeat:SeatChooseView!
+    
     var power:NSNumber?{
         
         /* 属性监视器方法
@@ -149,6 +159,23 @@ extension CtrlVC{
         if endpoint_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
             let online = robotInfo.online ? "在线":"断线"
+            
+            if robotInfo.online == false {
+                
+                if nil != alertView {
+                    alertView!.dismissWithClickedButtonIndex(0, animated: false)
+                    alertView = nil
+                }
+            
+                view_ctrl.hidden = true
+                
+            }
+            
+            btn_songcan.enabled = robotInfo.online
+            btn_kongzhi.enabled = robotInfo.online
+            btn_chongdian.enabled = robotInfo.online
+            
+    
             if(robotInfo.errorDetail.isEmpty){
                 self.lb_status!.text = robotInfo.statusName() + "(" + online + ")"
                 self.updateTitleViewFrame(self.lb_status!.text!)
@@ -158,6 +185,12 @@ extension CtrlVC{
                     imgv_status?.image = UIImage(named: "icon_status_abnormal_ipad")
                 } else {
                     imgv_status?.image = UIImage(named: "icon_status_busy_ipad")
+                }
+                
+                if robotInfo.statusName() == "送餐终止" {
+                    alertView = UIAlertView(title: "确认消息", message: "机器人处于［送餐终止］状态，是否要继续？", delegate: self, cancelButtonTitle: "返回", otherButtonTitles: "继续");
+                    alertView!.tag = TAG_TARGET_STOP_STATUS
+                    alertView!.show()
                 }
                 
             }else{
@@ -216,9 +249,15 @@ extension CtrlVC{
     }
     
     func updateUI(){
+        
         if nil != RotbotInfoManager.sharedInstance.current_endpoint_id {
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             let online = robotInfo.online ? "在线":"断线"
+        
+            btn_songcan.enabled = robotInfo.online
+            btn_kongzhi.enabled = robotInfo.online
+            btn_chongdian.enabled = robotInfo.online
+            
             //self.lb_electricity.text = "电量：" + String(robotInfo.power)
             self.power = NSNumber(int:(Int32(robotInfo.power)))
             self.lb_status!.text = robotInfo.statusName() + "(" + online + ")"
@@ -292,10 +331,20 @@ extension CtrlVC{
             alertView = nil
         }
         //weak var weakself = self
+        if nil == self.v_showSeat {
         
-        let myView = NSBundle.mainBundle().loadNibNamed("SeatChooseView", owner: nil, options: nil).first as? SeatChooseView
-        myView?.seatList = RobotAPI.getSeatList()
-        myView?.showView()
+            self.v_showSeat  = NSBundle.mainBundle().loadNibNamed("SeatChooseView", owner: nil, options: nil).first as? SeatChooseView
+            self.v_showSeat?.seatList = RobotAPI.getSeatList()
+            self.v_showSeat?.showView()
+        
+        }else{
+            
+            self.v_showSeat?.hideView()
+            self.v_showSeat?.showView()
+            
+        
+        }
+       
         
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
 //        let seatChooseVC = storyboard.instantiateViewControllerWithIdentifier("SeatChooseVC")
@@ -338,6 +387,7 @@ let TAG_TARGET_CTRL = 101 //手动状态
 let TAG_TARGET_CHARGE = 102 //充电
 let TAG_TARGET_PAUSE = 103 //任务挂起
 let TAG_TARGET_STOP = 104 //任务中止
+let TAG_TARGET_STOP_STATUS = 105 //送餐终止弹出来的状态
 
 var HAS_TARGET_PAUSE = false  //用来判断是否送餐任务挂起
 
@@ -371,6 +421,10 @@ extension CtrlVC:UIAlertViewDelegate{
                 }, func: { (error) in
                     
             })
+        }else if buttonIndex==1 && alertView.tag == TAG_TARGET_STOP_STATUS{
+           weakself?.sendContinueAction()
+        }else if buttonIndex==0 && alertView.tag == TAG_TARGET_STOP_STATUS{
+            weakself?.sendStopAction()
         }
     }
 }
@@ -550,8 +604,6 @@ extension CtrlVC{
                     
             })
             
-        
-        
         }
         
         
