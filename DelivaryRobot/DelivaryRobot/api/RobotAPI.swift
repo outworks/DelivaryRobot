@@ -469,6 +469,18 @@ class RobotAPI :BaseHttpAPI{
         NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.deviceStatusHandler(_:)), name: topic, object: nil)
     }
     
+    /**
+     添加机器人的在线和断线监听
+     
+     - parameter registration_id: 编号
+     */
+    static func addTableIdListener(endpoint_id:String){
+        let topic = String(format: "/Robot/%@/info/tableid", endpoint_id)
+        TopicTools.pushNotification(topic, endpoint_id: endpoint_id)
+        MQTTManager.sharedInstance.listenTopic(topic);
+        NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.tableIdHandler(_:)), name: topic, object: nil)
+    }
+    
     
     /**
      机器人取餐
@@ -630,6 +642,21 @@ class RobotAPI :BaseHttpAPI{
                     robotInfo.errorDetail = ""
                 }
                 NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.DEVICE_STATUS, object: nil,userInfo: ["endpoint_id":endpoint_id])
+            }
+        }
+        
+        @objc func tableIdHandler(notification: NSNotification){
+            let endpoint_id = TopicTools.getEndpoint_id(notification.name)
+            if nil != endpoint_id {
+                let userinfo = notification.userInfo
+                if nil != userinfo {
+                    let nTableId:NSNumber? = (userinfo!["nTableId"] as? NSNumber)
+                    if nil != nTableId {
+                        let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id!)
+                        robotInfo.tableId = nTableId!.integerValue
+                        NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.TABLEID_CHANGE, object: nil,userInfo: ["endpoint_id":endpoint_id!,"tableid":nTableId!])
+                    }
+                }
             }
         }
         

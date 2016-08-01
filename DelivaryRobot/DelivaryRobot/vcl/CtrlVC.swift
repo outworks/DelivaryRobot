@@ -137,6 +137,8 @@ class CtrlVC: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.ONLINE_CHANGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updatePosLable), name: RobotNotification.POSLABLE_CHANGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.DEVICE_STATUS, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.TABLEID_CHANGE, object: nil)
+        
         self.hideDirctionView()
         self.clearTagStatus()
         self.setUpTitleView()

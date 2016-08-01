@@ -75,6 +75,7 @@ extension RobotChooseVC{
             RobotAPI.addPowerListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addLeaveSeatPointListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addDeviceStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            RobotAPI.addTableIdListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
             RotbotInfoManager.sharedInstance.current_endpoin_name = endpoint.endpoin_name
             RobotAPI.getSeatTaskID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
