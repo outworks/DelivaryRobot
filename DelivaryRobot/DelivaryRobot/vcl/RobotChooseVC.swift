@@ -22,22 +22,54 @@ class RobotChooseVC: UIViewController,UITableViewDelegate,UITableViewDataSource 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        weak var weakself = self
+//        weak var weakself = self
       
+        //***************  监听设备在线变化，如果某个设备在线变化了则刷新列表 *************//
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateListStatus), name: RobotNotification.ONLINE_CHANGE, object: nil)
+
         self.addBackButton(self, action: #selector(self.backAction))
         
+//        RobotAPI.getEndpoints(func: { (result) in
+//            weakself!.endpoints =  self.endpoints + result!
+//            weakself!.tableView.reloadData()
+//        }) { (error) in
+//            
+//        }
+    
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+         weak var weakself = self
+        
         RobotAPI.getEndpoints(func: { (result) in
+            weakself!.endpoints.removeAll()
             weakself!.endpoints =  self.endpoints + result!
             weakself!.tableView.reloadData()
         }) { (error) in
             
         }
-    
+        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @objc func updateListStatus(notification: NSNotification){
+    
+        weak var weakself = self
+        RobotAPI.getEndpoints(func: { (result) in
+            weakself!.endpoints.removeAll()
+            weakself!.endpoints =  self.endpoints + result!
+            weakself!.tableView.reloadData()
+        }) { (error) in
+            
+        }
+
     }
     
 }

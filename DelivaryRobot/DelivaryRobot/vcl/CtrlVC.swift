@@ -28,8 +28,8 @@ class CtrlVC: UIViewController {
                 
                 self.v_jinye.hidden = true
                 self.v_changle.hidden = false
-                let at:CGAffineTransform = CGAffineTransformMakeRotation(CGFloat(-M_PI/2))
-                self.v_changle.transform = at
+//                let at:CGAffineTransform = CGAffineTransformMakeRotation(CGFloat(-M_PI/2))
+//                self.v_changle.transform = at
                 
                 
             }else{
@@ -139,6 +139,10 @@ class CtrlVC: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.DEVICE_STATUS, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.TABLEID_CHANGE, object: nil)
         
+        // *************** 添加从后台进入前台通知，所做的操作是从新去请求下是否在线 *********************//
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.appBecomeActive), name: RobotNotification.APPBECOMEACTIVE, object: nil)
+        
+        
         self.hideDirctionView()
         self.clearTagStatus()
         self.setUpTitleView()
@@ -154,6 +158,27 @@ class CtrlVC: UIViewController {
 
 
 extension CtrlVC{
+    
+    @objc func appBecomeActive(notification: NSNotification){
+        
+        weak var weakself = self
+        RobotAPI.getEndpoints(func: { (result) in
+            let endpoints:[EndPoint] = result!
+            
+            for endpoint in endpoints{
+                
+                if RotbotInfoManager.sharedInstance.current_endpoint_id == endpoint.registration_id {
+                    return
+                }
+            }
+            SCLAlertView().showError("提示", subTitle: ("机器离线"))
+            weakself!.backAction()
+            
+        }) { (error) in
+            
+        }
+    
+    }
     
     @objc func updateStatus(notification: NSNotification){
         let info = notification.userInfo!
@@ -177,7 +202,6 @@ extension CtrlVC{
             btn_kongzhi.enabled = robotInfo.online
             btn_chongdian.enabled = robotInfo.online
             
-    
             if(robotInfo.errorDetail.isEmpty){
                 self.lb_status!.text = robotInfo.statusName() + "(" + online + ")"
                 self.updateTitleViewFrame(self.lb_status!.text!)
@@ -341,8 +365,17 @@ extension CtrlVC{
         
         }else{
             
-            self.v_showSeat?.hideView()
-            self.v_showSeat?.showView()
+            UIView.animateWithDuration(0.2, animations: {
+                
+                self.v_showSeat.alpha = 0
+                }, completion: { finished in
+                    self.v_showSeat.removeFromSuperview()
+                    self.v_showSeat?.showView()
+                    
+            })
+            
+//            self.v_showSeat?.hideView()
+//            self.v_showSeat?.showView()
             
         
         }
@@ -443,6 +476,9 @@ extension CtrlVC{
 //        self.hideMessage()
 //        self.showSeatChooseVC()
 //        return
+        self.hideDirctionView()
+        
+        
         let flag = RobotAPI.canGoSeat(RotbotInfoManager.sharedInstance.current_endpoint_id!)
         if !flag.canGo {
             self.showMessage(flag.msg)
@@ -553,6 +589,9 @@ extension CtrlVC{
      */
     
     @IBAction func chargeAction(sender: AnyObject) {
+        
+         self.hideDirctionView()
+        
         let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
         if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
             alertView = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否要中止任务？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "中止");
@@ -732,8 +771,8 @@ extension CtrlVC{
             var results = [UILabel]()
             for view in tempviews! {
                 let lable = view as! UILabel
-                let at:CGAffineTransform = CGAffineTransformMakeRotation(CGFloat(M_PI/2))
-                lable.transform = at
+//                let at:CGAffineTransform = CGAffineTransformMakeRotation(CGFloat(M_PI/2))
+//                lable.transform = at
 
                 results.append(lable)
             }
@@ -797,63 +836,59 @@ extension CtrlVC{
     func getChangleTagFormLable(lable:Int) -> Int{
         switch lable {
         case 0:
-            return 0
-        case 5:
             return 1
-        case 1,2:
+        case 5:
             return 2
-        case 3,4:
+        case 1,2:
             return 3
-        case 6,7,8:
+        case 3,4:
             return 4
-        case 9:
+        case 6,7,8:
             return 5
-        case 10,11,12:
+        case 9:
             return 6
-        case 13:
+        case 10,11,12:
             return 7
-        case 14,15,16:
+        case 13:
             return 8
-        case 17:
+        case 14,15,16:
             return 9
-        case 18,19:
+        case 17:
             return 10
-        case 20,21:
+        case 18,19:
             return 11
-        case 22,23,24:
+        case 20,21:
             return 12
-        case 25:
+        case 22,23,24:
             return 13
-        case 26,27:
+        case 25:
             return 14
-        case 28,29:
+        case 26,27:
             return 15
-        case 30,31:
+        case 28,29:
             return 16
-        case 32,33,34:
+        case 30,31:
             return 17
-        case 35:
+        case 32,33,34:
             return 18
-        case 36,37:
+        case 35:
             return 19
-        case 38,39:
+        case 36,37:
             return 20
-        case 40:
+        case 38,39:
             return 21
-        case 41:
+        case 40,46:
             return 22
-        case 42:
+        case 41,47:
             return 23
-        case 43:
+        case 42,48:
             return 24
-        case 44:
+        case 43,49:
             return 25
-        case 45,46:
+        case 44,50:
             return 26
-        case 47,48:
+        case 45:
             return 27
-        case 49:
-            return 28
         default:
             return -1
         }

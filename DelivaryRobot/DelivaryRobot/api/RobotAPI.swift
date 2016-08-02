@@ -94,6 +94,7 @@ class RobotAPI :BaseHttpAPI{
         }
     }
     
+    
     /**
      登录机器
      - parameter endpoint_id:   编号
@@ -185,8 +186,9 @@ class RobotAPI :BaseHttpAPI{
         let path = String(format: "/v0.1/endpoints/%@/robot/patrolpath/", registration_id)
         let dict = ["pathAction":7,"nPathID":0,"nPathType":3,"nSpeedLevel":2,"bEndMsg":1,"node":[["x":(seat.x*1000),"y":(seat.y*1000),"nNodeIndex":1,"eAction":3,"nActionVal":(seat.angle/45),"nAnimateId":0,"nVoiceId":0,"nLightId":0,"nVideoId":0]],"nIndex":0]
         request(.POST, path: path, paramsdict: dict, serverPort: nil, func: { (result:NSDictionary?) in
-            let robotInfo:RotbotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(registration_id)
-            robotInfo.tableId = seat.tag
+            //************** 不用主动设置所送餐号 **************//
+            //let robotInfo:RotbotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(registration_id)
+            //robotInfo.tableId = seat.tag
             successHandle()
         }) { (error) in
             errorHandler(error: error)
@@ -444,7 +446,6 @@ class RobotAPI :BaseHttpAPI{
         NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.positionLableHandler(_:)), name: topic, object: nil)
     }
     
-    
     /**
      添加机器人的在线和断线监听
      
@@ -470,7 +471,7 @@ class RobotAPI :BaseHttpAPI{
     }
     
     /**
-     添加机器人的在线和断线监听
+     添加机器人送餐餐号
      
      - parameter registration_id: 编号
      */
@@ -488,15 +489,18 @@ class RobotAPI :BaseHttpAPI{
      - parameter endpoint_id: 编
      */
     static func toGetMeals(endpoint_id:String){
-        RobotAPI.sendCMD(endpoint_id, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_STOP_SLOW, func: {
-            RobotAPI.sendCMD(endpoint_id, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_GET_MEALS, func: {
+        
+        RobotAPI.sendCMD(endpoint_id, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_GET_MEALS, func: {
+            
+            }, func: { (error) in
                 
-                }, func: { (error) in
-                    
-            })
-            }) { (error) in
-                
-        }
+        })
+        // ******** 去掉停止指令 ********//
+//        RobotAPI.sendCMD(endpoint_id, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_STOP_SLOW, func: {
+//           
+//            }) { (error) in
+//                
+//        }
     }
     
     /// 消息分发

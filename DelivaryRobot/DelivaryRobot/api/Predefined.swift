@@ -18,6 +18,7 @@ public class RobotNotification{
     static let POSLABLE_CHANGE = "POSLABLE_CHANGE"
     static let DEVICE_STATUS = "DEVICE_STATUS"
     static let TABLEID_CHANGE = "TABLEID_CHANGE"
+    static let APPBECOMEACTIVE = "APPBECOMEACTIVE"
 }
 
 /**

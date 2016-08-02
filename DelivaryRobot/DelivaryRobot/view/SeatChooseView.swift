@@ -56,6 +56,7 @@ class SeatChooseView: UIView {
 
     func showView() {
         
+        self.clearTagStatus()
         
         imgv_bg.alpha = 0
         self.alpha = 1
