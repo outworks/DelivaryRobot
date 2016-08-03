@@ -168,6 +168,11 @@ extension CtrlVC{
             for endpoint in endpoints{
                 
                 if RotbotInfoManager.sharedInstance.current_endpoint_id == endpoint.registration_id {
+                    
+                    let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+                    robotInfo.online = true
+                    self.updateUI()
+                    
                     return
                 }
             }
