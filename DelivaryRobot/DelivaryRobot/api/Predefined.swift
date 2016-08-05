@@ -88,6 +88,7 @@ public enum ROBOT_STATUS: Int {
     case MOVE_MEAL = 8
     case MOVE_TIMEOUT = 9
     case MOVE_LEVETRACK = 10
+    case MOVE_SUSPENDED = 11
     case MOVE_WAITREADY = 8001
     case MOVE_WAITBEGINMEAL = 8002
     case MOVE_MEALARRIVE = 8004
@@ -121,6 +122,8 @@ public enum ROBOT_STATUS: Int {
             return MOVE_TIMEOUT
         case 10:
             return MOVE_LEVETRACK
+        case 11:
+            return MOVE_SUSPENDED
         case 8001:
             return MOVE_WAITREADY
         case 8002:
@@ -216,6 +219,8 @@ public class RotbotInfo{
             }
         case ROBOT_STATUS.MOVE_LEVETRACK:
             return "脱离磁道"
+        case ROBOT_STATUS.MOVE_SUSPENDED:
+            return "挂起"
         case ROBOT_STATUS.MOVE_WAITREADY:
             return "等待就位"
         case ROBOT_STATUS.MOVE_WAITBEGINMEAL:
