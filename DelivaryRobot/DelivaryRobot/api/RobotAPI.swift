@@ -335,6 +335,43 @@ class RobotAPI :BaseHttpAPI{
     }
     
     /**
+     获取是否有通知
+     
+     - parameter registration_id: 编号
+     - parameter successHand:     成功回调
+     - parameter errorHandler:    失败回调
+     */
+    static func getNoticeID(registration_id:String,func successHand:(noticeId:Int)->Void,func errorHandler:(error:BaseError?) -> Void) -> Void{
+        let path = String(format: "/v0.1/endpoints/%@/robot/notice/", registration_id)
+        request(.POST, path: path, paramsdict: [:], serverPort: nil, func: { (result:NSDictionary?) in
+            if nil != result{
+                let message:NSString? = result!["message"] as? NSString
+                if nil != message{
+                    let messageJson = JSON.parse(message! as String)
+                    let array:Array<JSON> = messageJson.arrayValue
+                    if array.count > 0{
+                        let messageDict = array[0]
+                        let infodict:NSDictionary? = messageDict["info"].dictionaryObject
+                        if nil != infodict{
+                            let noticeId:NSNumber? = infodict!["noticeId"] as? NSNumber
+                            if nil != noticeId{
+                                let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(registration_id)
+                                robotInfo.noticeID = noticeId!.integerValue
+                                successHand(noticeId: noticeId!.integerValue)
+                                return
+                            }
+                        }
+                    }
+                }
+            }
+            successHand(noticeId: -1)
+        }) { (error) in
+            errorHandler(error: error)
+        }
+        
+    }
+    
+    /**
      发送指令
      
      - parameter registration_id: 机器节点的编号
@@ -659,6 +696,21 @@ class RobotAPI :BaseHttpAPI{
                         let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id!)
                         robotInfo.tableId = nTableId!.integerValue
                         NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.TABLEID_CHANGE, object: nil,userInfo: ["endpoint_id":endpoint_id!,"tableid":nTableId!])
+                    }
+                }
+            }
+        }
+        
+        @objc func noticeHandler(notification: NSNotification){
+            let endpoint_id = TopicTools.getEndpoint_id(notification.name)
+            if nil != endpoint_id {
+                let userinfo = notification.userInfo
+                if nil != userinfo {
+                    let nNoticeId:NSNumber? = (userinfo!["nNoticeId"] as? NSNumber)
+                    if nil != nNoticeId {
+                        let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id!)
+                        robotInfo.noticeID = nNoticeId!.integerValue
+                        NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.NOTICE_HAPPEN, object: nil,userInfo: ["endpoint_id":endpoint_id!,"noticeId":nNoticeId!])
                     }
                 }
             }

@@ -19,6 +19,7 @@ public class RobotNotification{
     static let DEVICE_STATUS = "DEVICE_STATUS"
     static let TABLEID_CHANGE = "TABLEID_CHANGE"
     static let APPBECOMEACTIVE = "APPBECOMEACTIVE"
+    static let NOTICE_HAPPEN = "NOTICE_HAPPEN"
 }
 
 /**
@@ -176,6 +177,7 @@ public class RotbotInfo{
     var posLable = -1
     var errorDetail = ""
     var tableId = -1
+    var noticeID = -1
     
     init(endpoint_id:String){
         self.endpoint_id = endpoint_id
@@ -189,7 +191,7 @@ public class RotbotInfo{
         angle = 0
         posLable = -1
     }
-    
+        
     func statusName() -> String {
         switch self.status {
         case ROBOT_STATUS.MOVE_AUTO:

@@ -138,7 +138,7 @@ class CtrlVC: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updatePosLable), name: RobotNotification.POSLABLE_CHANGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.DEVICE_STATUS, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.TABLEID_CHANGE, object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.showNotice), name: RobotNotification.NOTICE_HAPPEN, object: nil)
         // *************** 添加从后台进入前台通知，所做的操作是从新去请求下是否在线 *********************//
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.appBecomeActive), name: RobotNotification.APPBECOMEACTIVE, object: nil)
         
@@ -183,6 +183,10 @@ extension CtrlVC{
             
         }
     
+    }
+    
+    @objc func showNotice(notfication:NSNotification){
+        
     }
     
     @objc func updateStatus(notification: NSNotification){
