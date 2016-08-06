@@ -110,21 +110,76 @@ extension RobotChooseVC{
             RobotAPI.addTableIdListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
             RotbotInfoManager.sharedInstance.current_endpoin_name = endpoint.endpoin_name
-            RobotAPI.getSeatTaskID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
+            
+            let globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+            let mainQueue = dispatch_get_main_queue()
+            
+            let group = dispatch_group_create()
+            
+            dispatch_group_async(group, globalQueue, { () -> Void in
                 
-                }, func: { (error) in
+                let dispatchSemaphore = dispatch_semaphore_create(0)
+                
+                RobotAPI.getSeatTaskID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
                     
+                    dispatch_semaphore_signal(dispatchSemaphore)
+                    
+                    }, func: { (error) in
+                    
+                    dispatch_semaphore_signal(dispatchSemaphore)
+                })
+                
+                dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
+                
             })
-            var storyboard = UIStoryboard(name: "Main", bundle: nil)
             
-            if (UIDevice.currentDevice().userInterfaceIdiom == .Phone) {
-                storyboard = UIStoryboard(name: "Main", bundle: nil)
-            }else{
-                storyboard = UIStoryboard(name: "Main_ipad", bundle: nil)
-            }
+            dispatch_group_async(group, globalQueue, { () -> Void in
+                
+                let dispatchSemaphore = dispatch_semaphore_create(0)
+                
+                RobotAPI.getNoticeID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
+                    
+                    dispatch_semaphore_signal(dispatchSemaphore)
+                    
+                    }, func: { (error) in
+                       
+                    dispatch_semaphore_signal(dispatchSemaphore)
+                })
+                
+                dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
+                
+            })
             
-            let ctrlVC = storyboard.instantiateViewControllerWithIdentifier("CtrlVC")
-            weakself!.navigationController?.pushViewController(ctrlVC, animated: true)
+            dispatch_group_notify(group, mainQueue, { () -> Void in
+                
+                var storyboard = UIStoryboard(name: "Main", bundle: nil)
+                
+                if (UIDevice.currentDevice().userInterfaceIdiom == .Phone) {
+                    storyboard = UIStoryboard(name: "Main", bundle: nil)
+                }else{
+                    storyboard = UIStoryboard(name: "Main_ipad", bundle: nil)
+                }
+                
+                let ctrlVC = storyboard.instantiateViewControllerWithIdentifier("CtrlVC")
+                weakself!.navigationController?.pushViewController(ctrlVC, animated: true)
+            })
+            
+            
+//            RobotAPI.getSeatTaskID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
+//                
+//                }, func: { (error) in
+//                    
+//            })
+//            var storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            
+//            if (UIDevice.currentDevice().userInterfaceIdiom == .Phone) {
+//                storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            }else{
+//                storyboard = UIStoryboard(name: "Main_ipad", bundle: nil)
+//            }
+//            
+//            let ctrlVC = storyboard.instantiateViewControllerWithIdentifier("CtrlVC")
+//            weakself!.navigationController?.pushViewController(ctrlVC, animated: true)
         }) { (error) in
             SCLAlertView().showError("提示", subTitle: ("机器离线"))
         }

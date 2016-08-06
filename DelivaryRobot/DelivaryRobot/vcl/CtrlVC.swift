@@ -28,9 +28,6 @@ class CtrlVC: UIViewController {
                 
                 self.v_jinye.hidden = true
                 self.v_changle.hidden = false
-//                let at:CGAffineTransform = CGAffineTransformMakeRotation(CGFloat(-M_PI/2))
-//                self.v_changle.transform = at
-                
                 
             }else{
                 self.v_jinye.hidden = false
@@ -43,11 +40,7 @@ class CtrlVC: UIViewController {
     
     }
     
-    @IBOutlet weak var lb_electricity: UILabel!
-    
-    //@IBOutlet weak var lb_status: UILabel!
-    
-    @IBOutlet weak var lb_route: UILabel!
+   
     
     @IBOutlet weak var btn_pause: UIButton!
     
@@ -65,6 +58,7 @@ class CtrlVC: UIViewController {
     
     @IBOutlet weak var switch_map: UISwitch!
     
+    @IBOutlet var v_info: UIView!
     
     
     var view_status: UIView?
@@ -72,8 +66,7 @@ class CtrlVC: UIViewController {
     var lb_status: UILabel?
     
     
-    /****************  停止视图 *****************/
-    @IBOutlet weak var view_stop: UIView!
+
     /**************** 显示电量的背景图片 *****************/
     @IBOutlet weak var img_powerbg: UIImageView!
     /**************** 显示电量多少图片 *****************/
@@ -113,7 +106,7 @@ class CtrlVC: UIViewController {
                 
                 img_powerbg.image = UIImage(named:"icon_commonPower_bg_ipad")
                 img_powerColoer.image = UIImage(named: "icon_common_color_ipad")
-                lb_power.textColor = UIColor.blackColor()
+                lb_power.textColor = UIColor.whiteColor()
 
             }
             
@@ -128,18 +121,27 @@ class CtrlVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
-        self.addBackButton(self, action: #selector(self.backAction))
-        
+        //*************** 添加机器状态变化通知 *********************//
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.statusChanged), name: RobotNotification.STATUS_CHANGE, object: nil)
+        //*************** 添加机器电量通知 *********************//
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateElectricity), name: RobotNotification.POWER_CHANGE, object: nil)
+        //*************** 添加机器在线或离线通知 *********************//
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.ONLINE_CHANGE, object: nil)
+        //*************** 添加机器位置通知 *********************//
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updatePosLable), name: RobotNotification.POSLABLE_CHANGE, object: nil)
+        
+        //*************** 未知通知？？？？？？？？ *********************//
+        //*************** 未知通知 *********************//
+        //*************** 未知通知 *********************//
+        //*************** 未知通知 *********************//
+        //*************** 未知通知 *********************//
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.DEVICE_STATUS, object: nil)
+        //*************** 添加机器送餐桌号通知 *********************//
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.updateStatus), name: RobotNotification.TABLEID_CHANGE, object: nil)
+        //*************** 添加机器信息通知 *********************//
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.showNotice), name: RobotNotification.NOTICE_HAPPEN, object: nil)
-        // *************** 添加从后台进入前台通知，所做的操作是从新去请求下是否在线 *********************//
+        //*************** 添加从后台进入前台通知，所做的操作是从新去请求下机器状态 *********************//
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.appBecomeActive), name: RobotNotification.APPBECOMEACTIVE, object: nil)
         
         
@@ -147,6 +149,7 @@ class CtrlVC: UIViewController {
         self.clearTagStatus()
         self.setUpTitleView()
         self.updateUI()
+        self.addBackButton(self, action: #selector(self.backAction))
     }
     
     override func didReceiveMemoryWarning() {
@@ -157,35 +160,108 @@ class CtrlVC: UIViewController {
 }
 
 
+// MARK: 初始化
+
 extension CtrlVC{
+
+    // ****************** 初始化视图 ******************//
+    
+    func updateUI(){
+        
+        if nil != RotbotInfoManager.sharedInstance.current_endpoint_id {
+            
+            // ****************** 判断机器是否是否在线 ******************//
+            let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            let online = robotInfo.online ? "在线":"断线"
+            
+            btn_songcan.enabled = robotInfo.online
+            btn_kongzhi.enabled = robotInfo.online
+            btn_chongdian.enabled = robotInfo.online
+            
+            
+            self.power = NSNumber(int:(Int32(robotInfo.power)))
+            
+            self.lb_status!.text = robotInfo.statusName() + "(" + online + ")"
+            self.updateTitleViewFrame(self.lb_status!.text!)
+            if robotInfo.statusName() == "闲置任务" || robotInfo.statusName() == "等待就位"{
+                imgv_status?.image = UIImage(named: "icon_status_idle_ipad")
+            }else if robotInfo.statusName() == "脱离磁道"{
+                imgv_status?.image = UIImage(named: "icon_status_abnormal_ipad")
+            } else {
+                imgv_status?.image = UIImage(named: "icon_status_busy_ipad")
+            }
+            self.setTagHighter(robotInfo.posLable)
+            self.lb_nameRobit.text = RotbotInfoManager.sharedInstance.current_endpoin_name!
+        
+            self.switch_map.addTarget(self, action:#selector(CtrlVC.mapChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+            self.isChangle = false
+            self.switch_map.setOn(self.isChangle!, animated: false)
+            
+        }
+        
+    }
+    
+    //*****************  初始化titleView视图 *****************//
+    
+    func setUpTitleView(){
+        
+        view_status = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 250, height: 44))
+        view_status?.backgroundColor = UIColor.clearColor()
+        imgv_status = UIImageView(frame: CGRect(x: 5.0, y: 22-4.5, width: 9, height: 9))
+        view_status?.addSubview(imgv_status!)
+        
+        lb_status = UILabel(frame: CGRect(x: 20.0, y: 0.0, width: 230, height: 44))
+        lb_status?.font = UIFont.systemFontOfSize(18.0)
+        lb_status?.backgroundColor = UIColor.clearColor()
+        lb_status?.textAlignment = NSTextAlignment.Center
+        lb_status?.textColor = UIColor.whiteColor()
+        view_status?.addSubview(lb_status!)
+        
+        self.navigationItem.titleView = view_status
+        
+    }
+    
+}
+
+// MARK: 事件通知
+
+extension CtrlVC{
+    
     
     @objc func appBecomeActive(notification: NSNotification){
         
         weak var weakself = self
-        RobotAPI.getEndpoints(func: { (result) in
-            let endpoints:[EndPoint] = result!
+        RobotAPI.loginRobot(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: {
+            print("登录机器成功")
             
-            for endpoint in endpoints{
+            RobotAPI.getSeatTaskID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
                 
-                if RotbotInfoManager.sharedInstance.current_endpoint_id == endpoint.registration_id {
+                let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+                robotInfo.online = true
+                self.updateUI()
+                
+                }, func: { (error) in
                     
-                    let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-                    robotInfo.online = true
-                    self.updateUI()
-                    
-                    return
-                }
-            }
-            SCLAlertView().showError("提示", subTitle: ("机器离线"))
-            weakself!.backAction()
+            })
             
         }) { (error) in
             
+            SCLAlertView().showError("提示", subTitle: ("机器离线"))
+            weakself!.backAction()
         }
-    
+
     }
     
-    @objc func showNotice(notfication:NSNotification){
+    @objc func showNotice(notification:NSNotification){
+        
+        let info = notification.userInfo!
+        let endpoint_id:String = info["endpoint_id"] as! String
+        let notice_id:Int = info["notice_id"] as! Int
+        if endpoint_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
+            let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
+            robotInfo.noticeID = notice_id
+        
+        }
         
     }
     
@@ -193,6 +269,7 @@ extension CtrlVC{
         let info = notification.userInfo!
         let endpoint_id:String = info["endpoint_id"] as! String
         if endpoint_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
+            
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
             let online = robotInfo.online ? "在线":"断线"
             
@@ -212,6 +289,7 @@ extension CtrlVC{
             btn_chongdian.enabled = robotInfo.online
             
             if(robotInfo.errorDetail.isEmpty){
+                
                 self.lb_status!.text = robotInfo.statusName() + "(" + online + ")"
                 self.updateTitleViewFrame(self.lb_status!.text!)
                 if robotInfo.statusName() == "闲置任务" || robotInfo.statusName() == "等待就位"{
@@ -229,12 +307,15 @@ extension CtrlVC{
                 }
                 
             }else{
+                
                 self.lb_status!.text = robotInfo.errorDetail
                 self.updateTitleViewFrame(self.lb_status!.text!)
                 imgv_status?.image = UIImage(named: "icon_status_abnormal_ipad")
             }
         }
     }
+    
+    //**************** 更新机器状态通知 ***************//
     
     @objc func statusChanged(notification: NSNotification){
         self.updateStatus(notification);
@@ -250,18 +331,18 @@ extension CtrlVC{
             }
         }
     }
+    //**************** 更新机器电量信息 ***************//
     
     @objc func updateElectricity(notification: NSNotification){
         let info = notification.userInfo!
         let endpoint_id:String = info["endpoint_id"] as! String
         if endpoint_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id)
-            
             self.power = NSNumber(int:(Int32(robotInfo.power)))
             
-            //self.lb_electricity.text = "电量：" + String(robotInfo.power) + "/100"
         }
     }
+    //**************** 更新机器位置信息 ***************//
     
     @objc func updatePosLable(notification: NSNotification){
         let info = notification.userInfo!
@@ -283,89 +364,33 @@ extension CtrlVC{
         }
     }
     
-    func updateUI(){
-        
-        if nil != RotbotInfoManager.sharedInstance.current_endpoint_id {
-            let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            let online = robotInfo.online ? "在线":"断线"
-        
-            btn_songcan.enabled = robotInfo.online
-            btn_kongzhi.enabled = robotInfo.online
-            btn_chongdian.enabled = robotInfo.online
-            
-            //self.lb_electricity.text = "电量：" + String(robotInfo.power)
-            self.power = NSNumber(int:(Int32(robotInfo.power)))
-            self.lb_status!.text = robotInfo.statusName() + "(" + online + ")"
-            self.updateTitleViewFrame(self.lb_status!.text!)
-            if robotInfo.statusName() == "闲置任务" || robotInfo.statusName() == "等待就位"{
-                imgv_status?.image = UIImage(named: "icon_status_idle_ipad")
-            }else if robotInfo.statusName() == "脱离磁道"{
-                imgv_status?.image = UIImage(named: "icon_status_abnormal_ipad")
-            } else {
-                imgv_status?.image = UIImage(named: "icon_status_busy_ipad")
-            }
-            self.setTagHighter(robotInfo.posLable)
-            self.lb_nameRobit.text = RotbotInfoManager.sharedInstance.current_endpoin_name!
-            self.view_stop.hidden = true;
-            
-            self.switch_map.addTarget(self, action:#selector(CtrlVC.mapChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
-            self.isChangle = false
-            self.switch_map.setOn(self.isChangle!, animated: false)
-        
-        }
-        
-    }
-    
-    func setUpTitleView(){
-        
-        view_status = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 250, height: 44))
-        view_status?.backgroundColor = UIColor.clearColor()
-        imgv_status = UIImageView(frame: CGRect(x: 5.0, y: 22-4.5, width: 9, height: 9))
-        view_status?.addSubview(imgv_status!)
-        
-        lb_status = UILabel(frame: CGRect(x: 20.0, y: 0.0, width: 230, height: 44))
-        lb_status?.font = UIFont.systemFontOfSize(18.0)
-        lb_status?.backgroundColor = UIColor.clearColor()
-        lb_status?.textAlignment = NSTextAlignment.Center
-        lb_status?.textColor = UIColor.whiteColor()
-        view_status?.addSubview(lb_status!)
-        
-        self.navigationItem.titleView = view_status
-    
-    }
-
-    
 }
 
 
+// MARK: 视图相关
+
 extension CtrlVC{
-    //TODO:
-    /**
-     显示方向控制视图
-     */
+   
+    //*****************  显示方向控制视图 *****************//
     func  showDirctionView() -> Void {
         btn_ctrl.tag = 1
-        self.setCtrlBtnTitle("自动")
         view_ctrl.hidden = false
     }
-    /**
-     隐藏方向控制视图
-     */
+    
+    
+    //*****************  隐藏方向控制视图 *****************//
+    
     func hideDirctionView()->Void{
         btn_ctrl.tag = 0
-        self.setCtrlBtnTitle("手控")
         view_ctrl.hidden = true
     }
     
-    /**
-     显示座位选择视图
-     */
+    //***************** 显示座位选择视图 *****************//
+
     func showSeatChooseVC()->Void{
-        if nil != alertView {
-            alertView!.dismissWithClickedButtonIndex(0, animated: false)
-            alertView = nil
-        }
-        //weak var weakself = self
+       
+        self.hideMessage()
+        
         if nil == self.v_showSeat {
         
             self.v_showSeat  = NSBundle.mainBundle().loadNibNamed("SeatChooseView", owner: nil, options: nil).first as? SeatChooseView
@@ -382,50 +407,33 @@ extension CtrlVC{
                     self.v_showSeat?.showView()
                     
             })
-            
-//            self.v_showSeat?.hideView()
-//            self.v_showSeat?.showView()
-            
         
         }
        
-        
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let seatChooseVC = storyboard.instantiateViewControllerWithIdentifier("SeatChooseVC")
-//        weakself!.navigationController?.presentViewController(seatChooseVC, animated: true, completion: {
-//            
-//        })
     }
     
-    /**
-     在界面上显示信息
-     
-     - parameter msg:
-     */
+    
+    //***************** 在界面上显示信息 *****************//
+   
     func showMessage(msg:String)->Void{
         self.hideMessage()
         alertView = UIAlertView(title: "提示", message: msg, delegate: nil, cancelButtonTitle: "确定")
         alertView?.show()
     }
     
-    /**
-     关闭显示的信息
-     */
-    func hideMessage()->Void{
-        alertView?.dismissWithClickedButtonIndex(0, animated: false)
-        alertView = nil
-    }
+    //***************** 关闭显示的信息 *****************//
     
-    /**
-     设置控制按钮的标题
-     
-     - parameter title: 标题
-     */
-    func setCtrlBtnTitle(title:String) -> Void{
-        
+    func hideMessage()->Void{
+        if alertView != nil {
+            alertView?.dismissWithClickedButtonIndex(0, animated: false)
+            alertView = nil
+        }
+      
     }
     
 }
+
+// MARK: 提示框处理
 
 let TAG_TARGET_CTRL = 101 //手动状态
 let TAG_TARGET_CHARGE = 102 //充电
@@ -434,7 +442,6 @@ let TAG_TARGET_STOP = 104 //任务中止
 let TAG_TARGET_STOP_STATUS = 105 //送餐终止弹出来的状态
 
 var HAS_TARGET_PAUSE = false  //用来判断是否送餐任务挂起
-
 
 extension CtrlVC:UIAlertViewDelegate{
     
@@ -473,20 +480,15 @@ extension CtrlVC:UIAlertViewDelegate{
     }
 }
 
+// MARK: 按钮事件
+
 extension CtrlVC{
     
-    /**
-     送餐
-     - parameter sender:
-     */
+    //***************** 点击送餐事件 *****************//
     
     @IBAction func chooseAction(sender: AnyObject) {
         
-//        self.hideMessage()
-//        self.showSeatChooseVC()
-//        return
         self.hideDirctionView()
-        
         
         let flag = RobotAPI.canGoSeat(RotbotInfoManager.sharedInstance.current_endpoint_id!)
         if !flag.canGo {
@@ -497,19 +499,22 @@ extension CtrlVC{
         }
     }
     
-    /**
-     控制
-     - parameter sender:
-     */
+    //***************** 点击控制事件 *****************//
+    
     @IBAction func beginCtrlAction(sender: AnyObject) {
         weak var weakself = self
+        
         if btn_ctrl.tag == 0{
+            
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
+                
                 alertView = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，请选择任务处理", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "暂停","中止");
                 alertView!.tag = TAG_TARGET_CTRL
                 alertView!.show()
+                
             }else{
+                
                 RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_AUTOMOVE_SUSPEND, func: {
                     HAS_TARGET_PAUSE = false
                     weakself?.showDirctionView()
@@ -517,26 +522,29 @@ extension CtrlVC{
                     }, func: { (error) in
                         
                 })
+                
             }
         }else{
+            
             if HAS_TARGET_PAUSE {
+                
                 RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_FINDPATH_RESUME, func: {
                     HAS_TARGET_PAUSE = false
                     weakself?.hideDirctionView()
                     }, func: { (error) in
                         
                 })
+                
             }else{
+                
                 weakself?.hideDirctionView()
+                
             }
         }
         
     }
     
-    /**
-     方向按下
-     - parameter sender:
-     */
+    //***************** 点击方向按下事件 *****************//
     
     @IBAction func downAction(sender: AnyObject) {
         let btn:UIButton = sender as! UIButton
@@ -555,48 +563,58 @@ extension CtrlVC{
         self.beginAction()
     }
     
-    /**
-     方向放开
-     - parameter sender:
-     */
-    
+    //***************** 点击方向放开事件 *****************//
+   
     @IBAction func upAction(sender: AnyObject) {
         dirction = MOVE_DIRCTION.MOVE_DIRCTION_STOP
         self.endDirctionCMD()
     }
     
+    //***************** 点击暂停事件 *****************//
+    
     @IBAction func pauseAction(sender: AnyObject) {
+        
         if btn_pause.tag == 0 {
+            
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
+                
                 alertView = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否要暂停？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "暂停");
                 alertView!.tag = TAG_TARGET_PAUSE
                 alertView!.show()
+                
             }else{
+                
                 self.sendPauseAction()
             }
+            
         }else{
+            
             self.sendContinueAction()
+            
         }
     }
     
+    //***************** 点击停止事件 *****************//
+    
     @IBAction func stopAction(sender: AnyObject) {
+        
         let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
         if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
+            
             alertView = UIAlertView(title: "确认消息", message: "机器人处于［正在送餐］状态，是否要中止？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "中止");
             alertView!.tag = TAG_TARGET_STOP
             alertView!.show()
+            
         }else{
             self.sendStopAction()
         }
         
     }
     
-    /**
-     充电
-     - parameter sender:
-     */
     
+    //***************** 点击充电事件 *****************//
+ 
     @IBAction func chargeAction(sender: AnyObject) {
         
          self.hideDirctionView()
@@ -611,6 +629,7 @@ extension CtrlVC{
         }
     }
     
+    
     func beginAction(){
         self.timer = NSTimer.scheduledTimerWithTimeInterval(1,
                                                             target:self,selector:#selector(CtrlVC.sendDirctionCMD),
@@ -618,54 +637,23 @@ extension CtrlVC{
         self.timer?.fire()
     }
     
-    /**
-      显示或者隐藏暂停视图
-    */
-    
-    @IBAction func ShowOrHideStopView(sender: AnyObject) {
-        
-        if !self.view_stop.hidden {
-          
-            UIView.animateWithDuration(0.3, animations: {
-                    () -> Void in
-                
-                self.view_stop.alpha = 0.0
-                
-                }, completion: {
-                    
-                    (finished:Bool) -> Void in
-            
-                    self.view_stop.hidden = true;
-            })
-            
+}
 
-        }else{
-        
-            UIView.animateWithDuration(0.3, animations: {
-                () -> Void in
-                
-                self.view_stop.alpha = 1.0
-                
-                }, completion: {
-                    
-                    (finished:Bool) -> Void in
-                    
-                    self.view_stop.hidden = false;
-                    
-            })
-            
-        }
-        
-        
-    }
-    
+// MARK: 命令定义
+
+extension CtrlVC{
+
+    //***************** 停止控制方向命令 *****************//
     
     func endDirctionCMD(){
+        
         timer?.invalidate()
         if (RotbotInfoManager.sharedInstance.current_endpoint_id != nil) {
             RobotAPI.ctrolDirection(RotbotInfoManager.sharedInstance.current_endpoint_id!, dirction: MOVE_DIRCTION.MOVE_DIRCTION_STOP)
         }
     }
+    
+    //***************** 发送控制方向命令 *****************//
     
     func sendDirctionCMD(){
         print("!!!!")
@@ -674,23 +662,30 @@ extension CtrlVC{
         }
     }
     
+    //***************** 发送暂停命令 *****************//
+    
     func sendPauseAction(){
         weak var weakself = self
         RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_AUTOMOVE_SUSPEND, func: {
+            
             weakself!.btn_pause.tag = 1
-            //weakself!.btn_pause.setTitle("继续任务", forState:UIControlState.Normal)
+            weakself!.btn_pause.setTitle("开始", forState: UIControlState.Normal)
             weakself!.btn_pause.setImage(UIImage(named: "icon_star_unsd_ipad"), forState: UIControlState.Normal)
             weakself!.btn_pause.setImage(UIImage(named: "icon_star_sd_ipad"), forState: UIControlState.Highlighted)
+            
         }) { (error) in
             
         }
     }
     
+    //***************** 发送停止命令 *****************//
+    
     func sendStopAction(){
         weak var weakself = self
         RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_STOP_SLOW, func: {
+            
             weakself!.btn_pause.enabled = false
-            //weakself!.btn_pause.setTitle("已无任务", forState:UIControlState.Normal)
+            weakself!.btn_pause.setTitle("暂停", forState: UIControlState.Normal)
             weakself!.btn_pause.setImage(UIImage(named: "icon_pause_unsd_ipad"), forState: UIControlState.Normal)
             weakself!.btn_pause.setImage(UIImage(named: "icon_pause_sd_ipad"), forState: UIControlState.Highlighted)
             
@@ -703,20 +698,23 @@ extension CtrlVC{
         }
     }
     
+    //***************** 发送继续命令 *****************//
+    
     func sendContinueAction(){
         weak var weakself = self
         RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_FINDPATH_RESUME, func: {
             weakself!.btn_pause.tag = 0
-            //weakself!.btn_pause.setTitle("暂停任务", forState:UIControlState.Normal)
-            
+            weakself!.btn_pause.setTitle("暂停", forState:UIControlState.Normal)
             weakself!.btn_pause.setImage(UIImage(named: "icon_pause_unsd_ipad"), forState: UIControlState.Normal)
             weakself!.btn_pause.setImage(UIImage(named: "icon_pause_sd_ipad"), forState: UIControlState.Highlighted)
             
-            }) { (error) in
+        }) { (error) in
         }
     }
     
     
+    //***************** 发送充电命令 *****************//
+
     func sendChargeAction(){
         RobotAPI.sendCMD(RotbotInfoManager.sharedInstance.current_endpoint_id!, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_CHARGE, func: {
             
@@ -724,54 +722,14 @@ extension CtrlVC{
             
         }
     }
-    
+
 }
 
-extension CtrlVC{
-
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.endpoints.count
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("CELL")
-        if nil == cell {
-            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "CELL")
-        }
-        let endpoint = self.endpoints[indexPath.row]
-        cell?.textLabel?.text = endpoint.endpoin_name
-        return cell!
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let endpoint = self.endpoints[indexPath.row]
-        RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
-        print(endpoint.endpoin_name + "_" + endpoint.registration_id)
-        let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint.registration_id)
-        robotInfo.clearStatus()
-        weak var weakself = self;
-        RobotAPI.loginRobot(endpoint.registration_id, func: {
-            print("登录机器成功")
-            RobotAPI.addStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            RobotAPI.addOnlineListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            RobotAPI.addPowerListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            RobotAPI.getSeatTaskID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
-                
-                }, func: { (error) in
-                    
-            })
-            RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
-            }) { (error) in
-                weakself!.showMessage((error?.message)!)
-        }
-    }
-    
-}
+// MARK: 获取地图地标以及定位地图地标
 
 extension CtrlVC{
     
     func getTagLables() -> [UILabel]{
-        
         
         if self.isChangle == true {
             
@@ -780,8 +738,6 @@ extension CtrlVC{
             var results = [UILabel]()
             for view in tempviews! {
                 let lable = view as! UILabel
-//                let at:CGAffineTransform = CGAffineTransformMakeRotation(CGFloat(M_PI/2))
-//                lable.transform = at
 
                 results.append(lable)
             }
@@ -918,21 +874,45 @@ extension CtrlVC{
     
 }
 
+// MARK: 返回视图初始化
+
 extension CtrlVC{
     
+    //************ 添加返回按钮 ****************//
     
     func addBackButton(target:AnyObject, action:Selector){
         
-        let image :UIImage = UIImage(named: "icon_back_unsd_ipad")!
-        let buttonFrame :CGRect  = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: image.size.width + 10.0, height: self.navigationController!.navigationBar.frame.size.height))
+        self.v_info.removeFromSuperview()
+        self.v_info.frame.origin.x = 0
+        self.v_info.frame.origin.y = 0
+        
+        
+        let view :UIView = UIView(frame:CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 170, height: self.navigationController!.navigationBar.frame.size.height)))
+        view.addSubview(self.v_info)
+        view.backgroundColor = UIColor.clearColor()
+        view.translatesAutoresizingMaskIntoConstraints = true
+        let layout_left:NSLayoutConstraint = NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: self.v_info, attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: 0.0)
+         let layout_top:NSLayoutConstraint = NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: self.v_info, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 0.0)
+        
+        
+        view.addConstraint(layout_left)
+        view.addConstraint(layout_top)
+    
+        //let image :UIImage = UIImage(named: "icon_back_unsd_ipad")!
+        let buttonFrame :CGRect  = view.frame
+        
         let button:UIButton = UIButton(type: UIButtonType.Custom)
         button.contentMode = UIViewContentMode.ScaleAspectFit;
         button.backgroundColor = UIColor.clearColor();
         button.frame = buttonFrame;
-        button.setImage(image, forState: UIControlState.Normal)
+        //button.setImage(image, forState: UIControlState.Normal)
         button.addTarget(target, action: action, forControlEvents: UIControlEvents.TouchUpInside)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView:button)
+        view.addSubview(button)
+        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView:view)
     }
+    
+    //************ 添加返回按钮事件处理 ****************//
     
     func backAction(){
         self.navigationController?.popViewControllerAnimated(true)
@@ -942,7 +922,8 @@ extension CtrlVC{
 
 extension CtrlVC{
 
-
+    //************ 地图切换处理 ****************//
+    
     func mapChanged(switchState:UISwitch){
         
         if switchState.on {
@@ -952,6 +933,8 @@ extension CtrlVC{
         }
         
     }
+    
+    //************ 更新titleView尺寸大小 ******************//
     
     func updateTitleViewFrame(text:String){
         
