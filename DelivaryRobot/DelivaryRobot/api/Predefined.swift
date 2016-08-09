@@ -20,6 +20,7 @@ public class RobotNotification{
     static let TABLEID_CHANGE = "TABLEID_CHANGE"
     static let APPBECOMEACTIVE = "APPBECOMEACTIVE"
     static let NOTICE_HAPPEN = "NOTICE_HAPPEN"
+    static let SUBSTATUS_CHANGE = "SUBSTATUS_CHANGE"
 }
 
 /**
@@ -71,6 +72,7 @@ public enum MOVE_DIRCTION: Int {
  - MOVE_CHARGING: 正在充电
  - MOVE_MEAL:     正在送餐
  - MOVE_LEVETRACK:脱离磁道
+ - MOVE_SUSPENDED:挂起
  - MOVE_WAITREADY:等待就位
  - MOVE_WAITBEGINMEAL: 等待送餐
  - MOVE_MEALARRIVE:送餐到达
@@ -181,6 +183,8 @@ public class RotbotInfo{
     var errorDetail = ""
     var tableId = -1
     var noticeID = -1
+    var preStatus = ROBOT_STATUS.MOVE_ANKOWN
+    var substatus = -1
     
     init(endpoint_id:String){
         self.endpoint_id = endpoint_id
@@ -222,9 +226,9 @@ public class RotbotInfo{
         case ROBOT_STATUS.MOVE_SUSPENDED:
             return "挂起"
         case ROBOT_STATUS.MOVE_WAITREADY:
-            return "等待就位"
+            return "送餐准备"
         case ROBOT_STATUS.MOVE_WAITBEGINMEAL:
-            return "等待送餐"
+            return "送餐准备"
         case ROBOT_STATUS.MOVE_MEALARRIVE:
             return "送餐到达"
         case ROBOT_STATUS.MOVE_GOBACK:
@@ -237,6 +241,50 @@ public class RotbotInfo{
             return "未知"
         }
     }
+    
+    func preStatusName() -> String {
+        switch self.preStatus {
+        case ROBOT_STATUS.MOVE_AUTO:
+            return "自动导航"
+        case ROBOT_STATUS.MOVE_ROCKER:
+            return "手柄柄制"
+        case ROBOT_STATUS.MOVE_TASK:
+            return "巡逻作务"
+        case ROBOT_STATUS.MOVE_WANDER:
+            return "自动漫游"
+        case ROBOT_STATUS.MOVE_FREE:
+            return "闲置任务"
+        case ROBOT_STATUS.MOVE_TOCHARGE:
+            return "前去充电"
+        case ROBOT_STATUS.MOVE_CHARGING:
+            return "正在充电"
+        case ROBOT_STATUS.MOVE_MEAL:
+            if self.tableId>0 {
+                return "正在送餐" + "(" + self.tableId.description + "号桌)"
+            }else{
+                return "正在送餐"
+            }
+        case ROBOT_STATUS.MOVE_LEVETRACK:
+            return "脱离磁道"
+        case ROBOT_STATUS.MOVE_SUSPENDED:
+            return "挂起"
+        case ROBOT_STATUS.MOVE_WAITREADY:
+            return "送餐准备"
+        case ROBOT_STATUS.MOVE_WAITBEGINMEAL:
+            return "送餐准备"
+        case ROBOT_STATUS.MOVE_MEALARRIVE:
+            return "送餐到达"
+        case ROBOT_STATUS.MOVE_GOBACK:
+            return "正在返回"
+        case ROBOT_STATUS.MOVE_MEALSTOP:
+            return "送餐终止"
+        case ROBOT_STATUS.MOVE_TIMEOUT:
+            return "超时停止"
+        default:
+            return "未知"
+        }
+    }
+
 }
 
 class EndPoint: EVObject {

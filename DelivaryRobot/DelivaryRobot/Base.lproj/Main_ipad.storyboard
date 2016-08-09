@@ -376,6 +376,7 @@
                                 <subviews>
                                     <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="map_changle" translatesAutoresizingMaskIntoConstraints="NO" id="V22-bi-nET">
                                         <rect key="frame" x="0.0" y="0.0" width="768" height="912"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </imageView>
                                     <view tag="119" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Fo-Jz-k9b">
                                         <rect key="frame" x="0.0" y="0.0" width="768" height="912"/>
@@ -597,6 +598,7 @@
                                 <subviews>
                                     <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="map" translatesAutoresizingMaskIntoConstraints="NO" id="JTD-QY-QTC">
                                         <rect key="frame" x="0.0" y="0.0" width="768" height="912"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </imageView>
                                     <view tag="111" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rYV-Os-uKi">
                                         <rect key="frame" x="0.0" y="0.0" width="768" height="912"/>
@@ -788,42 +790,9 @@
                                             <constraint firstAttribute="width" constant="1" id="7gB-Tw-IzY"/>
                                         </constraints>
                                     </imageView>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V8w-DW-C3i">
-                                        <rect key="frame" x="18" y="9" width="51" height="31"/>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V8w-DW-C3i">
+                                        <rect key="frame" x="686" y="9" width="51" height="31"/>
                                     </switch>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dAn-oU-l8o">
-                                        <rect key="frame" x="588" y="8" width="77" height="32"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="77" id="2ei-5y-J1N"/>
-                                            <constraint firstAttribute="height" constant="32" id="sT2-7W-EVB"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <inset key="imageEdgeInsets" minX="-15" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="暂停" image="icon_pause_unsd_ipad">
-                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted" image="icon_pause_sd_ipad"/>
-                                        <connections>
-                                            <action selector="pauseAction:" destination="Yex-UN-aTC" eventType="touchUpInside" id="9Bi-7c-qLb"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7v0-eZ-fYN">
-                                        <rect key="frame" x="686" y="8" width="77" height="32"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="77" id="LZj-vg-m06"/>
-                                            <constraint firstAttribute="height" constant="32" id="luk-iC-Cdv"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <inset key="imageEdgeInsets" minX="-15" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="停止" image="icon_stop_unsd_ipad">
-                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="stopAction:" destination="Yex-UN-aTC" eventType="touchUpInside" id="1hj-XY-Wew"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -841,16 +810,15 @@
                                     <constraint firstAttribute="bottom" secondItem="iF8-ad-aFW" secondAttribute="bottom" id="P4p-hN-csb"/>
                                     <constraint firstItem="u0n-ZQ-dVb" firstAttribute="top" secondItem="2ZE-zb-Lid" secondAttribute="top" id="Pv2-eT-d0t"/>
                                     <constraint firstItem="GjJ-Lh-8eZ" firstAttribute="top" secondItem="2ZE-zb-Lid" secondAttribute="top" id="QVn-sv-JPz"/>
-                                    <constraint firstItem="dAn-oU-l8o" firstAttribute="leading" secondItem="Cdt-lD-ZE7" secondAttribute="trailing" constant="15" id="XKT-ne-9Fg"/>
+                                    <constraint firstAttribute="trailing" secondItem="V8w-DW-C3i" secondAttribute="trailing" constant="33" id="bBO-G3-7wM"/>
                                     <constraint firstItem="8JH-t7-7iY" firstAttribute="leading" secondItem="GjJ-Lh-8eZ" secondAttribute="leading" id="bVA-dZ-r9G"/>
                                     <constraint firstItem="Cdt-lD-ZE7" firstAttribute="height" secondItem="GjJ-Lh-8eZ" secondAttribute="height" id="bhQ-gG-Gf4"/>
                                     <constraint firstAttribute="bottom" secondItem="8JH-t7-7iY" secondAttribute="bottom" id="e7u-rw-xwC"/>
                                     <constraint firstItem="lFo-8d-aoS" firstAttribute="height" secondItem="GjJ-Lh-8eZ" secondAttribute="height" id="fr1-WV-jks"/>
                                     <constraint firstItem="t20-MR-hc0" firstAttribute="top" secondItem="2ZE-zb-Lid" secondAttribute="top" id="gR4-Fo-ND7"/>
                                     <constraint firstAttribute="bottom" secondItem="t20-MR-hc0" secondAttribute="bottom" id="gWh-Mt-E19"/>
-                                    <constraint firstItem="dAn-oU-l8o" firstAttribute="centerY" secondItem="Cdt-lD-ZE7" secondAttribute="centerY" id="jRJ-Wn-27h"/>
+                                    <constraint firstItem="V8w-DW-C3i" firstAttribute="centerY" secondItem="2ZE-zb-Lid" secondAttribute="centerY" id="hDf-bU-CJR"/>
                                     <constraint firstItem="Jwu-E7-T4d" firstAttribute="leading" secondItem="GjJ-Lh-8eZ" secondAttribute="trailing" id="kwL-3M-u2Q"/>
-                                    <constraint firstItem="7v0-eZ-fYN" firstAttribute="centerY" secondItem="dAn-oU-l8o" secondAttribute="centerY" id="nqu-hL-5CJ"/>
                                     <constraint firstItem="iF8-ad-aFW" firstAttribute="top" secondItem="2ZE-zb-Lid" secondAttribute="top" id="oQC-qZ-gBw"/>
                                     <constraint firstItem="lFo-8d-aoS" firstAttribute="width" secondItem="GjJ-Lh-8eZ" secondAttribute="width" id="oSm-Zz-GYE"/>
                                     <constraint firstItem="GjJ-Lh-8eZ" firstAttribute="centerY" secondItem="lFo-8d-aoS" secondAttribute="centerY" id="pWG-Vw-1Ac"/>
@@ -858,53 +826,110 @@
                                     <constraint firstItem="Jwu-E7-T4d" firstAttribute="top" secondItem="2ZE-zb-Lid" secondAttribute="top" id="qog-Bt-8Rd"/>
                                     <constraint firstItem="Cdt-lD-ZE7" firstAttribute="leading" secondItem="lFo-8d-aoS" secondAttribute="trailing" constant="1" id="sUV-Xj-Hf4"/>
                                     <constraint firstItem="lFo-8d-aoS" firstAttribute="centerY" secondItem="2ZE-zb-Lid" secondAttribute="centerY" id="thD-Vm-Sq0"/>
-                                    <constraint firstItem="7v0-eZ-fYN" firstAttribute="leading" secondItem="dAn-oU-l8o" secondAttribute="trailing" constant="21" id="tlC-PH-DTL"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1q5-yw-o0C">
+                                <rect key="frame" x="35" y="98" width="42" height="42"/>
+                                <state key="normal" image="icon_listButton_unsd_ipad" backgroundImage="icon_listButtonBg_ipad"/>
+                                <state key="highlighted" image="icon_listButton_sd_ipad" backgroundImage="icon_listButtonBg_ipad"/>
+                                <connections>
+                                    <action selector="btnShowOrHideStopViewAction:" destination="Yex-UN-aTC" eventType="touchUpInside" id="cRG-8c-WUL"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cXc-NO-HQl">
+                                <rect key="frame" x="35" y="150" width="42" height="90"/>
+                                <subviews>
+                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="icon_StarOrStopBg_ipad" translatesAutoresizingMaskIntoConstraints="NO" id="tWk-e0-ffd">
+                                        <rect key="frame" x="0.0" y="0.0" width="42" height="90"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dAn-oU-l8o">
+                                        <rect key="frame" x="6" y="50" width="30" height="30"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="2Cq-o1-YcU"/>
+                                            <constraint firstAttribute="height" constant="30" id="dhb-7O-cX8"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal" image="icon_pause_unsd_ipad">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted" image="icon_pause_sd_ipad"/>
+                                        <connections>
+                                            <action selector="pauseAction:" destination="Yex-UN-aTC" eventType="touchUpInside" id="9Bi-7c-qLb"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7v0-eZ-fYN">
+                                        <rect key="frame" x="6" y="8" width="30" height="30"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="8c7-g4-k66"/>
+                                            <constraint firstAttribute="width" constant="30" id="Sbo-u6-TlW"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal" image="icon_stop_unsd_ipad">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="stopAction:" destination="Yex-UN-aTC" eventType="touchUpInside" id="1hj-XY-Wew"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="7v0-eZ-fYN" firstAttribute="centerX" secondItem="cXc-NO-HQl" secondAttribute="centerX" id="4d3-9Y-UKG"/>
+                                    <constraint firstItem="dAn-oU-l8o" firstAttribute="centerX" secondItem="cXc-NO-HQl" secondAttribute="centerX" id="CeD-Wm-7KM"/>
+                                    <constraint firstItem="7v0-eZ-fYN" firstAttribute="top" secondItem="cXc-NO-HQl" secondAttribute="top" constant="8" id="SOY-ER-19T"/>
+                                    <constraint firstAttribute="bottom" secondItem="dAn-oU-l8o" secondAttribute="bottom" constant="10" id="Z2G-yn-WfE"/>
+                                    <constraint firstAttribute="height" constant="90" id="kJH-GI-tU3"/>
+                                    <constraint firstAttribute="width" constant="42" id="riV-z9-GmU"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1i6-L2-zIt">
-                                <rect key="frame" x="299" y="98" width="170" height="44"/>
+                                <rect key="frame" x="87" y="98" width="153" height="42"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="GOOD COFFEE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4KH-Sa-KZD">
-                                        <rect key="frame" x="34" y="12" width="99" height="17"/>
+                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="icon_status_bg_ipad" translatesAutoresizingMaskIntoConstraints="NO" id="D2c-5B-SmU">
+                                        <rect key="frame" x="0.0" y="0.0" width="153" height="42"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GOOD COFFEE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4KH-Sa-KZD">
+                                        <rect key="frame" x="16" y="12" width="99" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" red="0.0" green="0.43529411759999997" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" image="icon_commonPower_bg_ipad" translatesAutoresizingMaskIntoConstraints="NO" id="a1F-Ve-s7Z">
-                                        <rect key="frame" x="145" y="8" width="13" height="15"/>
+                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="icon_commonPower_bg_ipad" translatesAutoresizingMaskIntoConstraints="NO" id="a1F-Ve-s7Z">
+                                        <rect key="frame" x="127" y="8" width="13" height="15"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="15" id="K83-m2-4ud"/>
                                             <constraint firstAttribute="width" constant="13" id="eLL-o6-Bi7"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" image="icon_common_color_ipad" translatesAutoresizingMaskIntoConstraints="NO" id="x27-l6-j6N">
-                                        <rect key="frame" x="147" y="11" width="9" height="10"/>
+                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="icon_common_color_ipad" translatesAutoresizingMaskIntoConstraints="NO" id="x27-l6-j6N">
+                                        <rect key="frame" x="129" y="11" width="9" height="10"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="9" id="muh-Xn-f8F"/>
                                             <constraint firstAttribute="height" constant="10" id="zz8-oq-Vf7"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="50%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Ou-Ew-fz9">
-                                        <rect key="frame" x="140" y="23" width="23" height="14"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="50%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Ou-Ew-fz9">
+                                        <rect key="frame" x="122" y="23" width="23" height="14"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" red="0.1137254902" green="0.1137254902" blue="0.14901960780000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" image="icon_back_unsd_ipad" translatesAutoresizingMaskIntoConstraints="NO" id="plw-83-JZL">
-                                        <rect key="frame" x="15" y="11" width="11" height="19"/>
-                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="4KH-Sa-KZD" firstAttribute="leading" secondItem="1i6-L2-zIt" secondAttribute="leading" constant="16" id="1Vm-Bd-XbF"/>
                                     <constraint firstItem="9Ou-Ew-fz9" firstAttribute="centerX" secondItem="a1F-Ve-s7Z" secondAttribute="centerX" id="4E4-80-hZw"/>
                                     <constraint firstItem="a1F-Ve-s7Z" firstAttribute="centerY" secondItem="4KH-Sa-KZD" secondAttribute="centerY" constant="-5" id="4Ug-cz-Mfy"/>
-                                    <constraint firstItem="plw-83-JZL" firstAttribute="leading" secondItem="1i6-L2-zIt" secondAttribute="leading" constant="15" id="5t1-eu-Dnd"/>
-                                    <constraint firstItem="plw-83-JZL" firstAttribute="centerY" secondItem="4KH-Sa-KZD" secondAttribute="centerY" id="JvT-n4-HZG"/>
-                                    <constraint firstAttribute="height" constant="44" id="SlL-mN-NfA"/>
+                                    <constraint firstItem="D2c-5B-SmU" firstAttribute="top" secondItem="1i6-L2-zIt" secondAttribute="top" id="Cs5-D1-G9u"/>
+                                    <constraint firstItem="D2c-5B-SmU" firstAttribute="leading" secondItem="1i6-L2-zIt" secondAttribute="leading" id="L0a-Rd-O0f"/>
+                                    <constraint firstAttribute="height" constant="42" id="SlL-mN-NfA"/>
                                     <constraint firstItem="4KH-Sa-KZD" firstAttribute="centerY" secondItem="1i6-L2-zIt" secondAttribute="centerY" id="WWg-al-7m4"/>
-                                    <constraint firstItem="4KH-Sa-KZD" firstAttribute="leading" secondItem="plw-83-JZL" secondAttribute="trailing" constant="8" id="ZeG-gx-NRc"/>
-                                    <constraint firstItem="a1F-Ve-s7Z" firstAttribute="leading" secondItem="4KH-Sa-KZD" secondAttribute="trailing" constant="12" id="aKu-Wz-MOX"/>
-                                    <constraint firstAttribute="width" constant="170" id="dmH-IG-3rN"/>
+                                    <constraint firstAttribute="bottom" secondItem="D2c-5B-SmU" secondAttribute="bottom" id="Zt2-NE-JcD"/>
+                                    <constraint firstAttribute="width" constant="153" id="dmH-IG-3rN"/>
+                                    <constraint firstAttribute="trailing" secondItem="D2c-5B-SmU" secondAttribute="trailing" id="dnP-pR-Cbm"/>
+                                    <constraint firstAttribute="trailing" secondItem="x27-l6-j6N" secondAttribute="trailing" constant="15" id="weV-vz-yJ7"/>
                                     <constraint firstItem="x27-l6-j6N" firstAttribute="centerX" secondItem="a1F-Ve-s7Z" secondAttribute="centerX" id="wi5-us-9YM"/>
                                     <constraint firstItem="x27-l6-j6N" firstAttribute="bottom" secondItem="a1F-Ve-s7Z" secondAttribute="bottom" constant="-2" id="yDj-Yh-Tsf"/>
                                     <constraint firstItem="9Ou-Ew-fz9" firstAttribute="top" secondItem="a1F-Ve-s7Z" secondAttribute="bottom" id="yz3-qB-wSk"/>
@@ -1009,20 +1034,24 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="2ZE-zb-Lid" firstAttribute="leading" secondItem="WGL-3d-JsB" secondAttribute="leading" id="3Vb-9t-jg7"/>
+                            <constraint firstItem="cXc-NO-HQl" firstAttribute="top" secondItem="1q5-yw-o0C" secondAttribute="bottom" constant="10" id="FG7-1w-ZhG"/>
+                            <constraint firstItem="1i6-L2-zIt" firstAttribute="leading" secondItem="1q5-yw-o0C" secondAttribute="trailing" constant="10" id="IBO-GO-Sy7"/>
                             <constraint firstItem="53V-WF-Pcx" firstAttribute="top" secondItem="xMz-2R-vgP" secondAttribute="bottom" id="JjS-3v-EDb"/>
                             <constraint firstAttribute="trailing" secondItem="53V-WF-Pcx" secondAttribute="trailing" id="JuH-y8-N2S"/>
+                            <constraint firstItem="1q5-yw-o0C" firstAttribute="leading" secondItem="WGL-3d-JsB" secondAttribute="leadingMargin" constant="15" id="K9N-cm-rjf"/>
                             <constraint firstAttribute="trailing" secondItem="2ZE-zb-Lid" secondAttribute="trailing" id="QAP-sJ-jZW"/>
                             <constraint firstItem="eg1-CX-Zk8" firstAttribute="top" secondItem="FtT-uh-rVR" secondAttribute="bottom" constant="70" id="Rh8-FZ-I6r"/>
-                            <constraint firstItem="1i6-L2-zIt" firstAttribute="centerX" secondItem="WGL-3d-JsB" secondAttribute="centerX" id="Vp9-sw-Aww"/>
                             <constraint firstItem="aXh-KV-c55" firstAttribute="leading" secondItem="WGL-3d-JsB" secondAttribute="leading" id="cgi-cZ-aQA"/>
                             <constraint firstItem="eg1-CX-Zk8" firstAttribute="top" secondItem="2ZE-zb-Lid" secondAttribute="bottom" id="dCL-5v-rL4"/>
                             <constraint firstItem="2ZE-zb-Lid" firstAttribute="top" secondItem="aXh-KV-c55" secondAttribute="bottom" constant="-1" id="dhD-Bc-pEK"/>
                             <constraint firstAttribute="trailing" secondItem="aXh-KV-c55" secondAttribute="trailing" id="ebY-ji-IUo"/>
                             <constraint firstItem="aXh-KV-c55" firstAttribute="top" secondItem="xMz-2R-vgP" secondAttribute="bottom" id="igH-w7-xFl"/>
-                            <constraint firstItem="1i6-L2-zIt" firstAttribute="top" secondItem="xMz-2R-vgP" secondAttribute="bottom" constant="34" id="jpw-6y-aNe"/>
                             <constraint firstItem="53V-WF-Pcx" firstAttribute="leading" secondItem="WGL-3d-JsB" secondAttribute="leading" id="mF9-ak-E1D"/>
+                            <constraint firstItem="1q5-yw-o0C" firstAttribute="centerY" secondItem="1i6-L2-zIt" secondAttribute="centerY" id="ooD-vX-sNv"/>
                             <constraint firstItem="2ZE-zb-Lid" firstAttribute="top" secondItem="53V-WF-Pcx" secondAttribute="bottom" constant="-1" id="pMM-8Y-hoj"/>
                             <constraint firstItem="FtT-uh-rVR" firstAttribute="leading" secondItem="WGL-3d-JsB" secondAttribute="leading" constant="25" id="uxU-CS-WUr"/>
+                            <constraint firstItem="cXc-NO-HQl" firstAttribute="centerX" secondItem="1q5-yw-o0C" secondAttribute="centerX" id="yLh-gz-CRi"/>
+                            <constraint firstItem="1q5-yw-o0C" firstAttribute="top" secondItem="xMz-2R-vgP" secondAttribute="bottom" constant="34" id="zng-mF-6qv"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="fah-6T-SyW"/>
@@ -1043,6 +1072,7 @@
                         <outlet property="v_changle" destination="aXh-KV-c55" id="kjs-hD-PH8"/>
                         <outlet property="v_info" destination="1i6-L2-zIt" id="Tma-mc-i1h"/>
                         <outlet property="v_jinye" destination="53V-WF-Pcx" id="CuW-BH-9ID"/>
+                        <outlet property="v_stop" destination="cXc-NO-HQl" id="XZ1-ej-F5E"/>
                         <outlet property="view_ctrl" destination="FtT-uh-rVR" id="ZWw-Xn-Hpl"/>
                     </connections>
                 </viewController>
@@ -1058,14 +1088,14 @@
         <image name="btn_rememberpassword_unselected" width="10" height="10"/>
         <image name="ic_机器人头像" width="30" height="30"/>
         <image name="icon_CtrlCenter_ipad" width="70" height="70"/>
-        <image name="icon_back_unsd_ipad" width="11" height="19"/>
+        <image name="icon_StarOrStopBg_ipad" width="42" height="90"/>
         <image name="icon_charg_selected_ipad" width="17" height="20"/>
         <image name="icon_charg_unSelected_ipad" width="17" height="20"/>
         <image name="icon_coffee_ipad" width="183" height="180"/>
         <image name="icon_commonPower_bg" width="11" height="19"/>
         <image name="icon_commonPower_bg_ipad" width="13" height="15"/>
         <image name="icon_common_color" width="8" height="2"/>
-        <image name="icon_common_color_ipad" width="10" height="7"/>
+        <image name="icon_common_color_ipad" width="9" height="3"/>
         <image name="icon_ctrl_selected_ipad" width="21" height="15"/>
         <image name="icon_ctrl_unSelected_ipad" width="21" height="15"/>
         <image name="icon_down_sd_ipad" width="114" height="58"/>
@@ -1073,12 +1103,16 @@
         <image name="icon_left_sd_ipad" width="58" height="114"/>
         <image name="icon_left_usd_ipad" width="58" height="114"/>
         <image name="icon_line_login" width="1" height="1"/>
+        <image name="icon_listButtonBg_ipad" width="42" height="42"/>
+        <image name="icon_listButton_sd_ipad" width="26" height="14"/>
+        <image name="icon_listButton_unsd_ipad" width="26" height="14"/>
         <image name="icon_pause_sd_ipad" width="12" height="13"/>
         <image name="icon_pause_unsd_ipad" width="12" height="13"/>
         <image name="icon_right_sd_ipad" width="58" height="115"/>
         <image name="icon_right_usd_ipad" width="58" height="115"/>
         <image name="icon_room_selected_ipad" width="16" height="18"/>
         <image name="icon_room_unSelected_ipad" width="16" height="18"/>
+        <image name="icon_status_bg_ipad" width="152" height="42"/>
         <image name="icon_stop_unsd_ipad" width="11" height="11"/>
         <image name="icon_up_sd_ipad" width="115" height="58"/>
         <image name="icon_up_usd_ipad" width="115" height="58"/>

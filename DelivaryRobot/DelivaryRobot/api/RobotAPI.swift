@@ -118,7 +118,9 @@ class RobotAPI :BaseHttpAPI{
                         if 10004 == idstr{
                             let infodict = dic["info"].dictionary!
                             let status = infodict["status"]!.intValue
+                            let preStatus = infodict["preStatus"]!.intValue
                             robotinfo.status = ROBOT_STATUS.IntToStatus(status)
+                            robotinfo.preStatus = ROBOT_STATUS.IntToStatus(preStatus)
                         }
                         if 10005 == idstr{
                             let infodict = dic["info"].dictionary
@@ -371,6 +373,44 @@ class RobotAPI :BaseHttpAPI{
         
     }
     
+    
+    /**
+     获取机器人是否正旋转
+     
+     - parameter registration_id: 编号
+     - parameter successHand:     成功回调
+     - parameter errorHandler:    错误回调
+     */
+    static func getSubStatus(registration_id:String,func successHand:(substatus:Int)->Void,func errorHandler:(error:BaseError?) -> Void) -> Void{
+        let path = String(format: "/v0.1/endpoints/%@/robot/substatus/", registration_id)
+        request(.POST, path: path, paramsdict: [:], serverPort: nil, func: { (result:NSDictionary?) in
+            if nil != result{
+                let message:NSString? = result!["message"] as? NSString
+                if nil != message{
+                    let messageJson = JSON.parse(message! as String)
+                    let array:Array<JSON> = messageJson.arrayValue
+                    if array.count > 0{
+                        let messageDict = array[0]
+                        let infodict:NSDictionary? = messageDict["info"].dictionaryObject
+                        if nil != infodict{
+                            let substatus:NSNumber? = infodict!["substatus"] as? NSNumber
+                            if nil != substatus{
+                                let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(registration_id)
+                                robotInfo.substatus = substatus!.integerValue
+                                successHand(substatus: substatus!.integerValue)
+                                return
+                            }
+                        }
+                    }
+                }
+            }
+            successHand(substatus: -1)
+        }) { (error) in
+            errorHandler(error: error)
+        }
+        
+    }
+    
     /**
      发送指令
      
@@ -519,6 +559,18 @@ class RobotAPI :BaseHttpAPI{
         NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.tableIdHandler(_:)), name: topic, object: nil)
     }
     
+    /**
+     添加机器人旋转监听
+     
+     - parameter registration_id: 编号
+     */
+    static func addSubstatusListener(endpoint_id:String){
+        let topic = String(format: "/Robot/%@/info/substatus", endpoint_id)
+        TopicTools.pushNotification(topic, endpoint_id: endpoint_id)
+        MQTTManager.sharedInstance.listenTopic(topic);
+        NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.substatusHandler(_:)), name: topic, object: nil)
+    }
+    
     
     /**
      机器人取餐
@@ -545,6 +597,7 @@ class RobotAPI :BaseHttpAPI{
         @objc func statusHandler(notification: NSNotification){
             let info = notification.userInfo!
             let status:NSNumber = (info["status"] as? NSNumber)!
+            let preStatus:NSNumber? = info["preStatus"] as? NSNumber
             let endpoint_id = TopicTools.getEndpoint_id(notification.name)
             if nil == endpoint_id {
                 return
@@ -581,6 +634,9 @@ class RobotAPI :BaseHttpAPI{
             case 10:
                 robotInfo.status = ROBOT_STATUS.MOVE_LEVETRACK
                 break
+            case 11:
+                robotInfo.status = ROBOT_STATUS.MOVE_SUSPENDED
+                break
             case 8001:
                 robotInfo.status = ROBOT_STATUS.MOVE_WAITREADY
                 break
@@ -599,6 +655,61 @@ class RobotAPI :BaseHttpAPI{
             default:
                 break
             }
+            
+            
+            switch preStatus!.integerValue {
+            case 1:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_AUTO
+                break
+            case 2:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_ROCKER
+                break
+            case 3:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_TASK
+                break
+            case 4:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_WANDER
+                break
+            case 5:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_FREE
+                break
+            case 6:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_TOCHARGE
+                break
+            case 7:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_CHARGING
+                break
+            case 8:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_MEAL
+                break
+            case 9:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_TIMEOUT
+                break
+            case 10:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_LEVETRACK
+                break
+            case 11:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_SUSPENDED
+                break
+            case 8001:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_WAITREADY
+                break
+            case 8002:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_WAITBEGINMEAL
+                break
+            case 8004:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_MEALARRIVE
+                break
+            case 8005:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_GOBACK
+                break
+            case 8006:
+                robotInfo.preStatus = ROBOT_STATUS.MOVE_MEALSTOP
+                break
+            default:
+                break
+            }
+            
             NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.STATUS_CHANGE, object: nil,userInfo: ["endpoint_id":endpoint_id!])
         }
         
@@ -700,6 +811,25 @@ class RobotAPI :BaseHttpAPI{
                 }
             }
         }
+        
+        
+        @objc func substatusHandler(notification: NSNotification){
+            let endpoint_id = TopicTools.getEndpoint_id(notification.name)
+            if nil != endpoint_id {
+                let userinfo = notification.userInfo
+                if nil != userinfo {
+                    let substatus:NSNumber? = (userinfo!["substatus"] as? NSNumber)
+                    if nil != substatus {
+                        let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(endpoint_id!)
+                        robotInfo.substatus = substatus!.integerValue
+                        NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.SUBSTATUS_CHANGE, object: nil,userInfo: ["endpoint_id":endpoint_id!,"tableid":substatus!])
+                    }
+                }
+            }
+        }
+        
+        
+        
         
         @objc func noticeHandler(notification: NSNotification){
             let endpoint_id = TopicTools.getEndpoint_id(notification.name)

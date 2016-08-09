@@ -108,6 +108,7 @@ extension RobotChooseVC{
             RobotAPI.addLeaveSeatPointListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addDeviceStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addTableIdListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            RobotAPI.addSubstatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
             RotbotInfoManager.sharedInstance.current_endpoin_name = endpoint.endpoin_name
             
@@ -137,7 +138,7 @@ extension RobotChooseVC{
                 
                 let dispatchSemaphore = dispatch_semaphore_create(0)
                 
-                RobotAPI.getNoticeID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
+                RobotAPI.getNoticeID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (noticeId) in
                     
                     dispatch_semaphore_signal(dispatchSemaphore)
                     
@@ -149,6 +150,25 @@ extension RobotChooseVC{
                 dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
                 
             })
+            
+            
+            dispatch_group_async(group, globalQueue, { () -> Void in
+                
+                let dispatchSemaphore = dispatch_semaphore_create(0)
+                
+                RobotAPI.getSubStatus(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (substatus) in
+                    
+                    dispatch_semaphore_signal(dispatchSemaphore)
+                    
+                    }, func: { (error) in
+                        
+                        dispatch_semaphore_signal(dispatchSemaphore)
+                })
+                
+                dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
+                
+            })
+
             
             dispatch_group_notify(group, mainQueue, { () -> Void in
                 
