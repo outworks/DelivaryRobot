@@ -198,7 +198,7 @@ extension CtrlVC{
             self.lb_nameRobit.text = RotbotInfoManager.sharedInstance.current_endpoin_name!
         
             self.switch_map.addTarget(self, action:#selector(CtrlVC.mapChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
-            self.isChangle = false
+            self.isChangle = true
             self.switch_map.setOn(self.isChangle!, animated: false)
             
             self.v_stop.hidden = true
