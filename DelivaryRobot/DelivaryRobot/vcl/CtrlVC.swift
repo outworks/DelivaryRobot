@@ -693,7 +693,7 @@ extension CtrlVC{
 
         if btn_ctrl.tag == 0{
             
-            alertView = UIAlertView(title: "确认消息", message: "", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定");
+            alertView = UIAlertView(title: "确认消息", message: "机器人正在" + "(" + robotInfo.statusName() + ")中,是否手控调整?", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定");
             alertView!.tag = TAG_TARGET_CTRL
             alertView!.show()
 
