@@ -45,11 +45,11 @@ class MQTTManager :CocoaMQTTDelegate {
 //        dispatch_main()
     }
     
-    func connect(){
+    func connect()->Bool{
         mqtt.clientId = self.clientIdPid
         mqtt.delegate = self
         mqtt.secureMQTT = true
-        mqtt.connect()
+        return mqtt.connect()
     }
 
     func sendTopic(topic:String,data:EVObject?){
@@ -76,6 +76,7 @@ class MQTTManager :CocoaMQTTDelegate {
     //CocoaMQTTDelegate
     func mqtt(mqtt: CocoaMQTT, didConnect host: String, port: Int){
 //        mqtt.ping()
+        NSNotificationCenter.defaultCenter().postNotificationName(RobotNotification.MQTTRECONNETED, object: nil)
     }
     
     func mqtt(mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck){
@@ -118,7 +119,8 @@ class MQTTManager :CocoaMQTTDelegate {
     }
     
     func mqttDidDisconnect(mqtt: CocoaMQTT, withError err: NSError?){
-        self.connect()
+        print(err?.localizedDescription)
+        MQTTManager.sharedInstance.connect("FZ2h4sz1idwY8kUUR1jxF7L")
     }
     
 }

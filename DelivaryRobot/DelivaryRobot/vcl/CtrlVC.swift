@@ -148,6 +148,10 @@ class CtrlVC: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.showNotice), name: RobotNotification.NOTICE_HAPPEN, object: nil)
         //*************** 添加从后台进入前台通知，所做的操作是从新去请求下机器状态 *********************//
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.appBecomeActive), name: RobotNotification.APPBECOMEACTIVE, object: nil)
+        //*************** 重新连接，所做的操作是从新去请求下机器状态 *********************//
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CtrlVC.appBecomeActive), name: RobotNotification.MQTTRECONNETED, object: nil)
+        
+        
         self.isChangle = true
         self.arr_alert = NSMutableArray()
         self.hideDirctionView()
@@ -286,12 +290,25 @@ extension CtrlVC{
 extension CtrlVC{
     
     
+    @objc func reConnect(notification: NSNotification){
+    
+        
+    }
+    
+    
     @objc func appBecomeActive(notification: NSNotification){
         
         weak var weakself = self
         RobotAPI.loginRobot(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: {
             print("登录机器成功")
-            
+            RobotAPI.addStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            RobotAPI.addOnlineListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            RobotAPI.addPowerListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            RobotAPI.addLeaveSeatPointListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            RobotAPI.addDeviceStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            RobotAPI.addTableIdListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            RobotAPI.addSubstatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            RobotAPI.addNoticeListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             
             let globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
             let mainQueue = dispatch_get_main_queue()

@@ -21,6 +21,7 @@ public class RobotNotification{
     static let APPBECOMEACTIVE = "APPBECOMEACTIVE"
     static let NOTICE_HAPPEN = "NOTICE_HAPPEN"
     static let SUBSTATUS_CHANGE = "SUBSTATUS_CHANGE"
+    static let MQTTRECONNETED = "MQTTRECONNETED"
 }
 
 /**
