@@ -64,7 +64,7 @@ public enum MOVE_DIRCTION: Int {
  机器人当前状态
  
  - MOVE_AUTO:     自动导航
- - MOVE_ROCKER:   手柄柄制
+ - MOVE_ROCKER:   手柄控制
  - MOVE_TASK:     巡逻作务
  - MOVE_WANDER:   自动漫游
  - MOVE_FREE:     闲置任务
@@ -76,7 +76,7 @@ public enum MOVE_DIRCTION: Int {
  - MOVE_WAITREADY:等待就位
  - MOVE_WAITBEGINMEAL: 等待送餐
  - MOVE_MEALARRIVE:送餐到达
- - MOVE_GOBACK:   正在返回
+ - MOVE_GOBACK:   返回取餐
  - MOVE_MEALSTOP: 送餐终止
  */
 public enum ROBOT_STATUS: Int {
@@ -198,13 +198,13 @@ public class RotbotInfo{
         angle = 0
         posLable = -1
     }
-        
+    
     func statusName() -> String {
         switch self.status {
         case ROBOT_STATUS.MOVE_AUTO:
             return "自动导航"
         case ROBOT_STATUS.MOVE_ROCKER:
-            return "手柄柄制"
+            return "手柄控制"
         case ROBOT_STATUS.MOVE_TASK:
             return "巡逻作务"
         case ROBOT_STATUS.MOVE_WANDER:
@@ -232,7 +232,7 @@ public class RotbotInfo{
         case ROBOT_STATUS.MOVE_MEALARRIVE:
             return "送餐到达"
         case ROBOT_STATUS.MOVE_GOBACK:
-            return "正在返回"
+            return "返回取餐"
         case ROBOT_STATUS.MOVE_MEALSTOP:
             return "送餐终止"
         case ROBOT_STATUS.MOVE_TIMEOUT:
@@ -247,7 +247,7 @@ public class RotbotInfo{
         case ROBOT_STATUS.MOVE_AUTO:
             return "自动导航"
         case ROBOT_STATUS.MOVE_ROCKER:
-            return "手柄柄制"
+            return "手柄控制"
         case ROBOT_STATUS.MOVE_TASK:
             return "巡逻作务"
         case ROBOT_STATUS.MOVE_WANDER:
@@ -275,7 +275,7 @@ public class RotbotInfo{
         case ROBOT_STATUS.MOVE_MEALARRIVE:
             return "送餐到达"
         case ROBOT_STATUS.MOVE_GOBACK:
-            return "正在返回"
+            return "返回取餐"
         case ROBOT_STATUS.MOVE_MEALSTOP:
             return "送餐终止"
         case ROBOT_STATUS.MOVE_TIMEOUT:
@@ -284,7 +284,7 @@ public class RotbotInfo{
             return "未知"
         }
     }
-
+    
 }
 
 class EndPoint: EVObject {

@@ -175,7 +175,7 @@ class RobotAPI :BaseHttpAPI{
         return list
     }
     
-        
+    
     /**
      送餐到某个位置去
      
@@ -225,7 +225,7 @@ class RobotAPI :BaseHttpAPI{
             if(robotInfo.power <= 20){
                 return (false,"电量不足，正在前往充电，请稍候")
             }else{
-                RobotAPI.toGetMeals(registration_id)
+                //RobotAPI.toGetMeals(registration_id)
                 return (false,"正在返回取餐点，请稍候")
             }
         }
@@ -252,7 +252,7 @@ class RobotAPI :BaseHttpAPI{
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_WAITREADY {
             //ToDo: 发送就位指令
-            return (false,"请放入咖啡")
+            return (false,"请放入餐点")
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
             return (true,"")
@@ -333,7 +333,7 @@ class RobotAPI :BaseHttpAPI{
         }) { (error) in
             errorHandler(error: error)
         }
-
+        
     }
     
     /**
@@ -565,10 +565,16 @@ class RobotAPI :BaseHttpAPI{
      - parameter registration_id: 编号
      */
     static func addSubstatusListener(endpoint_id:String){
-        let topic = String(format: "/Robot/%@/info/substatus", endpoint_id)
+        let topic = String(format: "/Robot/%@/info/SubStatus", endpoint_id)
         TopicTools.pushNotification(topic, endpoint_id: endpoint_id)
         MQTTManager.sharedInstance.listenTopic(topic);
         NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.substatusHandler(_:)), name: topic, object: nil)
+    }
+    static func addNoticeListener(endpoint_id:String){
+        let topic = String(format: "/Robot/%@/info/notice", endpoint_id)
+        TopicTools.pushNotification(topic, endpoint_id: endpoint_id)
+        MQTTManager.sharedInstance.listenTopic(topic);
+        NSNotificationCenter.defaultCenter().addObserver(RobotAPI.notificationHandler, selector: #selector(TopicNotificationHandler.noticeHandler(_:)), name: topic, object: nil)
     }
     
     
@@ -585,11 +591,11 @@ class RobotAPI :BaseHttpAPI{
                 
         })
         // ******** 去掉停止指令 ********//
-//        RobotAPI.sendCMD(endpoint_id, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_STOP_SLOW, func: {
-//           
-//            }) { (error) in
-//                
-//        }
+        //        RobotAPI.sendCMD(endpoint_id, cmd: MOVE_CTRL_ACTION.ACT_MOVE_CTRL_STOP_SLOW, func: {
+        //
+        //            }) { (error) in
+        //
+        //        }
     }
     
     /// 消息分发

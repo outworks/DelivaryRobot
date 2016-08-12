@@ -18,31 +18,31 @@ class RobotChooseVC: UIViewController,UITableViewDelegate,UITableViewDataSource 
     
     @IBOutlet weak var tableView: UITableView!
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-//        weak var weakself = self
-      
+        //        weak var weakself = self
+        
         //***************  监听设备在线变化，如果某个设备在线变化了则刷新列表 *************//
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateListStatus), name: RobotNotification.ONLINE_CHANGE, object: nil)
-
+        
         self.addBackButton(self, action: #selector(self.backAction))
         
-//        RobotAPI.getEndpoints(func: { (result) in
-//            weakself!.endpoints =  self.endpoints + result!
-//            weakself!.tableView.reloadData()
-//        }) { (error) in
-//            
-//        }
-    
+        //        RobotAPI.getEndpoints(func: { (result) in
+        //            weakself!.endpoints =  self.endpoints + result!
+        //            weakself!.tableView.reloadData()
+        //        }) { (error) in
+        //
+        //        }
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-         weak var weakself = self
+        weak var weakself = self
         
         RobotAPI.getEndpoints(func: { (result) in
             weakself!.endpoints.removeAll()
@@ -60,7 +60,7 @@ class RobotChooseVC: UIViewController,UITableViewDelegate,UITableViewDataSource 
     }
     
     @objc func updateListStatus(notification: NSNotification){
-    
+        
         weak var weakself = self
         RobotAPI.getEndpoints(func: { (result) in
             weakself!.endpoints.removeAll()
@@ -69,7 +69,7 @@ class RobotChooseVC: UIViewController,UITableViewDelegate,UITableViewDataSource 
         }) { (error) in
             
         }
-
+        
     }
     
 }
@@ -85,11 +85,11 @@ extension RobotChooseVC{
         let CellIndentifier:String = "RobotChooseCell"
         
         let cell:RobotChooseCell = tableView.dequeueReusableCellWithIdentifier(CellIndentifier, forIndexPath: indexPath) as! RobotChooseCell
-       
+        
         let endpoint:EndPoint = self.endpoints[indexPath.row]
         cell.lb_title.text = endpoint.endpoin_name
         let i = NSNumber(int:(Int32(endpoint.battery_percent))!)
-       
+        
         cell.power = i
         
         return cell
@@ -109,6 +109,7 @@ extension RobotChooseVC{
             RobotAPI.addDeviceStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addTableIdListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addSubstatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            RobotAPI.addNoticeListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
             RotbotInfoManager.sharedInstance.current_endpoin_name = endpoint.endpoin_name
             
@@ -126,8 +127,8 @@ extension RobotChooseVC{
                     dispatch_semaphore_signal(dispatchSemaphore)
                     
                     }, func: { (error) in
-                    
-                    dispatch_semaphore_signal(dispatchSemaphore)
+                        
+                        dispatch_semaphore_signal(dispatchSemaphore)
                 })
                 
                 dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
@@ -143,8 +144,8 @@ extension RobotChooseVC{
                     dispatch_semaphore_signal(dispatchSemaphore)
                     
                     }, func: { (error) in
-                       
-                    dispatch_semaphore_signal(dispatchSemaphore)
+                        
+                        dispatch_semaphore_signal(dispatchSemaphore)
                 })
                 
                 dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
@@ -168,7 +169,7 @@ extension RobotChooseVC{
                 dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
                 
             })
-
+            
             
             dispatch_group_notify(group, mainQueue, { () -> Void in
                 
@@ -185,35 +186,35 @@ extension RobotChooseVC{
             })
             
             
-//            RobotAPI.getSeatTaskID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
-//                
-//                }, func: { (error) in
-//                    
-//            })
-//            var storyboard = UIStoryboard(name: "Main", bundle: nil)
-//            
-//            if (UIDevice.currentDevice().userInterfaceIdiom == .Phone) {
-//                storyboard = UIStoryboard(name: "Main", bundle: nil)
-//            }else{
-//                storyboard = UIStoryboard(name: "Main_ipad", bundle: nil)
-//            }
-//            
-//            let ctrlVC = storyboard.instantiateViewControllerWithIdentifier("CtrlVC")
-//            weakself!.navigationController?.pushViewController(ctrlVC, animated: true)
+            //            RobotAPI.getSeatTaskID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
+            //
+            //                }, func: { (error) in
+            //
+            //            })
+            //            var storyboard = UIStoryboard(name: "Main", bundle: nil)
+            //
+            //            if (UIDevice.currentDevice().userInterfaceIdiom == .Phone) {
+            //                storyboard = UIStoryboard(name: "Main", bundle: nil)
+            //            }else{
+            //                storyboard = UIStoryboard(name: "Main_ipad", bundle: nil)
+            //            }
+            //
+            //            let ctrlVC = storyboard.instantiateViewControllerWithIdentifier("CtrlVC")
+            //            weakself!.navigationController?.pushViewController(ctrlVC, animated: true)
         }) { (error) in
             SCLAlertView().showError("提示", subTitle: ("机器离线"))
         }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat{
-    
+        
         return 70.0
     }
     
 }
 
 extension RobotChooseVC{
-
+    
     
     func addBackButton(target:AnyObject, action:Selector){
         
@@ -231,6 +232,6 @@ extension RobotChooseVC{
     func backAction(){
         self.navigationController?.popViewControllerAnimated(true)
     }
-
+    
 }
 
