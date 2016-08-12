@@ -222,12 +222,15 @@ class RobotAPI :BaseHttpAPI{
             return (false,"正在送餐，请稍候")
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_GOBACK {
-            if(robotInfo.power <= 20){
-                return (false,"电量不足，正在前往充电，请稍候")
-            }else{
-                //RobotAPI.toGetMeals(registration_id)
-                return (false,"正在返回取餐点，请稍候")
-            }
+//            if(robotInfo.power <= 20){
+//                return (false,"电量不足，正在前往充电，请稍候")
+//            }else{
+//                //RobotAPI.toGetMeals(registration_id)
+//                return (false,"正在返回取餐点，请稍候")
+//            }
+            
+            return (false,"正在返回取餐点，请稍候")
+            
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_TOCHARGE {
             if(robotInfo.power <= 20){
@@ -235,7 +238,7 @@ class RobotAPI :BaseHttpAPI{
             }
             //ToDo: 发送就位指令
             RobotAPI.toGetMeals(registration_id)
-            return (false,"正在返回取餐点，请稍候")
+            return (false,"前去充电，请稍候")
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_CHARGING {
             if(robotInfo.power <= 20){
@@ -243,12 +246,7 @@ class RobotAPI :BaseHttpAPI{
             }
             //ToDo: 发送就位指令
             RobotAPI.toGetMeals(registration_id)
-            return (false,"正在返回取餐点，请稍候")
-        }
-        if robotInfo.status == ROBOT_STATUS.MOVE_CHARGING {
-            if(robotInfo.power <= 20){
-                return (false,"正在充电，请稍候")
-            }
+            return (false,"正在充电，请稍候")
         }
         if robotInfo.status == ROBOT_STATUS.MOVE_WAITREADY {
             //ToDo: 发送就位指令

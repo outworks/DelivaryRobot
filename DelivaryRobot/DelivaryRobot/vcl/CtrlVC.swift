@@ -205,10 +205,11 @@ extension CtrlVC{
             self.updateTitleViewFrame(self.lb_status!.text!)
             
             if self.isChangle == true {
+                self.clearTagStatus()
                 let tag = self.getChangleTagFormLable(robotInfo.posLable)
                 self.setTagHighter(tag)
             }else{
-                
+                self.clearTagStatus()
                 let tag = self.getTagFormLable(robotInfo.posLable)
                 self.setTagHighter(tag)
             }
@@ -469,16 +470,16 @@ extension CtrlVC{
     @objc func updatePosLable(notification: NSNotification){
         let info = notification.userInfo!
         print(info)
-        self.clearTagStatus()
         let endpoint_id:String = info["endpoint_id"] as! String
         if endpoint_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
             let posLable:NSNumber = info["posLabel"] as! NSNumber
             
             if self.isChangle == true {
+                self.clearTagStatus()
                 let tag = self.getChangleTagFormLable(posLable.integerValue)
                 self.setTagHighter(tag)
             }else{
-                
+                self.clearTagStatus()
                 let tag = self.getTagFormLable(posLable.integerValue)
                 self.setTagHighter(tag)
             }
@@ -571,10 +572,11 @@ extension CtrlVC{
         let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
         
         if self.isChangle == true {
+            self.clearTagStatus()
             let tag = self.getChangleTagFormLable(robotInfo.posLable)
             self.setTagHighter(tag)
         }else{
-            
+            self.clearTagStatus()
             let tag = self.getTagFormLable(robotInfo.posLable)
             self.setTagHighter(tag)
         }
