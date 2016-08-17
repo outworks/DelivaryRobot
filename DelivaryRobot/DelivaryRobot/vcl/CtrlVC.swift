@@ -10,6 +10,7 @@ import UIKit
 import Foundation
 import SCLAlertView
 import AudioToolbox
+import XLProgressHUD
 
 class CtrlVC: UIViewController {
     
@@ -95,6 +96,7 @@ class CtrlVC: UIViewController {
     
     var timer_sound:NSTimer!
     var v_showSeat:SeatChooseView!
+    var v_showSetting:RobotSettingView!
     
     var arr_alert:NSMutableArray!
     
@@ -159,6 +161,7 @@ class CtrlVC: UIViewController {
         self.setUpTitleView()
         self.updateUI()
         self.addBackButton(self, action: #selector(self.backAction))
+        self.addSetingButton(self, action: #selector(self.showSetting))
     }
     
     override func didReceiveMemoryWarning() {
@@ -193,7 +196,7 @@ extension CtrlVC{
             
             self.lb_status!.text = robotInfo.statusName() + "(" + online + ")"
             self.updateTitleViewFrame(self.lb_status!.text!)
-            if robotInfo.statusName() == "闲置任务" || robotInfo.statusName() == "等待就位" || robotInfo.statusName() == "挂起"{
+            if robotInfo.statusName() == "闲置任务" || robotInfo.statusName() == "送餐准备" || robotInfo.statusName() == "挂起"{
                 imgv_status?.image = UIImage(named: "icon_status_idle_ipad")
             }else if robotInfo.statusName() == "脱离磁道"{
                 imgv_status?.image = UIImage(named: "icon_status_abnormal_ipad")
@@ -276,11 +279,59 @@ extension CtrlVC{
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView:button)
     }
     
+    func addSetingButton(target:AnyObject, action:Selector){
+        
+        let image :UIImage = UIImage(named: "icon_setting_unsd_ipad")!
+        let buttonFrame :CGRect  = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: image.size.width + 10.0, height: self.navigationController!.navigationBar.frame.size.height))
+        
+        let button:UIButton = UIButton(type: UIButtonType.Custom)
+        button.contentMode = UIViewContentMode.ScaleAspectFit;
+        button.backgroundColor = UIColor.clearColor();
+        button.frame = buttonFrame;
+        button.setImage(image, forState: UIControlState.Normal)
+        button.setImage(UIImage(named: "icon_setting_sd_ipad")!, forState: UIControlState.Highlighted)
+        button.addTarget(target, action: action, forControlEvents: UIControlEvents.TouchUpInside)
+        view.addSubview(button)
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView:button)
+    }
+    
+    
+    
     //************ 添加返回按钮事件处理 ****************//
     
     func backAction(){
         self.navigationController?.popViewControllerAnimated(true)
     }
+    
+    func showSetting(){
+    
+        
+        self.v_showSetting  = NSBundle.mainBundle().loadNibNamed("RobotSettingView", owner: nil, options: nil).first as? RobotSettingView
+        self.v_showSetting?.showView()
+
+        
+        
+//        if nil == self.v_showSetting {
+//            
+//            self.v_showSetting  = NSBundle.mainBundle().loadNibNamed("RobotSettingView", owner: nil, options: nil).first as? RobotSettingView
+//            self.v_showSetting?.showView()
+//            
+//        }else{
+//            
+//            UIView.animateWithDuration(0.2, animations: {
+//                
+//                self.v_showSetting?.alpha = 0
+//                }, completion: { finished in
+//                    self.v_showSetting?.removeFromSuperview()
+//                     self.v_showSetting?.showView()
+//            })
+//            
+//        }
+    
+    
+    }
+    
     
 }
 
@@ -289,97 +340,98 @@ extension CtrlVC{
 
 extension CtrlVC{
     
-    
-    @objc func reConnect(notification: NSNotification){
-    
-        
-    }
-    
-    
     @objc func appBecomeActive(notification: NSNotification){
         
         weak var weakself = self
-        RobotAPI.loginRobot(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: {
-            print("登录机器成功")
-            RobotAPI.addStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            RobotAPI.addOnlineListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            RobotAPI.addPowerListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            RobotAPI.addLeaveSeatPointListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            RobotAPI.addDeviceStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            RobotAPI.addTableIdListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            RobotAPI.addSubstatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            RobotAPI.addNoticeListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+        
+        RobotAPI.getEndpoints(func: { (result) in
             
-            let globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-            let mainQueue = dispatch_get_main_queue()
+            var endpoints = Array<EndPoint>()
+            endpoints =  endpoints + result!
             
-            let group = dispatch_group_create()
+            for endpoint in endpoints {
             
-            dispatch_group_async(group, globalQueue, { () -> Void in
+                if endpoint.registration_id == RotbotInfoManager.sharedInstance.current_endpoint_id {
                 
-                let dispatchSemaphore = dispatch_semaphore_create(0)
-                
-                RobotAPI.getSeatTaskID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
-                    
-                    dispatch_semaphore_signal(dispatchSemaphore)
-                    
-                    }, func: { (error) in
+                    RobotAPI.loginRobot(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: {
+                        print("登录机器成功")
+                        RobotAPI.addStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+                        RobotAPI.addOnlineListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+                        RobotAPI.addPowerListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+                        RobotAPI.addLeaveSeatPointListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+                        RobotAPI.addDeviceStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+                        RobotAPI.addTableIdListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+                        RobotAPI.addNoticeListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
                         
-                        dispatch_semaphore_signal(dispatchSemaphore)
-                })
-                
-                dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
-                
-            })
-            
-            dispatch_group_async(group, globalQueue, { () -> Void in
-                
-                let dispatchSemaphore = dispatch_semaphore_create(0)
-                
-                RobotAPI.getNoticeID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (noticeId) in
-                    
-                    dispatch_semaphore_signal(dispatchSemaphore)
-                    
-                    }, func: { (error) in
+                        let globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+                        let mainQueue = dispatch_get_main_queue()
                         
-                        dispatch_semaphore_signal(dispatchSemaphore)
-                })
-                
-                dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
-                
-            })
-            
-            
-            dispatch_group_async(group, globalQueue, { () -> Void in
-                
-                let dispatchSemaphore = dispatch_semaphore_create(0)
-                
-                RobotAPI.getSubStatus(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (substatus) in
-                    
-                    dispatch_semaphore_signal(dispatchSemaphore)
-                    
-                    }, func: { (error) in
+                        let group = dispatch_group_create()
                         
-                        dispatch_semaphore_signal(dispatchSemaphore)
-                })
+                        dispatch_group_async(group, globalQueue, { () -> Void in
+                            
+                            let dispatchSemaphore = dispatch_semaphore_create(0)
+                            
+                            RobotAPI.getSeatTaskID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (tableId) in
+                                
+                                dispatch_semaphore_signal(dispatchSemaphore)
+                                
+                                }, func: { (error) in
+                                    
+                                    dispatch_semaphore_signal(dispatchSemaphore)
+                            })
+                            
+                            dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
+                            
+                        })
+                        
+                        dispatch_group_async(group, globalQueue, { () -> Void in
+                            
+                            let dispatchSemaphore = dispatch_semaphore_create(0)
+                            
+                            RobotAPI.getNoticeID(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (noticeId) in
+                                
+                                dispatch_semaphore_signal(dispatchSemaphore)
+                                
+                                }, func: { (error) in
+                                    
+                                    dispatch_semaphore_signal(dispatchSemaphore)
+                            })
+                            
+                            dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
+                            
+                        })
+                    
+                        dispatch_group_notify(group, mainQueue, { () -> Void in
+                            
+                            let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+                            robotInfo.online = true
+                            self.updateUI()
+                            
+                        })
+                        
+                    }) { (error) in
+                        
+                        SCLAlertView().showError("提示", subTitle: error!.description)
+                    }
+
+                    return
+                }
                 
-                dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
-                
-            })
+            }
             
+            let message = "机器人离线"
+            self.view.showMessage(message, interval: 0.2, position: "center")
             
-            dispatch_group_notify(group, mainQueue, { () -> Void in
-                
-                let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-                robotInfo.online = true
-                self.updateUI()
-                
-            })
-            
+            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
+            dispatch_after(delayTime, dispatch_get_main_queue()) { () -> Void in
+                // 退回列表页面
+                weakself!.backAction()
+            }
+           
+        
         }) { (error) in
             
-            SCLAlertView().showError("提示", subTitle: ("机器离线"))
-            weakself!.backAction()
         }
         
     }
@@ -419,8 +471,7 @@ extension CtrlVC{
                 
             }
             
-            
-            
+
             if(robotInfo.errorDetail.isEmpty){
                 
                 self.lb_status!.text = robotInfo.statusName() + "(" + online + ")"
@@ -468,6 +519,15 @@ extension CtrlVC{
                 }
             }else if robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL{ //等待送餐 ，弹出选择框
                 weakself?.showSeatChooseVC()
+            }else {
+            
+                if nil != self.v_showSeat {
+                    
+                    self.v_showSeat.removeFromSuperview()
+                    self.v_showSeat = nil
+                    
+                }
+                
             }
         }
     }
@@ -539,14 +599,9 @@ extension CtrlVC{
             
         }else{
             
-            UIView.animateWithDuration(0.2, animations: {
-                
-                self.v_showSeat.alpha = 0
-                }, completion: { finished in
-                    self.v_showSeat.removeFromSuperview()
-                    self.v_showSeat?.showView()
-                    
-            })
+            self.v_showSeat.alpha = 0
+            self.v_showSeat.removeFromSuperview()
+            self.v_showSeat?.showView()
             
         }
         
@@ -716,6 +771,13 @@ extension CtrlVC:UIAlertViewDelegate{
                 self.timer_sound = nil
             }
             
+        }else if alertView.tag == ALERTVIEW_NOTICE_THWETH {
+            
+            if self.timer_sound != nil{
+                self.timer_sound.invalidate()
+                self.timer_sound = nil
+            }
+            
         }
     }
 }
@@ -729,13 +791,6 @@ extension CtrlVC{
     @IBAction func chooseAction(sender: AnyObject) {
         
         let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-        
-        if robotInfo.substatus == 2 {
-            
-            SCLAlertView().showError("提示", subTitle: ("机器正在旋转，请稍等"))
-            
-            return
-        }
         
         self.hideDirctionView()
         
@@ -754,13 +809,6 @@ extension CtrlVC{
         weak var weakself = self
         
         let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-        
-        if robotInfo.substatus == 2 {
-            
-            SCLAlertView().showError("提示", subTitle: ("机器正在旋转，请稍等"))
-            
-            return
-        }
         
         if btn_ctrl.tag == 0{
             
@@ -851,14 +899,6 @@ extension CtrlVC{
         
         let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
         
-        if robotInfo.substatus == 2 {
-            
-            SCLAlertView().showError("提示", subTitle: ("机器正在旋转，请稍等"))
-            
-            return
-        }
-        
-        
         if btn_pause.tag == 0 {
             
             let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
@@ -889,14 +929,7 @@ extension CtrlVC{
         self.hideDirctionView()
         
         let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-        
-        if robotInfo.substatus == 2 {
-            
-            SCLAlertView().showError("提示", subTitle: ("机器正在旋转，请稍等"))
-            
-            return
-        }
-        
+    
         if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
             
             alertView = UIAlertView(title: "确认消息", message: "机器人处于" + robotInfo.statusName() + "状态，是否要返回？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "返回");
@@ -917,13 +950,6 @@ extension CtrlVC{
         self.hideDirctionView()
         
         let robotInfo = RotbotInfoManager.sharedInstance.robotWithEndpointId(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-        
-        if robotInfo.substatus == 2 {
-            
-            SCLAlertView().showError("提示", subTitle: ("机器正在旋转，请稍等"))
-            
-            return
-        }
         
         if robotInfo.status == ROBOT_STATUS.MOVE_MEAL || robotInfo.status == ROBOT_STATUS.MOVE_MEALARRIVE || robotInfo.status == ROBOT_STATUS.MOVE_WAITBEGINMEAL {
             alertView = UIAlertView(title: "确认消息", message: "机器人处于" + robotInfo.statusName() + "状态，是否要去充电？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定");
@@ -1002,6 +1028,7 @@ let ALERTVIEW_NOTICE_EIGHTENTH  = 1008      //重新回磁道
 let ALERTVIEW_NOTICE_NINTH      = 1009      //低电量
 let ALERTVIEW_NOTICE_TENTH      = 1010      //低电量恢复
 let ALERTVIEW_NOTICE_ELEVENTH   = 1011      //送餐到达后餐盘没被取走，机器人自动回吧台
+let ALERTVIEW_NOTICE_THWETH     = 1012      //座位号找不到
 
 extension CtrlVC{
     
@@ -1158,6 +1185,16 @@ extension CtrlVC{
             //送餐到达后餐盘没被取走，机器人自动回吧台
             let alert = UIAlertView(title: "提醒消息", message: "长时间无人取餐，机器人自动返回", delegate: self, cancelButtonTitle: "确定");
             alert.tag = ALERTVIEW_NOTICE_ELEVENTH
+            alert.show()
+            self.arr_alert.addObject(alert)
+            self.playSoundWithTime()
+            
+            break
+        case 12:
+            
+            //座位号找不到
+            let alert = UIAlertView(title: "提醒消息", message: "你所点的座位号找不到", delegate: self, cancelButtonTitle: "确定");
+            alert.tag = ALERTVIEW_NOTICE_THWETH
             alert.show()
             self.arr_alert.addObject(alert)
             self.playSoundWithTime()
@@ -1394,7 +1431,7 @@ extension CtrlVC{
         case 45:
             return 27
         default:
-            return -1
+            return 0
         }
     }
     

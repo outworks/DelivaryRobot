@@ -75,15 +75,23 @@ class SeatChooseView: UIView {
         
     }
     
-    func hideView() {
+    func hideView(animate:Bool) {
         
-        UIView.animateWithDuration(0.2, animations: {
+        if animate == true {
             
-            self.alpha = 0
-            }, completion: { finished in
-                self.removeFromSuperview()
+            UIView.animateWithDuration(0.2, animations: {
                 
-        })
+                self.alpha = 0
+                }, completion: { finished in
+                    self.removeFromSuperview()
+                    
+            })
+            
+        }else {
+            self.alpha = 0
+            self.removeFromSuperview()
+        }
+        
     }
     
 
@@ -99,7 +107,7 @@ extension SeatChooseView {
 
     @IBAction func backSeatAction(sender: AnyObject) {
         
-        self.hideView()
+        self.hideView(true)
         
     }
 
@@ -197,7 +205,7 @@ extension SeatChooseView{
     func sendCmd(){
         weak var weakself = self;
         RobotAPI.goSeat(RotbotInfoManager.sharedInstance.current_endpoint_id!, seat: self.waitSeat!, func: {
-            weakself?.hideView()
+            weakself?.hideView(true)
         }) { (error) in
             
         }

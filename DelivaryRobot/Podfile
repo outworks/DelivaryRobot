@@ -12,4 +12,5 @@ target 'DelivaryRobot' do
     pod 'EVReflection'
     pod 'CocoaMQTT'
     pod 'IQKeyboardManagerSwift'
+    pod 'XLProgressHUD'
 end

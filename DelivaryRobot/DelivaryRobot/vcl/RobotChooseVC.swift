@@ -27,15 +27,9 @@ class RobotChooseVC: UIViewController,UITableViewDelegate,UITableViewDataSource 
         //***************  监听设备在线变化，如果某个设备在线变化了则刷新列表 *************//
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateListStatus), name: RobotNotification.ONLINE_CHANGE, object: nil)
+         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateListStatus), name: RobotNotification.APPBECOMEACTIVE, object: nil)
         
         self.addBackButton(self, action: #selector(self.backAction))
-        
-        //        RobotAPI.getEndpoints(func: { (result) in
-        //            weakself!.endpoints =  self.endpoints + result!
-        //            weakself!.tableView.reloadData()
-        //        }) { (error) in
-        //
-        //        }
         
     }
     
@@ -108,7 +102,8 @@ extension RobotChooseVC{
             RobotAPI.addLeaveSeatPointListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addDeviceStatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addTableIdListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
-            RobotAPI.addSubstatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
+            //不再需要机器人旋转判断
+            //RobotAPI.addSubstatusListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RobotAPI.addNoticeListener(RotbotInfoManager.sharedInstance.current_endpoint_id!)
             RotbotInfoManager.sharedInstance.current_endpoint_id = endpoint.registration_id
             RotbotInfoManager.sharedInstance.current_endpoin_name = endpoint.endpoin_name
@@ -152,23 +147,23 @@ extension RobotChooseVC{
                 
             })
             
-            
-            dispatch_group_async(group, globalQueue, { () -> Void in
-                
-                let dispatchSemaphore = dispatch_semaphore_create(0)
-                
-                RobotAPI.getSubStatus(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (substatus) in
-                    
-                    dispatch_semaphore_signal(dispatchSemaphore)
-                    
-                    }, func: { (error) in
-                        
-                        dispatch_semaphore_signal(dispatchSemaphore)
-                })
-                
-                dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
-                
-            })
+//            不需要判断旋转，由服务端那端判断
+//            dispatch_group_async(group, globalQueue, { () -> Void in
+//                
+//                let dispatchSemaphore = dispatch_semaphore_create(0)
+//                
+//                RobotAPI.getSubStatus(RotbotInfoManager.sharedInstance.current_endpoint_id!, func: { (substatus) in
+//                    
+//                    dispatch_semaphore_signal(dispatchSemaphore)
+//                    
+//                    }, func: { (error) in
+//                        
+//                        dispatch_semaphore_signal(dispatchSemaphore)
+//                })
+//                
+//                dispatch_semaphore_wait(dispatchSemaphore, DISPATCH_TIME_FOREVER)
+//                
+//            })
             
             
             dispatch_group_notify(group, mainQueue, { () -> Void in

@@ -60,9 +60,9 @@ class RobotAPI :BaseHttpAPI{
         
     }
     
+    // MARK: 登录   
+    
     /**
-     登录
-     
      - parameter params:        登录参数
      - parameter successHandle: 成功回调
      - parameter errorHandler:  错误回调
@@ -80,9 +80,9 @@ class RobotAPI :BaseHttpAPI{
         }
     }
     
+    // MARK: 获取机器节点
     /**
-     获取机器节点
-     
+
      - parameter successHandle: 成功回调
      - parameter errorHandler:  错误回调
      */
@@ -94,9 +94,9 @@ class RobotAPI :BaseHttpAPI{
         }
     }
     
-    
+    // MARK: 登录机器
     /**
-     登录机器
+     
      - parameter endpoint_id:   编号
      - parameter successHandle: 成功回调
      - parameter errorHandler:  错误回调
@@ -149,6 +149,7 @@ class RobotAPI :BaseHttpAPI{
         }
     }
     
+    // MARK: 获取餐桌号
     static func getSeatList() -> [SeatData]{
         let array = [
             ["seat":"A-002","x":3.6,"y":0.0,"angle":180,"x0":3.6,"y0":-1,"tag":2],
@@ -161,10 +162,10 @@ class RobotAPI :BaseHttpAPI{
             ["seat":"C-009","x":24.0,"y":0.6,"angle":180,"x0":24.0,"y0":-0.4,"tag":9],
             ["seat":"C-010","x":26.1,"y":0.6,"angle":0,"x0":26.7,"y0":1.6,"tag":10],
             ["seat":"C-011","x":26.7,"y":0.6,"angle":180,"x0":26.7,"y0":-0.4,"tag":11],
-            ["seat":"D-012","x":29.7,"y":0.8,"angle":180,"x0":29.7,"y0":0,"tag":12],
-            ["seat":"D-013","x":31.1,"y":0.8,"angle":0,"x0":31.5,"y0":1.8,"tag":13],
-            ["seat":"D-014","x":32.1,"y":0.8,"angle":180,"x0":32.1,"y0":0,"tag":14],
-            ["seat":"E-015","x":34.0,"y":0.8,"angle":90,"x0":35.0,"y0":0.8,"tag":15]
+            //["seat":"D-012","x":29.7,"y":0.8,"angle":180,"x0":29.7,"y0":0,"tag":12],
+            ["seat":"D-012","x":31.1,"y":0.8,"angle":0,"x0":31.5,"y0":1.8,"tag":12],
+            //["seat":"D-014","x":32.1,"y":0.8,"angle":180,"x0":32.1,"y0":0,"tag":14],
+            //["seat":"E-015","x":34.0,"y":0.8,"angle":90,"x0":35.0,"y0":0.8,"tag":15]
         ]
         var list = [SeatData]()
         for seatDict in array{
@@ -175,10 +176,8 @@ class RobotAPI :BaseHttpAPI{
         return list
     }
     
-    
+    // MARK: 送餐到某个位置去
     /**
-     送餐到某个位置去
-     
      - parameter registration_id: 机器节点的编号
      - parameter seat:            位置信息
      - parameter successHandle:   成功回调
@@ -196,12 +195,9 @@ class RobotAPI :BaseHttpAPI{
             errorHandler(error: error)
         }
     }
-    
-    /**
-     判断是否可以执行送餐指令
-     
+    // MARK: 判断是否可以执行送餐指令
+    /*
      - parameter registration_id: 机器节点的编号
-     
      - returns: (是否可以执行送餐指令，相关提示信息)
      */
     static func canGoSeat(registration_id:String)->(canGo:Bool,msg:String){
@@ -260,9 +256,8 @@ class RobotAPI :BaseHttpAPI{
         return (false,"机器人前往取餐，请稍候")
     }
     
-    /**
-     获取机器人当前的rfid标答
-     
+    // MARK: 获取机器人当前的rfid标答
+    /*
      - parameter registration_id: 编号
      - parameter successHand:     成功回调
      - parameter errorHandler:    错误回调
@@ -297,9 +292,8 @@ class RobotAPI :BaseHttpAPI{
         }
     }
     
-    /**
-     获取机器人正在送菜的桌号
-     
+    // MARK: 获取机器人正在送菜的桌号    
+    /*
      - parameter registration_id: 编号
      - parameter successHand:     成功回调
      - parameter errorHandler:    错误回调
@@ -334,9 +328,8 @@ class RobotAPI :BaseHttpAPI{
         
     }
     
-    /**
-     获取是否有通知
-     
+    // MARK: 获取是否有通知
+    /*
      - parameter registration_id: 编号
      - parameter successHand:     成功回调
      - parameter errorHandler:    失败回调
@@ -371,10 +364,8 @@ class RobotAPI :BaseHttpAPI{
         
     }
     
-    
-    /**
-     获取机器人是否正旋转
-     
+    // MARK: 获取机器人是否正旋转    
+    /*
      - parameter registration_id: 编号
      - parameter successHand:     成功回调
      - parameter errorHandler:    错误回调
@@ -409,6 +400,69 @@ class RobotAPI :BaseHttpAPI{
         
     }
     
+    // MARK: 获取或设置机器人音量
+    /*
+     - parameter registration_id: 编号
+       usAct: ACT_SET(1) : 设置 | ACT_GET(2) : 获取
+       paramList : 参数数组
+     
+     - parameter successHand:     成功回调
+     - parameter errorHandler:    错误回调
+     */
+    
+    static func getRobotAction(registration_id:String, usAct:Int, nParamType:Int, nValue:Int,func successHand:(actValue:Int)->Void,func errorHandler:(error:BaseError?) -> Void) -> Void{
+        let path = String(format: "/v0.1/endpoints/%@/robot/paramset/", registration_id)
+        var dict:Dictionary<String,AnyObject> = [:]
+        dict["usAct"] = NSNumber(long:usAct)
+        
+        let paramList:NSMutableArray = NSMutableArray()
+        
+        var dict_list:Dictionary<String,Int> = [:]
+        dict_list["nParamType"] = nParamType
+        dict_list["nValue"] = nValue
+        
+        paramList.addObject(dict_list)
+        
+        dict["paramList"] = paramList
+        
+        request(.POST, path: path, paramsdict: dict, serverPort: nil, func: { (result:NSDictionary?) in
+            if nil != result{
+                let message:NSString? = result!["message"] as? NSString
+                if nil != message{
+                    let messageJson = JSON.parse(message! as String)
+                    let array:Array<JSON> = messageJson.arrayValue
+                    if array.count > 0{
+                        let messageDict = array[0]
+                        let infodict:NSDictionary? = messageDict["info"].dictionaryObject
+                        if nil != infodict{
+                            let paramList:NSArray? = infodict!["paramList"] as? NSArray
+                            if nil != paramList{
+                                let dict_list : NSDictionary? = paramList![0] as? NSDictionary
+                                
+                                if nil != dict_list{
+                                
+                                    let nParamType:NSNumber? = dict_list!["nParamType"] as? NSNumber
+                                    if nParamType?.integerValue == 2 {
+                                        
+                                        let nValue:NSNumber? = dict_list!["nValue"] as? NSNumber
+                                        successHand(actValue: nValue!.integerValue)
+                                    }
+                                    
+                                }
+                                return
+                            }
+                        }
+                    }
+                }
+            }
+            successHand(actValue: -1)
+        }) { (error) in
+            errorHandler(error: error)
+        }
+        
+    }
+    
+
     /**
      发送指令
      
